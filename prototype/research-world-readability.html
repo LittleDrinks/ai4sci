@@ -1,0 +1,510 @@
+<!doctype html>
+<!-- THROWAWAY UI PROTOTYPE: every visible research field is derived from a mock Harness event stream and its referenced artifacts. -->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Research World Readability Prototype</title>
+  <style>
+    :root {
+      --ink: #17251e;
+      --muted: #63726a;
+      --line: #d1ddd5;
+      --ground: #eef3ef;
+      --paper: #ffffff;
+      --green: #247651;
+      --green-soft: #e0f1e7;
+      --blue: #207897;
+      --blue-soft: #dff0f6;
+      --violet: #7258ad;
+      --violet-soft: #eee9fa;
+      --amber: #ae6c15;
+      --amber-soft: #fff0d4;
+      color: var(--ink);
+      background: var(--ground);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body { min-width: 320px; margin: 0; }
+    button { color: inherit; font: inherit; cursor: pointer; }
+    button:focus-visible { outline: 3px solid #215e42; outline-offset: 3px; }
+    h1, h2, p { margin: 0; }
+    .app { min-height: 100vh; padding-bottom: 30px; }
+    .topbar { min-height: 64px; display: flex; align-items: center; gap: 14px; padding: 11px 24px; border-bottom: 1px solid var(--line); background: #fffffff2; }
+    .mark { width: 31px; height: 31px; display: grid; place-items: center; border-radius: 5px; color: white; background: var(--ink); font-size: 13px; font-weight: 850; }
+    .brand { font-size: 14px; font-weight: 850; }
+    .project { min-width: 0; padding-left: 14px; border-left: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .project b { display: block; overflow: hidden; color: var(--ink); font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+    .run-state { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
+    .run-state i { width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px #dceee3; }
+    .shell { width: min(1480px, calc(100% - 44px)); margin: 0 auto; padding-top: 18px; }
+    .microbar { min-height: 29px; display: flex; align-items: center; margin-bottom: 12px; color: var(--green); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 800; }
+    .microbar .spacer { flex: 1; }
+    .signal-legend { display: flex; gap: 9px; }
+    .signal-legend i { width: 10px; height: 10px; border: 2px solid var(--green); border-radius: 50%; }
+    .signal-legend i:nth-child(2) { border-color: var(--violet); transform: rotate(45deg); }
+    .signal-legend i:nth-child(3) { border-color: var(--amber); border-radius: 2px; }
+    .research-map { min-height: 850px; display: grid; grid-template-columns: minmax(810px, 1fr) 300px; overflow: hidden; border: 1px solid var(--line); border-radius: 7px; background: var(--paper); }
+
+    .map-canvas { position: relative; min-width: 0; overflow: hidden; background-color: #f9fcfa; background-image: radial-gradient(#d7e4dc 1px, transparent 1px); background-size: 21px 21px; touch-action: none; }
+    .map-canvas > header { position: absolute; z-index: 6; top: 15px; left: 16px; right: 16px; display: flex; align-items: center; justify-content: space-between; pointer-events: none; }
+    .day-marker { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .day-marker b { color: var(--ink); }
+    .canvas-tools { display: flex; gap: 6px; pointer-events: auto; }
+    .icon-button { width: 34px; height: 34px; display: grid; place-items: center; padding: 0; border: 1px solid #c8d7cd; border-radius: 5px; color: var(--ink); background: #fffffff0; font-size: 17px; }
+    .icon-button:hover { border-color: #85a794; background: #f5faf6; }
+    .graph-scene { position: absolute; inset: 0; transform-origin: center center; }
+    .graph-links { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+    .graph-link { fill: none; stroke: #91ad9d; stroke-width: 2.6; stroke-linecap: round; opacity: 0; transition: opacity .25s ease; }
+    .graph-link.dashed { stroke: #c58b38; stroke-dasharray: 8 8; }
+    .graph-link.visible { opacity: 1; animation: drawLink .48s ease both; }
+    .graph-link.dashed.visible { animation: drawDashed .48s ease both; }
+
+    .map-node { position: absolute; z-index: 2; display: grid; align-content: center; gap: 5px; padding: 13px; border: 0; color: var(--ink); box-shadow: 0 10px 25px #1e473417; opacity: 0; text-align: left; transform: scale(.72); transition: filter .18s ease, box-shadow .18s ease; }
+    .map-node.visible { opacity: 1; transform: scale(1); animation: nodeGrow .42s cubic-bezier(.2, .9, .2, 1) both; }
+    .map-node:not(.visible), .graph-link:not(.visible) { pointer-events: none; }
+    .map-node:hover, .map-node.selected { filter: saturate(1.12); box-shadow: 0 0 0 4px #ffffff, 0 0 0 7px #2a7956, 0 14px 30px #1e47342e; }
+    .map-node small { color: color-mix(in srgb, currentColor 58%, transparent); font-size: 11px; font-weight: 750; }
+    .map-node b { font-size: 16px; line-height: 1.2; }
+    .map-node span { color: color-mix(in srgb, currentColor 68%, transparent); font-size: 11px; line-height: 1.3; }
+    .node-glyph { position: absolute; right: 15px; bottom: 12px; color: color-mix(in srgb, currentColor 30%, transparent); font-size: 20px; font-style: normal; }
+    .source { width: 138px; height: 138px; place-items: center; padding: 16px; border: 2px solid var(--violet); border-radius: 50%; color: #563d91; background: var(--violet-soft); text-align: center; }
+    .source b { font-size: 17px; }
+    .source .node-glyph { right: auto; bottom: 17px; }
+    .turning { width: 188px; min-height: 108px; padding-left: 24px; color: #4d387e; background: #e9e1fb; clip-path: polygon(12% 0, 100% 0, 100% 76%, 82% 100%, 0 100%, 0 20%); }
+    .turning b { font-size: 18px; }
+    .branch { width: 174px; min-height: 94px; border-left: 8px solid currentColor; border-radius: 3px 9px 9px 3px; }
+    .stress { color: #15583d; background: var(--green-soft); }
+    .electrolyte { color: #17647e; background: var(--blue-soft); }
+    .limited { width: 174px; min-height: 92px; border: 2px dashed #c79246; border-radius: 9px; color: #80510f; background: #fff7e8; opacity: 0; }
+    .limited.visible { opacity: .76; }
+    .limited.selected, .limited:hover { opacity: 1; }
+    .frontier { width: 182px; min-height: 100px; border: 3px solid var(--amber); border-radius: 4px 16px 16px 16px; color: #5f3a07; background: #ffe1a9; box-shadow: 0 0 0 9px #fff3d9, 0 14px 30px #85591030; }
+    .frontier b { font-size: 18px; }
+    .frontier.visible { animation: nodeGrow .42s cubic-bezier(.2, .9, .2, 1) both, frontierPulse 1.8s ease-in-out infinite .5s; }
+    .frontier .node-glyph { color: #9a5a0a; }
+    .evidence { width: 174px; min-height: 92px; border: 2px solid #8da99a; border-radius: 10px 3px 10px 3px; color: #245d45; background: #edf7f0; }
+    .evidence-blue { color: #1b647c; border-color: #7cadbe; background: #eaf6f9; }
+    .evidence-violet { color: #593d90; border-color: #9b86c7; background: #f0ebfa; }
+    .review-node { width: 174px; min-height: 92px; border: 2px solid #65766d; border-radius: 4px; color: #2d4036; background: #e8efeb; }
+
+    .sim-dock { position: absolute; z-index: 7; bottom: 17px; left: 50%; width: min(500px, calc(100% - 32px)); display: grid; grid-template-columns: 34px 34px minmax(0, 1fr) 34px 34px; align-items: center; gap: 8px; padding: 8px; border: 1px solid #b5c8ba; border-radius: 7px; background: #fffffff2; box-shadow: 0 10px 30px #1a382829; transform: translateX(-50%); }
+    .sim-dock .icon-button { width: 34px; height: 34px; border: 0; background: transparent; font-size: 17px; }
+    .sim-dock .icon-button:hover { background: #eef6f0; }
+    .stage-track { display: grid; grid-auto-columns: 1fr; grid-auto-flow: column; gap: 6px; align-items: center; }
+    .stage { height: 10px; padding: 0; border: 0; border-radius: 8px; background: #d9e3dc; }
+    .stage.done { background: var(--green); }
+    .stage.current { height: 14px; background: var(--amber); box-shadow: 0 0 0 3px #ffedca; }
+    .stage:hover { background: #7ea68d; }
+
+    .inspector { min-width: 0; border-left: 1px solid var(--line); background: #f6f9f7; }
+    .map-detail { min-height: 505px; padding: 22px 20px 18px; }
+    .detail-code { display: block; color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 800; }
+    .map-detail h2 { margin-top: 9px; font-size: 23px; line-height: 1.15; }
+    .map-detail p { margin-top: 10px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .source-ledger { display: grid; margin-top: 24px; border-top: 1px solid var(--line); }
+    .source-row { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 9px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 12px; line-height: 1.4; }
+    .source-row span { color: var(--muted); }
+    .source-row b { overflow-wrap: anywhere; }
+    .frontier-list { display: grid; gap: 0; padding: 10px 20px 18px; border-top: 1px solid var(--line); }
+    .frontier-list button { width: 100%; display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 9px; padding: 13px 0; border: 0; border-top: 1px solid var(--line); background: transparent; text-align: left; }
+    .frontier-list button:first-child { border-top: 0; }
+    .frontier-list button:hover { color: #87520c; }
+    .frontier-list i { width: 8px; height: 8px; margin-top: 4px; border-radius: 2px; background: var(--amber); }
+    .frontier-list b { display: block; font-size: 13px; }
+    .frontier-list small { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; line-height: 1.35; }
+
+    .drawer-backdrop { position: fixed; z-index: 20; inset: 0; display: none; background: #17251e66; }
+    .drawer-backdrop.open { display: grid; place-items: end; }
+    .drawer { width: min(900px, 100%); max-height: min(680px, 86vh); overflow: auto; border: 1px solid #b8c9be; border-radius: 8px 8px 0 0; background: #fff; box-shadow: 0 -12px 50px #14271d33; }
+    .drawer header { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 17px 20px; border-bottom: 1px solid var(--line); background: #fff; }
+    .drawer header h2 { font-size: 16px; }
+    .drawer header p { margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .drawer-list { padding: 0 20px 20px; }
+    .drawer-row { display: grid; grid-template-columns: 82px minmax(0, 1fr) 122px; gap: 13px; padding: 15px 0; border-bottom: 1px solid var(--line); }
+    .drawer-row time { color: var(--muted); font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .drawer-row b { display: block; font-size: 14px; }
+    .drawer-row p { margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .drawer-row span { color: var(--muted); font-size: 11px; line-height: 1.4; text-align: right; }
+    .prototype-state { position: fixed; right: 17px; bottom: 15px; color: var(--muted); font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    @keyframes nodeGrow { from { opacity: 0; transform: scale(.64); } to { opacity: 1; transform: scale(1); } }
+    @keyframes drawLink { from { stroke-dasharray: 320; stroke-dashoffset: 320; } to { stroke-dasharray: 320; stroke-dashoffset: 0; } }
+    @keyframes drawDashed { from { stroke-dasharray: 8 340; stroke-dashoffset: 340; } to { stroke-dasharray: 8 8; stroke-dashoffset: 0; } }
+    @keyframes frontierPulse { 0%, 100% { box-shadow: 0 0 0 9px #fff3d9, 0 14px 30px #85591030; } 50% { box-shadow: 0 0 0 17px #fff3d999, 0 16px 34px #85591035; } }
+
+    @media (max-width: 980px) {
+      .research-map { grid-template-columns: 1fr; }
+      .inspector { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); border-left: 0; }
+      .map-detail { min-height: 0; border-right: 1px solid var(--line); }
+      .frontier-list { border-top: 0; }
+    }
+    @media (max-width: 700px) {
+      .topbar { padding-inline: 13px; }
+      .brand { display: none; }
+      .project { font-size: 10px; }
+      .project b { font-size: 12px; }
+      .shell { width: min(100% - 24px, 680px); padding-top: 12px; }
+      .research-map { min-height: 0; }
+      .map-canvas { min-height: 1500px; }
+      .graph-links { display: none; }
+      .source { width: 122px; height: 122px; }
+      .turning { width: 143px; min-height: 96px; }
+      .branch, .evidence, .review-node { width: 136px; min-height: 88px; }
+      .limited { width: 136px; min-height: 86px; }
+      .frontier { width: 146px; min-height: 96px; }
+      .map-node { padding: 11px; }
+      .map-node b, .turning b, .frontier b { font-size: 14px; }
+      .map-node span, .map-node small { font-size: 10px; }
+      .inspector { display: block; }
+      .map-detail { border-right: 0; }
+      .frontier-list { border-top: 1px solid var(--line); }
+      .prototype-state { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="mark">R</div><div class="brand">Research World</div>
+      <div class="project"><span id="world-id"></span><b id="world-title"></b></div>
+      <div class="run-state"><i></i><span id="run-label"></span></div>
+    </header>
+    <main class="shell">
+      <div class="microbar"><span id="date-range"></span><span class="spacer"></span><span class="signal-legend" aria-label="节点状态"><i title="活跃"></i><i title="转向"></i><i title="待执行"></i></span></div>
+      <section class="research-map">
+        <section class="map-canvas" id="map-canvas">
+          <header><span class="day-marker"><b id="day-marker"></b><span>●</span></span><div class="canvas-tools"><button class="icon-button" id="event-log" title="研究事件">≡</button><button class="icon-button" id="zoom-out" title="缩小">−</button><button class="icon-button" id="zoom-reset" title="聚焦全图">⌾</button><button class="icon-button" id="zoom-in" title="放大">+</button></div></header>
+          <div class="graph-scene" id="graph-scene"><svg class="graph-links" id="graph-links" viewBox="0 0 1200 850" preserveAspectRatio="none" aria-hidden="true"></svg><div id="graph-nodes"></div></div>
+          <div class="sim-dock" aria-label="研究事件回放"><button class="icon-button" id="sim-back" title="上一步">‹</button><button class="icon-button" id="sim-play" title="回放">▶</button><div class="stage-track" id="stage-track"></div><button class="icon-button" id="sim-next" title="下一步">›</button><button class="icon-button" id="sim-reset" title="从头开始">↺</button></div>
+        </section>
+        <aside class="inspector"><section class="map-detail" id="map-detail"></section><section class="frontier-list" id="frontier-list"></section></aside>
+      </section>
+    </main>
+  </div>
+  <div class="drawer-backdrop" id="drawer" aria-hidden="true"><section class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title"><header><div><h2 id="drawer-title">研究事件</h2><p id="drawer-subtitle"></p></div><button class="icon-button" data-close-drawer title="关闭">×</button></header><div class="drawer-list" id="drawer-list"></div></section></div>
+  <div class="prototype-state" id="prototype-state"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script>
+    const researchWorld = {
+      id: 'Q-CHE-01 / Chemistry',
+      question: '如何在微观尺度测量界面现象？',
+      seedArtifactId: 'booklet-p06'
+    }
+    const artifacts = [
+      { id: 'booklet-p06', source: '题册原文', locator: 'sjtu-booklet.pdf p.6', fact: 'How can we measure interface phenomena on the microscopic level?' },
+      { id: 'sfg-101', source: '虚拟仪器', locator: 'sfg/run-101.h5', fact: '电位扫描时 OH 区峰位发生可逆偏移。' },
+      { id: 'cal-002', source: '虚拟仪器', locator: 'surface-cal/run-002.json', fact: '清洗后背景信号下降，但主峰保留。' },
+      { id: 'step-014', source: '虚拟仪器', locator: 'time-sfg/run-014.h5', fact: '阶跃后出现 8 ms 快分量和 180 ms 慢分量。' },
+      { id: 'conc-021', source: '虚拟仪器', locator: 'conc-scan/run-021.csv', fact: '慢分量随盐浓度饱和，快分量近乎不变。' },
+      { id: 'audit-009', source: '独立审查', locator: 'audit/run-009.md', fact: '参比电极漂移仍可能混入慢分量。' },
+      { id: 'human-004', source: '人工输入', locator: 'lab-note-004.md', fact: '可调用时域 SFG、阻抗谱与同位素替换接口。' }
+    ]
+    const agentEvents = [
+      { id: 'evt-01', at: '2026-08-01T09:14:00', agent: 'Scout-01', run: 'run-101', kind: 'signal', title: '谱线偏移', nodeText: 'OH 峰可逆移动', detail: '虚拟 SFG 运行记录到随电位变化的 OH 峰位偏移。', parents: [], artifacts: ['sfg-101'], unresolved: '变化来自界面哪一层', status: 'observed' },
+      { id: 'evt-02', at: '2026-08-01T14:36:00', agent: 'Planner-02', run: 'run-104', kind: 'turning', title: '三种来源', nodeText: 'Δ 可判别读数', detail: '将题册问题收缩为三个可被时间与浓度读数区分的来源。', parents: ['evt-01'], artifacts: ['booklet-p06', 'sfg-101'], unresolved: '哪一个先于谱线偏移', status: 'active' },
+      { id: 'evt-03', at: '2026-08-02T10:07:00', agent: 'Modeler-03', run: 'run-108', kind: 'ions', title: '离子富集', nodeText: '浓度依赖', detail: '若界面离子富集主导，慢分量应随盐浓度变化。', parents: ['evt-02'], artifacts: ['sfg-101'], unresolved: '浓度曲线是否饱和', status: 'active', code: 'M-01' },
+      { id: 'evt-04', at: '2026-08-02T11:28:00', agent: 'Modeler-04', run: 'run-109', kind: 'water', title: '溶剂重排', nodeText: '同位素敏感', detail: '若水分子取向重排主导，快分量应对同位素替换敏感。', parents: ['evt-02'], artifacts: ['sfg-101'], unresolved: '快分量是否保留', status: 'active', code: 'M-02', relation: 'alternative' },
+      { id: 'evt-05', at: '2026-08-02T16:18:00', agent: 'Modeler-05', run: 'run-111', kind: 'limited', title: '污染层残留', nodeText: '− 清洗后仍在', detail: '清洗降低背景却没有消除主峰，污染层解释被限制。', parents: ['evt-02'], artifacts: ['cal-002'], unresolved: '残余覆盖度是否足够大', status: 'limited', code: 'M-03', relation: 'alternative' },
+      { id: 'evt-06', at: '2026-08-03T08:43:00', agent: 'Runner-01', run: 'run-114', kind: 'evidence', title: '电位阶跃', nodeText: '8 ms / 180 ms', detail: '时域 SFG 回传两段响应，因此单一过程解释不足。', parents: ['evt-03', 'evt-04'], artifacts: ['step-014', 'human-004'], unresolved: '两段响应各自对应什么', status: 'complete', code: 'E-01' },
+      { id: 'evt-07', at: '2026-08-03T13:42:00', agent: 'Modeler-06', run: 'run-117', kind: 'refinement', title: '双时标', nodeText: '快 / 慢分离', detail: '快分量保留给溶剂重排，慢分量交给离子富集复核。', parents: ['evt-06'], artifacts: ['step-014'], unresolved: '分离能否跨电位成立', status: 'active', code: 'M-04' },
+      { id: 'evt-08', at: '2026-08-04T09:12:00', agent: 'Planner-03', run: 'run-121', kind: 'experiment', title: '同位素替换', nodeText: '检验快分量', detail: '用 D2O 替换 H2O，预期只改变 M-02 的快分量。', parents: ['evt-04', 'evt-07'], artifacts: ['human-004'], unresolved: '频率窗口是否足够', status: 'queued', code: 'E-02' },
+      { id: 'evt-09', at: '2026-08-04T14:58:00', agent: 'Runner-02', run: 'run-124', kind: 'evidence', title: '浓度扫描', nodeText: '慢分量饱和', detail: '浓度扫描显示慢分量饱和，快分量近乎不变。', parents: ['evt-03', 'evt-07'], artifacts: ['conc-021'], unresolved: '饱和是否排除电极漂移', status: 'complete', code: 'E-03' },
+      { id: 'evt-10', at: '2026-08-05T10:31:00', agent: 'Planner-04', run: 'run-128', kind: 'experiment', title: '清洗复测', nodeText: '复核 M-03', detail: '改变清洗剂与暴露时间，确认污染层不会重新解释慢分量。', parents: ['evt-05'], artifacts: ['cal-002'], unresolved: '清洗会否改变表面化学', status: 'queued', code: 'E-04' },
+      { id: 'evt-11', at: '2026-08-05T16:04:00', agent: 'Modeler-07', run: 'run-131', kind: 'limited', title: '富集非主导', nodeText: '− 不能解释快分量', detail: 'M-01 解释慢分量，却不能解释快分量，因此被降为局部解释。', parents: ['evt-09'], artifacts: ['conc-021'], unresolved: '慢分量是否有第二来源', status: 'limited', code: 'M-01r' },
+      { id: 'evt-12', at: '2026-08-06T09:47:00', agent: 'Modeler-08', run: 'run-136', kind: 'water', title: '重排优先', nodeText: '快分量保留', detail: '当前解释将快分量优先归于溶剂重排，并保留离子富集作为慢变量。', parents: ['evt-07', 'evt-11'], artifacts: ['step-014', 'conc-021'], unresolved: '同位素替换是否反转排序', status: 'active', code: 'M-02r' },
+      { id: 'evt-13', at: '2026-08-06T15:22:00', agent: 'Auditor-01', run: 'audit-009', kind: 'review', title: '标定链缺口', nodeText: '参比漂移未排除', detail: '独立审查指出参比电极漂移可能混入慢分量。', parents: ['evt-09'], artifacts: ['audit-009'], unresolved: '先校正漂移还是直接复测', status: 'review', code: 'A-01' },
+      { id: 'evt-14', at: '2026-08-07T08:20:00', agent: 'Planner-05', run: 'run-141', kind: 'experiment', title: '同步阻抗', nodeText: '分离慢变量', detail: '同步采集阻抗与时域 SFG，判别慢分量是否来自参比漂移。', parents: ['evt-12', 'evt-13'], artifacts: ['human-004', 'audit-009'], unresolved: '两种读数能否独立变化', status: 'queued', code: 'E-05' }
+    ]
+    const artifactById = new Map(artifacts.map(item => [item.id, item]))
+    const eventById = new Map(agentEvents.map(item => [item.id, item]))
+    const mapEvents = agentEvents
+    const eventDepthById = new Map(mapEvents.map(event => [event.id, eventDepth(event)]))
+    const maxDepth = Math.max(...eventDepthById.values())
+    let selectedId = 'evt-14'
+    let drawerOpen = false
+    let step = mapEvents.length
+    let playing = false
+    let frame = null
+    let replayStartedAt = 0
+    let replayVersion = 0
+    let zoom = 1
+    let pan = { x: 0, y: 0 }
+    let drag = null
+    let forceLayout = null
+    let forceNodes = []
+    let forceLinks = []
+    let nodeElements = new Map()
+    let linkElements = []
+    let graphSize = { width: 0, height: 0 }
+    let layoutFrame = null
+
+    function formatDate(value) { return new Intl.DateTimeFormat('sv-SE').format(new Date(value)) }
+    function eventDepth(event, seen = new Set()) {
+      if (!event.parents.length || seen.has(event.id)) return 0
+      const next = new Set(seen).add(event.id)
+      return 1 + Math.max(...event.parents.map(id => eventDepth(eventById.get(id), next)))
+    }
+    function displayCode(event) { return event.code || (event.kind === 'turning' ? 'Δ' : 'Δ 2.7×') }
+    function cssClass(event) {
+      return ({ signal: 'source', turning: 'turning', ions: 'branch stress', water: 'branch electrolyte', limited: 'limited', evidence: 'evidence', refinement: 'evidence evidence-violet', experiment: 'frontier', review: 'review-node' })[event.kind]
+    }
+    function glyph(event) { return ({ signal: '⊘', turning: '✦', ions: '↗', water: '↘', limited: '−', evidence: '◌', refinement: '✦', experiment: '▶', review: '?' })[event.kind] }
+    function eventArtifacts(event) { return event.artifacts.map(id => artifactById.get(id)).filter(Boolean) }
+    function sourceText(event) { return `${event.agent} · ${event.run}` }
+    function queueEvents() { return agentEvents.filter(event => event.status === 'queued') }
+
+    function renderHeader() {
+      const first = agentEvents[0]
+      const latest = agentEvents.at(-1)
+      document.getElementById('world-id').textContent = researchWorld.id
+      document.getElementById('world-title').textContent = researchWorld.question
+      document.getElementById('date-range').textContent = `${formatDate(first.at)} → ${formatDate(latest.at)}`
+      document.getElementById('run-label').textContent = latest.run
+      document.getElementById('day-marker').textContent = `D${Math.round((new Date(latest.at) - new Date(first.at)) / 86400000) + 1}`
+    }
+    function renderGraph() {
+      const canvas = document.getElementById('map-canvas')
+      graphSize = { width: canvas.clientWidth, height: canvas.clientHeight }
+      forceLayout?.stop()
+      forceNodes = createForceNodes()
+      forceLinks = createForceLinks()
+      renderNodes()
+      renderLinks()
+      startForceLayout()
+      renderSimulation()
+    }
+    function createForceNodes() {
+      const mobile = graphSize.width < 700
+      return mapEvents.map((event, index) => ({ ...event, depth: eventDepthById.get(event.id), radius: nodeRadius(event), x: mobile ? graphSize.width / 2 : rankTarget(event), y: mobile ? rankTarget(event) : graphSize.height / 2 + (index % 5 - 2) * 35 }))
+    }
+    function createForceLinks() {
+      return mapEvents.flatMap(event => event.parents.map(parentId => ({ source: parentId, target: event.id, dashed: event.relation === 'alternative' })))
+    }
+    function nodeRadius(event) {
+      return ({ signal: 80, turning: 105, experiment: 105, limited: 96, review: 96 })[event.kind] || 98
+    }
+    function rankTarget(event) {
+      const mobile = graphSize.width < 700
+      const edge = mobile ? graphSize.height : graphSize.width
+      const margin = mobile ? 132 : 110
+      return margin + eventDepthById.get(event.id) / Math.max(1, maxDepth) * (edge - margin * 2)
+    }
+    function renderNodes() {
+      const host = document.getElementById('graph-nodes')
+      nodeElements = new Map()
+      host.replaceChildren(...forceNodes.map(renderNode))
+    }
+    function renderLinks() {
+      const svg = document.getElementById('graph-links')
+      svg.setAttribute('viewBox', `0 0 ${graphSize.width} ${graphSize.height}`)
+      linkElements = forceLinks.map(link => ({ link, path: renderEdge(link) }))
+      svg.replaceChildren(...linkElements.map(item => item.path))
+    }
+    function renderEdge(link) {
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+      path.dataset.stage = String(mapEvents.findIndex(item => item.id === link.target) + 1)
+      path.className.baseVal = `graph-link${link.dashed ? ' dashed' : ''}`
+      return path
+    }
+    function renderNode(event) {
+      const node = document.createElement('button')
+      node.className = `map-node ${cssClass(event)}${event.id === selectedId ? ' selected' : ''}`
+      node.dataset.node = event.id
+      node.dataset.stage = String(mapEvents.findIndex(item => item.id === event.id) + 1)
+      const code = event.kind === 'signal' ? '' : `<small>${displayCode(event)}</small>`
+      node.innerHTML = `${code}<b>${event.title}</b><span>${event.nodeText}</span><em class="node-glyph">${glyph(event)}</em>`
+      node.onclick = () => selectEvent(event.id)
+      nodeElements.set(event.id, node)
+      return node
+    }
+    function startForceLayout() {
+      const mobile = graphSize.width < 700
+      forceLayout = d3.forceSimulation(forceNodes)
+        .force('link', d3.forceLink(forceLinks).id(node => node.id).distance(132).strength(.9))
+        .force('charge', d3.forceManyBody().strength(-150))
+        .force('collision', d3.forceCollide(node => node.radius + 18).iterations(3))
+        .force('rank', mobile ? d3.forceY(rankTarget).strength(.52) : d3.forceX(rankTarget).strength(.52))
+        .force('cross', mobile ? d3.forceX(graphSize.width / 2).strength(.08) : d3.forceY(graphSize.height / 2).strength(.07))
+        .force('bounds', keepInBounds)
+        .alpha(1).on('tick', renderForceFrame)
+    }
+    function keepInBounds() {
+      forceNodes.forEach(node => {
+        node.x = Math.max(node.radius, Math.min(graphSize.width - node.radius, node.x))
+        node.y = Math.max(node.radius, Math.min(graphSize.height - node.radius, node.y))
+      })
+    }
+    function renderForceFrame() {
+      forceNodes.forEach(positionNode)
+      linkElements.forEach(item => item.path.setAttribute('d', linkPath(item.link)))
+    }
+    function positionNode(node) {
+      const element = nodeElements.get(node.id)
+      element.style.left = `${Math.round(node.x - element.offsetWidth / 2)}px`
+      element.style.top = `${Math.round(node.y - element.offsetHeight / 2)}px`
+    }
+    function linkPath(link) {
+      const dx = link.target.x - link.source.x
+      const dy = link.target.y - link.source.y
+      const start = nodeEdge(link.source, dx, dy)
+      const end = nodeEdge(link.target, -dx, -dy)
+      return `M${start.x},${start.y} L${end.x},${end.y}`
+    }
+    function nodeEdge(node, dx, dy) {
+      const element = nodeElements.get(node.id)
+      const halfWidth = element.offsetWidth / 2 + 3
+      const halfHeight = element.offsetHeight / 2 + 3
+      const scale = Math.min(halfWidth / Math.max(1, Math.abs(dx)), halfHeight / Math.max(1, Math.abs(dy)))
+      return { x: node.x + dx * scale, y: node.y + dy * scale }
+    }
+    function renderDetail() {
+      const event = eventById.get(selectedId)
+      const inputs = eventArtifacts(event).map(item => `${item.source} / ${item.locator}`).join(' · ')
+      const seed = artifactById.get(researchWorld.seedArtifactId)
+      const parents = event.parents.map(id => eventById.get(id)?.title).filter(Boolean).join(' · ') || seed.locator
+      document.getElementById('map-detail').innerHTML = `<span class="detail-code">${displayCode(event)}</span><h2>${event.title}</h2><p>${event.detail}</p><div class="source-ledger"><div class="source-row"><span>Agent</span><b>${sourceText(event)}</b></div><div class="source-row"><span>输入</span><b>${inputs}</b></div><div class="source-row"><span>上游</span><b>${parents}</b></div><div class="source-row"><span>未决</span><b>${event.unresolved}</b></div></div>`
+    }
+    function renderFrontier() {
+      const list = document.getElementById('frontier-list')
+      list.replaceChildren(...queueEvents().map(event => {
+        const item = document.createElement('button')
+        item.dataset.node = event.id
+        item.innerHTML = `<i></i><span><b>${event.title}</b><small>${displayCode(event)} · ${event.nodeText}</small></span>`
+        item.onclick = () => selectEvent(event.id)
+        return item
+      }))
+    }
+    function renderDrawer() {
+      document.getElementById('drawer-subtitle').textContent = `${agentEvents.length} 条研究事件 · ${queueEvents().length} 项待执行`
+      document.getElementById('drawer-list').replaceChildren(...agentEvents.map(event => {
+        const row = document.createElement('div')
+        const artifactsText = eventArtifacts(event).map(item => `${item.source} / ${item.locator}`).join(' · ')
+        row.className = 'drawer-row'
+        row.innerHTML = `<time>${formatDate(event.at).slice(5)}<br>${event.at.slice(11, 16)}</time><div><b>${event.title}</b><p>${event.detail}</p></div><span>${sourceText(event)}<br>${artifactsText}</span>`
+        return row
+      }))
+    }
+    function selectEvent(id) {
+      selectedId = id
+      renderDetail()
+      document.querySelectorAll('.map-node').forEach(node => node.classList.toggle('selected', node.dataset.node === id))
+    }
+    function setDrawer(open) {
+      drawerOpen = open
+      const drawer = document.getElementById('drawer')
+      drawer.classList.toggle('open', open)
+      drawer.setAttribute('aria-hidden', String(!open))
+    }
+    function renderSimulation() {
+      document.querySelectorAll('[data-stage]').forEach(node => node.classList.toggle('visible', Number(node.dataset.stage) <= step))
+      document.querySelectorAll('.stage').forEach(node => {
+        const value = Number(node.dataset.step)
+        node.classList.toggle('done', value < step)
+        node.classList.toggle('current', value === step)
+      })
+      document.getElementById('sim-play').textContent = playing ? 'Ⅱ' : '▶'
+      document.getElementById('sim-play').title = playing ? '暂停回放' : '回放'
+      document.getElementById('prototype-state').textContent = `events=${agentEvents.length} | map=${step}${playing ? ' | replay' : ''}`
+    }
+    function renderStages() {
+      const track = document.getElementById('stage-track')
+      track.replaceChildren(...mapEvents.map((event, index) => {
+        const stage = document.createElement('button')
+        stage.className = 'stage'
+        stage.dataset.step = String(index + 1)
+        stage.title = `${formatDate(event.at)} · ${event.title}`
+        stage.addEventListener('click', () => setStep(index + 1))
+        return stage
+      }))
+    }
+    function stopPlayback() {
+      replayVersion += 1
+      playing = false
+      cancelAnimationFrame(frame)
+      frame = null
+    }
+    function advancePlayback(time, version) {
+      if (!playing || version !== replayVersion) return
+      const nextStep = Math.min(mapEvents.length, Math.floor((time - replayStartedAt) / 950))
+      if (nextStep !== step) step = nextStep, renderSimulation()
+      if (step >= mapEvents.length) return stopPlayback(), renderSimulation()
+      frame = requestAnimationFrame(nextTime => advancePlayback(nextTime, version))
+    }
+    function togglePlayback() {
+      if (playing) return stopPlayback(), renderSimulation()
+      if (step >= mapEvents.length) step = 0
+      playing = true
+      replayStartedAt = performance.now() - step * 950
+      replayVersion += 1
+      const version = replayVersion
+      renderSimulation()
+      frame = requestAnimationFrame(time => advancePlayback(time, version))
+    }
+    function setStep(value) {
+      stopPlayback()
+      step = Math.max(0, Math.min(mapEvents.length, value))
+      renderSimulation()
+    }
+    function renderScene() {
+      document.getElementById('graph-scene').style.transform = `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`
+    }
+    function adjustZoom(delta) {
+      zoom = Math.max(.7, Math.min(1.55, zoom + delta))
+      renderScene()
+    }
+    function resetScene() {
+      zoom = 1
+      pan = { x: 0, y: 0 }
+      renderScene()
+    }
+    function scheduleGraph() {
+      cancelAnimationFrame(layoutFrame)
+      layoutFrame = requestAnimationFrame(renderGraph)
+    }
+
+    document.querySelector('[data-close-drawer]').addEventListener('click', () => setDrawer(false))
+    document.getElementById('drawer').addEventListener('click', event => { if (event.target.id === 'drawer') setDrawer(false) })
+    document.getElementById('event-log').onclick = () => setDrawer(true)
+    document.getElementById('sim-play').addEventListener('click', togglePlayback)
+    document.getElementById('sim-back').addEventListener('click', () => setStep(step - 1))
+    document.getElementById('sim-next').addEventListener('click', () => setStep(step + 1))
+    document.getElementById('sim-reset').addEventListener('click', () => setStep(0))
+    document.getElementById('zoom-in').addEventListener('click', () => adjustZoom(.12))
+    document.getElementById('zoom-out').addEventListener('click', () => adjustZoom(-.12))
+    document.getElementById('zoom-reset').addEventListener('click', resetScene)
+    document.getElementById('map-canvas').addEventListener('wheel', event => {
+      event.preventDefault()
+      adjustZoom(event.deltaY < 0 ? .08 : -.08)
+    }, { passive: false })
+    document.getElementById('map-canvas').addEventListener('pointerdown', event => {
+      if (event.target.closest('button')) return
+      drag = { x: event.clientX - pan.x, y: event.clientY - pan.y }
+    })
+    window.addEventListener('pointermove', event => {
+      if (!drag) return
+      pan = { x: event.clientX - drag.x, y: event.clientY - drag.y }
+      renderScene()
+    })
+    window.addEventListener('pointerup', () => { drag = null })
+    new ResizeObserver(scheduleGraph).observe(document.getElementById('map-canvas'))
+    window.addEventListener('keydown', event => {
+      const editable = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName) || document.activeElement?.isContentEditable
+      if (editable) return
+      if (event.key === 'ArrowLeft') setStep(step - 1)
+      if (event.key === 'ArrowRight') setStep(step + 1)
+      if (event.key === 'Escape') setDrawer(false)
+      if (event.key === ' ') event.preventDefault(), togglePlayback()
+    })
+    renderHeader()
+    renderStages()
+    renderGraph()
+    renderDetail()
+    renderFrontier()
+    renderDrawer()
+    renderScene()
+  </script>
+</body>
+</html>

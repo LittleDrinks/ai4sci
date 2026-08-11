@@ -1,0 +1,474 @@
+<!doctype html>
+<!-- THROWAWAY UI PROTOTYPE: every visible state is derived from the event stream below. -->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Research World Live Run</title>
+  <style>
+    :root {
+      --ink: #14221b; --muted: #65746c; --line: #cad7cf; --paper: #fbfdfb;
+      --ground: #edf2ee; --green: #217553; --blue: #247894; --violet: #7356a6;
+      --amber: #b86d12; --red: #af433a; --soft-green: #e2f0e7; --soft-blue: #e3f1f5;
+      color: var(--ink); background: var(--ground);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { min-width: 1240px; margin: 0; overflow: hidden; }
+    button { color: inherit; font: inherit; cursor: pointer; }
+    button:focus-visible { outline: 3px solid #1d5c42; outline-offset: 2px; }
+    h1, h2, p { margin: 0; }
+    .topbar { height: 64px; display: flex; align-items: center; gap: 14px; padding: 9px 20px; border-bottom: 1px solid var(--line); background: #fff; }
+    .mark { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 5px; color: #fff; background: var(--ink); font-weight: 900; }
+    .brand { font-size: 15px; font-weight: 850; }
+    .question { min-width: 0; padding-left: 14px; border-left: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .question b { display: block; overflow: hidden; color: var(--ink); font-size: 15px; text-overflow: ellipsis; white-space: nowrap; }
+    .run-status { margin-left: auto; display: flex; align-items: center; gap: 9px; color: var(--muted); font: 750 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .run-status i { width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px #dfeee5; }
+    .app { height: calc(100vh - 64px); display: grid; grid-template-columns: 320px minmax(680px, 1fr) 410px; }
+    .event-column, .inspector { min-height: 0; background: var(--paper); }
+    .event-column { display: grid; grid-template-rows: auto auto minmax(0, 1fr); border-right: 1px solid var(--line); }
+    .playback { padding: 16px; border-bottom: 1px solid var(--line); }
+    .playback-head { display: flex; align-items: center; justify-content: space-between; }
+    .playback-head b { font-size: 15px; }
+    .playback-head span { color: var(--green); font: 800 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .playback-controls { display: grid; grid-template-columns: 38px 38px minmax(0, 1fr) 38px; gap: 6px; margin-top: 13px; }
+    .icon-button { width: 38px; height: 38px; display: grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 5px; background: #fff; font-size: 17px; }
+    .icon-button:hover { border-color: #87a595; background: #f2f7f3; }
+    .progress { position: relative; align-self: center; height: 8px; overflow: hidden; border-radius: 5px; background: #dbe5de; }
+    .progress i { position: absolute; inset: 0 auto 0 0; width: var(--progress); background: var(--green); transition: width .38s ease; }
+    .thread-overview { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+    .thread-chip { min-width: 0; display: grid; justify-items: center; gap: 3px; padding: 11px 4px 10px; border-right: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+    .thread-chip:last-child { border-right: 0; }
+    .thread-chip.current { color: var(--ink); background: color-mix(in srgb, var(--thread) 10%, white); }
+    .thread-chip i { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--thread) 14%, white); font-size: 14px; font-style: normal; }
+    .thread-chip b { overflow: hidden; max-width: 100%; text-overflow: ellipsis; white-space: nowrap; }
+    .thread-chip span { font: 750 9px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .event-list { overflow: auto; padding: 8px 0 20px; }
+    .event-row { position: relative; width: 100%; display: grid; grid-template-columns: 42px 34px minmax(0, 1fr); gap: 8px; padding: 12px 15px 12px 12px; border: 0; background: transparent; text-align: left; }
+    .event-row > * { pointer-events: none; }
+    .event-row:hover, .event-row.selected { background: #e8f1eb; }
+    .event-row.new { box-shadow: inset 4px 0 var(--ink); }
+    .event-time { position: relative; z-index: 1; padding-top: 4px; color: var(--muted); background: inherit; font: 750 10px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .thread-rail { position: relative; display: grid; grid-template-columns: repeat(3, 6px); gap: 3px; justify-content: center; padding-top: 6px; }
+    .thread-rail::before { content: ""; position: absolute; top: -12px; bottom: -12px; left: calc(8px + var(--lane) * 9px); width: 2px; background: color-mix(in srgb, var(--thread) 46%, white); }
+    .thread-rail i { position: relative; z-index: 1; width: 6px; height: 6px; border: 1px solid #afbeb5; border-radius: 50%; background: #fff; }
+    .thread-rail i.active { border-color: var(--thread); background: var(--thread); box-shadow: 0 0 0 3px color-mix(in srgb, var(--thread) 16%, white); }
+    .event-copy b { display: block; font-size: 13px; line-height: 1.35; overflow-wrap: anywhere; }
+    .event-copy span { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+    .stage-badge { display: inline-flex; align-items: center; gap: 4px; width: fit-content; margin-top: 7px; color: var(--thread); font: 800 9px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .world { min-width: 0; display: grid; grid-template-rows: 72px minmax(0, 1fr); background: #f7faf8; }
+    .world-head { display: flex; align-items: center; padding: 0 18px; border-bottom: 1px solid var(--line); }
+    .world-title small { display: block; color: var(--green); font: 800 10px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .world-title h1 { margin-top: 4px; font-size: 22px; }
+    .stats { margin-left: auto; display: flex; height: 100%; }
+    .stat { min-width: 92px; display: grid; align-content: center; padding: 0 15px; border-left: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+    .stat b { color: var(--ink); font-size: 20px; }
+    .graph-wrap { position: relative; min-height: 0; overflow: hidden; background-color: #fbfdfc; background-image: radial-gradient(#d6e3da 1px, transparent 1px); background-size: 20px 20px; }
+    .thread-bands { position: absolute; z-index: 0; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); pointer-events: none; }
+    .thread-band { position: relative; }
+    .thread-band span { position: absolute; top: 17px; left: 18px; display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 10px; font-weight: 800; }
+    .legend { position: absolute; z-index: 3; top: 47px; left: 16px; display: flex; gap: 5px; padding: 5px 7px; border: 1px solid var(--line); border-radius: 5px; background: #fffffff0; }
+    .legend span { width: 25px; height: 25px; display: grid; place-items: center; font-size: 15px; }
+    .graph-tools { position: absolute; z-index: 3; top: 14px; right: 14px; display: flex; gap: 6px; }
+    #graph { width: 100%; height: 100%; display: block; }
+    .edge { fill: none; stroke: #8fa399; stroke-width: 2; opacity: .72; }
+    .edge.refutes, .edge.flags { stroke-dasharray: 8 6; stroke-width: 3; }
+    .edge.tests { stroke-dasharray: 3 6; }
+    .edge.new { stroke-width: 3.5; opacity: 1; }
+    .node { cursor: pointer; }
+    .node foreignObject { overflow: visible; pointer-events: all; }
+    .node-card { width: 176px; height: 92px; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 3px; padding: 8px 10px; overflow: hidden; border: 2px solid var(--node-color); border-left-width: 7px; border-radius: 5px; color: var(--ink); background: var(--node-fill); box-shadow: 0 7px 18px #1735261b; }
+    .node-card.question { clip-path: polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px); }
+    .node-card.observation { border-radius: 46px; padding-inline: 18px; }
+    .node-card.result { clip-path: polygon(0 0, 91% 0, 100% 50%, 91% 100%, 0 100%); padding-right: 22px; }
+    .node-card.audit { clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px); }
+    .node-card.mechanism { border-radius: 25px 5px 25px 5px; }
+    .node-card.queued { border-width: 4px; border-left-width: 9px; background: repeating-linear-gradient(135deg, #fff3d5 0 9px, #ffe4af 9px 18px); box-shadow: 0 0 0 7px #fff0d2, 0 0 0 11px var(--amber), 0 13px 30px #7a4e1640; }
+    .node-card.queued .node-state { padding: 3px 6px; color: #fff; background: var(--amber); }
+    .node-card.passed { border-color: var(--green); box-shadow: 0 0 0 5px #e0f0e6, 0 10px 24px #1c634328; }
+    .node-top { min-width: 0; display: flex; align-items: center; gap: 6px; }
+    .node-icon { width: 24px; height: 24px; flex: 0 0 24px; display: grid; place-items: center; border-radius: 4px; background: #ffffffb8; font-size: 15px; }
+    .node-code { overflow: hidden; color: var(--muted); font: 800 9px ui-monospace, SFMono-Regular, Menlo, monospace; text-overflow: ellipsis; white-space: nowrap; }
+    .node-state { margin-left: auto; color: var(--node-color); font-size: 9px; font-weight: 850; white-space: nowrap; }
+    .node-card b { align-self: center; overflow: hidden; font-size: 13px; line-height: 1.18; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+    .node-card small { overflow: hidden; color: var(--muted); font-size: 10px; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+    .node.new .node-card { border-width: 4px; border-left-width: 8px; }
+    .node.selected .node-card { box-shadow: 0 0 0 4px white, 0 0 0 7px var(--ink), 0 13px 28px #17352633; }
+    .node.affected .node-card { border-color: var(--red); box-shadow: 0 0 0 6px #f8dfdc; }
+    .inspector { overflow: auto; border-left: 1px solid var(--line); }
+    .detail { padding: 20px 22px 0; }
+    .detail-head { display: flex; align-items: center; justify-content: space-between; }
+    .detail-code { color: var(--green); font: 850 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .detail-state { padding: 4px 7px; border: 1px solid var(--line); border-radius: 3px; color: var(--state-color); background: var(--state-fill); font-size: 10px; font-weight: 850; }
+    .detail h2 { margin-top: 10px; font-size: 23px; line-height: 1.2; }
+    .detail > p { margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .agent-strip { display: grid; grid-template-columns: 1fr 1fr; margin: 17px -22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .agent-cell { min-width: 0; display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 9px; padding: 13px 14px 13px 22px; border-right: 1px solid var(--line); }
+    .agent-cell:last-child { border-right: 0; padding-left: 15px; }
+    .agent-cell i { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: #edf2ee; font-size: 16px; font-style: normal; }
+    .agent-cell span { min-width: 0; color: var(--muted); font-size: 9px; }
+    .agent-cell b, .agent-cell small { display: block; overflow: hidden; margin-top: 2px; color: var(--ink); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+    .agent-cell small { color: var(--muted); font: 750 9px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .review-verdict { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 11px; margin: 0 -22px; padding: 16px 22px; border-bottom: 1px solid var(--line); background: var(--state-fill); }
+    .review-verdict i { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 5px; color: var(--state-color); background: #fff; font-size: 20px; font-style: normal; }
+    .review-verdict b { display: block; font-size: 14px; }
+    .review-verdict p { margin-top: 4px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+    .comparison { display: grid; grid-template-columns: 1fr 1fr; margin-inline: -22px; border-bottom: 1px solid var(--line); }
+    .comparison div { min-width: 0; padding: 15px 18px 16px 22px; border-right: 1px solid var(--line); }
+    .comparison div:last-child { border-right: 0; }
+    .comparison span { display: block; color: var(--muted); font-size: 10px; }
+    .comparison b { display: block; margin-top: 7px; font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+    .decision { margin-inline: -22px; padding: 15px 22px 17px; border-bottom: 1px solid var(--line); }
+    .decision span { color: var(--muted); font-size: 10px; }
+    .decision p { margin-top: 7px; font-size: 13px; font-weight: 750; line-height: 1.5; }
+    .ledger { display: grid; margin-inline: -22px; }
+    .ledger-row { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 10px; padding: 11px 22px; border-bottom: 1px solid var(--line); font-size: 12px; line-height: 1.4; }
+    .ledger-row span { color: var(--muted); }
+    .ledger-row b { overflow-wrap: anywhere; }
+    .impact { padding: 18px 22px 24px; }
+    .impact h2 { font-size: 14px; }
+    .impact-list { display: grid; margin-top: 10px; }
+    .impact-row { display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 9px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.35; }
+    .impact-row i { width: 8px; height: 8px; margin-top: 3px; border-radius: 2px; background: var(--muted); }
+    .impact-row small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .empty { color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="mark">R</div><div class="brand">Research World</div>
+    <div class="question">AMT-EXACT-GM / Music AI<b>如何在真实混合音频上同时恢复音符事件与精确乐器身份？</b></div>
+    <div class="run-status"><i></i><span id="run-status"></span></div>
+  </header>
+  <main class="app">
+    <aside class="event-column">
+      <section class="playback">
+        <div class="playback-head"><b>运行记录</b><span id="stage-label"></span></div>
+        <div class="playback-controls">
+          <button class="icon-button" id="reset" title="回到开始">↺</button>
+          <button class="icon-button" id="play" title="播放">▶</button>
+          <div class="progress"><i id="progress"></i></div>
+          <button class="icon-button" id="next" title="下一事件">›</button>
+        </div>
+      </section>
+      <section class="thread-overview" id="thread-overview"></section>
+      <section class="event-list" id="event-list"></section>
+    </aside>
+    <section class="world">
+      <header class="world-head">
+        <div class="world-title"><small id="world-time"></small><h1 id="world-event"></h1></div>
+        <div class="stats" id="stats"></div>
+      </header>
+      <section class="graph-wrap" id="graph-wrap">
+        <div class="thread-bands" id="thread-bands"></div>
+        <div class="legend" aria-label="节点类型"><span title="目标">🎯</span><span title="观测">📊</span><span title="实验">🧪</span><span title="审查">🔎</span><span title="解释">💡</span></div>
+        <div class="graph-tools"><button class="icon-button" id="zoom-out" title="缩小">−</button><button class="icon-button" id="zoom-reset" title="聚焦全图">◎</button><button class="icon-button" id="zoom-in" title="放大">+</button></div>
+        <svg id="graph" role="img" aria-label="研究事件关系图"></svg>
+      </section>
+    </section>
+    <aside class="inspector"><section class="detail" id="detail"></section><section class="impact" id="impact"></section></aside>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script>
+    const nodes = [
+      {id:'Q-01',at:0,type:'question',thread:'foundation',icon:'🎯',title:'精确 GM 多乐器转录',summary:'真实混合音频',state:'open',source:'37f8b93:GOAL.md L8–25',owner:'research objective',expected:'exact F1 ≥ .40；第二真实集提升 ≥ .03',unknown:'事件恢复与乐器身份都未闭合'},
+      {id:'B-01',at:0,type:'observation',thread:'foundation',icon:'📊',title:'MulTTiPop 基线',summary:'pitch .318 / exact .117',state:'reproduced',source:'study.yaml · multtipop_event_ceiling',owner:'shared benchmark · 10k bootstrap',result:'pitch-only macro F1 .318006；exact macro F1 .117337'},
+      {id:'B-02',at:0,type:'result',thread:'foundation',icon:'📈',title:'同库存身份上限',summary:'exact .308 / retention .968',state:'reproduced',source:'exp20 · per_clip.csv · SHA 5cd0a8…',owner:'matched-note oracle replay',result:'固定事件库存内，重标注几乎饱和身份，但仍低于 .40'},
+      {id:'E-01',at:1,type:'experiment',thread:'identity',icon:'🧪',title:'同源近邻检索',summary:'+.0127，未过 +.03',state:'closed',source:'commit 483f62c · contract b0024c…',owner:'URMP 15-group cross-fit',expected:'同源持久证据带来 ≥ .03 group-macro 增益',result:'+.012700 [.005951, .020462]；10 胜 4 平 1 负'},
+      {id:'E-02',at:2,type:'experiment',thread:'identity',icon:'🧪',title:'域因素归因',summary:'无可行动单因素',state:'closed',source:'commit ef899a5 · contract dd76c6…',owner:'98 stems · 30 pieces · 13 programs',expected:'定位可直接干预的带宽、噪声、混响或渲染因素',result:'真实域差 .061667 [.013333, .138333]；全部单因素区间跨零'},
+      {id:'D-01',at:3,type:'observation',thread:'identity',icon:'🗂️',title:'OpenMIC 训练集',summary:'843 fit / 227 validation',state:'registered',source:'commit 1c16d78 · contract 4eadfc…',owner:'14,915 excerpts rights audit',result:'保留 1,070 条许可样本；12/20 类通过覆盖门槛'},
+      {id:'E-03',at:4,type:'experiment',thread:'identity',icon:'🧪',title:'音频—符号对齐',summary:'+.0273，区间跨零',state:'closed',source:'commit c93b928 · contract d871cb…',owner:'3 matched seeds · independent audit',expected:'macro AP 增益 ≥ .03 且置信下界 > 0',result:'+.027320 [-.018323, .073799]；8 类提升，4 类下降'},
+      {id:'A-01',at:5,type:'audit',thread:'identity',icon:'🔎',title:'梯度冲突诊断',summary:'未发现一致冲突',state:'closed',source:'commit ad8743b · contract a501aa…',owner:'128 fit-only batches · byte replay',expected:'至少 4 类在 3 seeds 中稳定冲突',result:'median cosine -.0267 / -.1063 / -.0324；通过类数 0'},
+      {id:'E-04',at:6,type:'experiment',thread:'event',icon:'🧪',title:'连续时间自回归',summary:'时间网格不是瓶颈',state:'closed',source:'commit d1eeb5b · contracts 358c33… / 82ac2c…',owner:'3 seeds · independent audit',expected:'连续时间优于匹配的量化控制',result:'均为 47/47；continuous MAE 11.176 / 8.905 / 4.692 ms，仍需 14–20 次顺序修复'},
+      {id:'M-01',at:6,type:'mechanism',thread:'event',icon:'💡',title:'同时事件不应排序',summary:'结构缺陷被定位',state:'supported',source:'E-04 frozen result',owner:'research decision at d1eeb5b',result:'量化控制 4.553 ms；剩余缺陷是同时事件的任意自回归顺序'},
+      {id:'E-05',at:7,type:'experiment',thread:'event',icon:'🧪',title:'无序 Note-set Decoder',summary:'47/47 · 0 repairs',state:'passed',source:'commit 37f8b93 · contract fa9a1f…',owner:'32 queries · Hungarian · 262,523 params',expected:'匹配容量、精确基数、零重复、零顺序修复、音频依赖',result:'3 seeds 全部 47/47；4.553191 ms；容量为控制的 97.71%'},
+      {id:'N-01',at:7,type:'experiment',thread:'event',icon:'⏳',title:'规模判别实验',summary:'37 个 reserve groups',state:'queued',source:'37f8b93:GOAL.md · active decision',owner:'unopened Slakh-train reserve',expected:'冻结架构后验证 composition-disjoint 泛化',unknown:'尚未读取 reserve 标签或预测'}
+    ]
+    const edges = [
+      {source:'Q-01',target:'B-01',at:0,kind:'tests'}, {source:'B-01',target:'B-02',at:0,kind:'derives'},
+      {source:'B-02',target:'E-01',at:1,kind:'tests'}, {source:'E-01',target:'E-02',at:2,kind:'redirects'},
+      {source:'E-02',target:'D-01',at:3,kind:'redirects'}, {source:'D-01',target:'E-03',at:4,kind:'tests'},
+      {source:'E-03',target:'A-01',at:5,kind:'tests'}, {source:'A-01',target:'E-03',at:5,kind:'refutes'},
+      {source:'B-01',target:'E-04',at:6,kind:'tests'}, {source:'E-04',target:'M-01',at:6,kind:'derives'},
+      {source:'M-01',target:'E-05',at:7,kind:'tests'}, {source:'E-05',target:'N-01',at:7,kind:'derives'},
+      {source:'E-05',target:'Q-01',at:7,kind:'supports'}
+    ]
+    const events = [
+      {at:'08/02 10:00',thread:'foundation',avatar:'📐',agent:'Benchmark',run:'study.yaml',title:'真实混合物差距被量化',decision:'事件与身份两个瓶颈都必须保留，不能只优化 exact 标签。',focus:'B-01'},
+      {at:'08/02 11:27',thread:'identity',avatar:'🤖',agent:'Research agent',run:'483f62c',title:'同源检索未过幅度门槛',decision:'冻结当前近邻规则，不在同一批 15 groups 上调 k 或权重。',focus:'E-01'},
+      {at:'08/02 12:13',thread:'identity',avatar:'🤖',agent:'Research agent',run:'ef899a5',title:'域差存在，但没有单一旋钮',decision:'关闭带宽、噪声、混响、level 与 renderer 路线。',focus:'E-02'},
+      {at:'08/02 12:50',thread:'identity',avatar:'🗂️',agent:'Data audit',run:'1c16d78',title:'注册可训练的 OpenMIC 子集',decision:'只允许弱标签机制验证，不能据此宣称 AMT 泛化。',focus:'D-01'},
+      {at:'08/02 15:26',thread:'identity',avatar:'🤖',agent:'Research agent',run:'c93b928',title:'对齐表征改善但未过门槛',decision:'不重跑 outcome；只准一次不读取 validation 的冲突诊断。',focus:'E-03'},
+      {at:'08/02 16:27',thread:'identity',avatar:'🔎',agent:'Independent audit',run:'ad8743b',title:'冲突解释也被否决',decision:'关闭 projected-gradient 与 alignment-weight 后续。',focus:'A-01'},
+      {at:'08/02 18:08',thread:'event',avatar:'🤖',agent:'Research agent',run:'d1eeb5b',title:'连续时间路线暴露结构缺陷',decision:'停止时间密度调参，转向不对同时事件强加顺序的解码器。',focus:'M-01'},
+      {at:'08/02 18:32',thread:'event',avatar:'🔎',agent:'Independent audit',run:'37f8b93',title:'Note-set mechanics 全部门槛通过',decision:'冻结 32 queries 与 Hungarian 配置；下一步只做未开封 reserve 的规模判别。',focus:'E-05'}
+    ]
+    const threads = [
+      {id:'foundation',icon:'📊',label:'基准与目标',color:'#65746c'},
+      {id:'identity',icon:'🎛️',label:'乐器身份',color:'#65746c'},
+      {id:'event',icon:'🎼',label:'音符事件',color:'#65746c'}
+    ]
+    const reviews = {
+      'Q-01': {gate:'exact F1 ≥ .40；第二真实集 ≥ +.03',observed:'事件与身份两条路线均未完成真实集确认',verdict:'目标仍开放',reason:'mechanics 通过不能替代 held-out performance。',audit:'等待最终 confirmatory protocol'},
+      'B-01': {gate:'exact macro F1 ≥ .40',observed:'pitch .318006；exact .117337',verdict:'差距确认',reason:'仅修复身份也受当前事件库存上限制约。',audit:'10,000 次 cluster bootstrap'},
+      'B-02': {gate:'固定库存身份是否足以到达 .40',observed:'exact .307970；retention .968',verdict:'仍不足',reason:'身份近乎饱和后仍低于目标，事件恢复必须并行推进。',audit:'matched-note oracle replay'},
+      'E-01': {gate:'同源检索增益 ≥ +.03',observed:'+.012700 [.005951, .020462]',verdict:'关闭',reason:'方向为正但幅度不足，不在已消费的 15 groups 上调参。',audit:'contract + cross-fit audit'},
+      'E-02': {gate:'至少一个预注册因素区间排除 0',observed:'5 个因素全部区间跨 0',verdict:'关闭',reason:'真实域差存在，但没有可单独行动的因素。',audit:'determinism audit passed'},
+      'D-01': {gate:'权利合规且类别覆盖可用于机制验证',observed:'843 fit / 227 validation；12/20 类通过',verdict:'注册通过',reason:'只允许弱标签机制验证，不能支持 AMT 泛化声明。',audit:'14,915 excerpts rights audit'},
+      'E-03': {gate:'增益 ≥ +.03 且置信下界 > 0',observed:'+.027320 [-.018323, .073799]',verdict:'关闭',reason:'点估计接近门槛，但幅度与下界同时失败。',audit:'independent audit passed'},
+      'A-01': {gate:'至少 4 类在 3 seeds 中稳定冲突',observed:'通过类数 0；global medians 仅 1 seed 达标',verdict:'解释被否决',reason:'不能用稳定梯度冲突解释 E-03 的结果。',audit:'128 fit-only batches · byte replay'},
+      'E-04': {gate:'连续时间优于量化控制且减少顺序修复',observed:'47/47，但 MAE 更高且需 14–20 次修复',verdict:'关闭',reason:'时间网格不是瓶颈，缺陷来自同时事件的任意顺序。',audit:'two contracts + independent audit'},
+      'M-01': {gate:'能解释 E-04 与量化控制差异',observed:'量化控制 4.553 ms；连续输出仍需顺序修复',verdict:'结构解释成立',reason:'下一实验必须移除自回归事件顺序，而不是增加时间密度。',audit:'frozen-result inference'},
+      'E-05': {gate:'容量、基数、重复、顺序修复、音频依赖全部通过',observed:'3 seeds 47/47；0 repairs；97.71% capacity',verdict:'Mechanics 通过',reason:'允许进入新 reserve 的规模判别，不构成泛化结论。',audit:'independent audit b2bcf76… passed'},
+      'N-01': {gate:'冻结配置后在 composition-disjoint reserve 上优于控制',observed:'37 groups 未开封；标签与预测未读取',verdict:'待执行',reason:'这是当前唯一获准的下一实验。',audit:'data firewall active'}
+    }
+    const stateMeta = {
+      open:['开放','#5d6c64','#edf1ee','◌'], reproduced:['已复现','#7356a6','#eee8f8','✓'], closed:['已关闭','#af433a','#fae6e3','×'],
+      registered:['已注册','#247894','#e3f1f5','✓'], supported:['已定位','#217553','#e2f0e7','◆'], passed:['已通过','#217553','#e2f0e7','✓'], queued:['待执行','#b86d12','#fff0d6','▶']
+    }
+    const agentOwners = {
+      'Q-01':['🎯','Research lead','GOAL.md','📐','Benchmark agent','completion gates'],
+      'B-01':['📐','Benchmark agent','study.yaml','🔁','Replay checker','10k bootstrap'],
+      'B-02':['📐','Benchmark agent','exp20','🔁','Replay checker','matched-note oracle'],
+      'E-01':['🤖','Research agent','483f62c','🔎','Contract audit','b0024c…'],
+      'E-02':['🤖','Research agent','ef899a5','🔎','Determinism audit','466510…'],
+      'D-01':['🗂️','Data audit agent','1c16d78','⚖️','Rights checker','14,915 excerpts'],
+      'E-03':['🤖','Research agent','c93b928','🔎','Independent audit','1ecaef…'],
+      'A-01':['🔎','Audit agent','ad8743b','🔁','Byte replay','b8c044…'],
+      'E-04':['🤖','Research agent','d1eeb5b','🔎','Independent audit','f9b84a…'],
+      'M-01':['🤖','Research agent','d1eeb5b','📐','Frozen-result check','E-04'],
+      'E-05':['🤖','Research agent','37f8b93','🔎','Independent audit','b2bcf76…'],
+      'N-01':['🧭','Planner agent','next contract','🔒','Data firewall','37 groups sealed']
+    }
+    const colors = {question:'#5d6c64',observation:'#7356a6',mechanism:'#217553',experiment:'#b86d12',result:'#247894',audit:'#af433a'}
+    const fills = {question:'#edf1ee',observation:'#eee8f8',mechanism:'#e2f0e7',experiment:'#fff0d6',result:'#e3f1f5',audit:'#fae6e3'}
+    const initialStep = Number(new URLSearchParams(location.search).get('stage') || 0)
+    let step = Math.max(0, Math.min(initialStep, events.length - 1)), selectedId = eventAt(initialStep).focus, playing = false, timer, zoomLevel = 1, simulation
+    const svg = d3.select('#graph')
+    const root = svg.append('g')
+    const edgeLayer = root.append('g')
+    const nodeLayer = root.append('g')
+    const zoom = d3.zoom().scaleExtent([.55, 1.8]).on('zoom', event => root.attr('transform', event.transform))
+    svg.call(zoom)
+
+    function visibleNodes() { return nodes.filter(node => node.at <= step) }
+    function visibleEdges() { return edges.filter(edge => edge.at <= step) }
+    function nodeById(id) { return nodes.find(node => node.id === id) }
+    function threadById(id) { return threads.find(thread => thread.id === id) }
+    function eventAt(index) { return events[Math.max(0, Math.min(index, events.length - 1))] }
+    function edgeId(edge) { return `${edge.source.id || edge.source}-${edge.target.id || edge.target}` }
+    function render() {
+      syncUrl()
+      renderHeader()
+      renderThreads()
+      renderThreadBands()
+      renderEvents()
+      renderGraph()
+      selectNode(selectedId, false)
+    }
+    function syncUrl() {
+      const url = new URL(location.href)
+      url.searchParams.set('stage', step)
+      history.replaceState(null, '', url)
+    }
+    function renderHeader() {
+      const event = eventAt(step)
+      document.getElementById('run-status').textContent = `${event.run} · ${playing ? 'running' : 'paused'}`
+      document.getElementById('stage-label').textContent = `${step + 1} / ${events.length}`
+      document.getElementById('world-time').textContent = event.at
+      document.getElementById('world-event').textContent = event.title
+      document.getElementById('progress').style.setProperty('--progress', `${(step + 1) / events.length * 100}%`)
+      document.getElementById('play').textContent = playing ? 'Ⅱ' : '▶'
+      renderStats()
+    }
+    function renderStats() {
+      const shown = visibleNodes()
+      const trials = shown.filter(node => node.type === 'experiment')
+      const activeThreads = new Set(shown.map(node => node.thread)).size
+      const stats = [[activeThreads,'线程'],[trials.filter(node=>node.state==='closed').length,'已关闭'],[trials.filter(node=>node.state==='queued').length,'待执行']]
+      document.getElementById('stats').innerHTML = stats.map(stat => `<span class="stat"><b>${stat[0]}</b>${stat[1]}</span>`).join('')
+    }
+    function renderThreads() {
+      const current = eventAt(step).thread
+      document.getElementById('thread-overview').innerHTML = threads.map(thread => threadChip(thread, current)).join('')
+    }
+    function threadChip(thread, current) {
+      const count = events.slice(0, step + 1).filter(event => event.thread === thread.id).length
+      return `<div class="thread-chip ${thread.id===current?'current':''}" style="--thread:${thread.color}"><i>${thread.icon}</i><b>${thread.label}</b><span>${count} EVENTS</span></div>`
+    }
+    function renderThreadBands() {
+      document.getElementById('thread-bands').innerHTML = threads.map(thread => `<div class="thread-band"><span>${thread.icon} ${thread.label}</span></div>`).join('')
+    }
+    function renderEvents() {
+      const list = document.getElementById('event-list')
+      list.replaceChildren(...events.slice(0, step + 1).map(makeEventRow))
+      list.lastElementChild?.scrollIntoView({block:'nearest'})
+    }
+    function makeEventRow(event, index) {
+      const row = document.createElement('button')
+      const thread = threadById(event.thread)
+      const lane = threads.findIndex(item => item.id === event.thread)
+      row.className = `event-row ${index===step?'new':''} ${event.focus===selectedId?'selected':''}`
+      row.style.setProperty('--thread', thread.color)
+      row.innerHTML = `<time class="event-time">${event.at.slice(6)}</time>${threadRail(lane,thread)}<span class="event-copy"><b>${event.title}</b><span>${event.decision}</span><i class="stage-badge">${event.avatar} ${event.agent}</i></span>`
+      row.onclick = () => selectNode(event.focus)
+      return row
+    }
+    function threadRail(lane, thread) {
+      const dots = threads.map((_, index) => `<i class="${index===lane?'active':''}"></i>`).join('')
+      return `<span class="thread-rail" style="--lane:${lane};--thread:${thread.color}">${dots}</span>`
+    }
+    function renderGraph() {
+      const width = document.getElementById('graph-wrap').clientWidth
+      const height = document.getElementById('graph-wrap').clientHeight
+      svg.attr('viewBox', `0 0 ${width} ${height}`)
+      const graphNodes = visibleNodes().map(node => ({...node}))
+      const graphEdges = visibleEdges().map(edge => ({...edge}))
+      joinEdges(graphEdges)
+      joinNodes(graphNodes)
+      runLayout(graphNodes, graphEdges, width, height)
+    }
+    function joinEdges(graphEdges) {
+      edgeLayer.selectAll('path').data(graphEdges, edgeId).join(
+        enter => enter.append('path').attr('class', edge => `edge ${edge.kind} ${edge.at === step ? 'new' : ''}`),
+        update => update.attr('class', edge => `edge ${edge.kind}`),
+        exit => exit.remove()
+      )
+    }
+    function joinNodes(graphNodes) {
+      const groups = nodeLayer.selectAll('g').data(graphNodes, node => node.id).join(enterNode, updateNode, exit => exit.remove())
+      groups.on('click', (_, node) => selectNode(node.id))
+      groups.call(d3.drag().on('start', dragStarted).on('drag', dragged).on('end', dragEnded))
+    }
+    function enterNode(enter) {
+      const group = enter.append('g').attr('class', nodeClass)
+      group.append('foreignObject').attr('x',-88).attr('y',-46).attr('width',176).attr('height',92).html(nodeHtml)
+      return group
+    }
+    function nodeHtml(node) {
+      const state = stateMeta[node.state] || [node.state,colors[node.type],fills[node.type],'·']
+      return `<div xmlns="http://www.w3.org/1999/xhtml" class="node-card ${node.type} ${node.state}" style="--node-color:${state[1]};--node-fill:${state[2]}"><span class="node-top"><i class="node-icon">${node.icon}</i><span class="node-code">${node.id}</span><span class="node-state">${state[0]}</span></span><b>${node.title}</b><small>${node.summary}</small></div>`
+    }
+    function updateNode(update) { return update.attr('class', nodeClass) }
+    function nodeClass(node) {
+      const affected = step === 5 && node.id === 'E-03'
+      return `node ${node.at===step?'new':''} ${node.id===selectedId?'selected':''} ${affected?'affected':''} ${node.state}`
+    }
+    function runLayout(graphNodes, graphEdges, width, height) {
+      simulation?.stop()
+      simulation = d3.forceSimulation(graphNodes).force('link', d3.forceLink(graphEdges).id(node=>node.id).distance(165).strength(.64)).force('charge', d3.forceManyBody().strength(-780)).force('x',d3.forceX(node=>threadX(node.thread,width)).strength(.18)).force('y',d3.forceY(height/2+24).strength(.05)).force('collide',d3.forceCollide(104))
+      simulation.on('tick', () => positionGraph(width, height))
+      simulation.on('end', () => positionGraph(width, height))
+      simulation.stop()
+      settleSimulation(graphNodes, width, height)
+      positionGraph(width, height)
+      simulation.alpha(.08).restart()
+    }
+    function settleSimulation(graphNodes, width, height) {
+      for (let index = 0; index < 240; index += 1) {
+        simulation.tick()
+        graphNodes.forEach(node => clampNode(node, width, height))
+      }
+    }
+    function clampNode(node, width, height) {
+      node.x = clamp(node.x, 98, width - 98)
+      node.y = clamp(node.y, 92, height - 58)
+    }
+    function threadX(threadId, width) {
+      const lane = Math.max(0, threads.findIndex(thread => thread.id === threadId))
+      return width * ((lane + .5) / threads.length)
+    }
+    function positionGraph(width, height) {
+      nodeLayer.selectAll('g').attr('transform', node => { clampNode(node,width,height); return `translate(${node.x},${node.y})` })
+      edgeLayer.selectAll('path').attr('d', edge => edgePath(edge, width, height))
+    }
+    function edgePath(edge, width, height) {
+      const sx=clamp(edge.source.x,98,width-98), sy=clamp(edge.source.y,92,height-58)
+      const tx=clamp(edge.target.x,98,width-98), ty=clamp(edge.target.y,92,height-58)
+      const bend=(tx-sx)*.18
+      return `M${sx},${sy} C${sx+bend},${sy} ${tx-bend},${ty} ${tx},${ty}`
+    }
+    function clamp(value, min, max) { return Math.max(min, Math.min(max, value || min)) }
+    function dragStarted(event, node) { if (!event.active) simulation.alphaTarget(.25).restart(); node.fx = node.x; node.fy = node.y }
+    function dragged(event, node) { node.fx = event.x; node.fy = event.y }
+    function dragEnded(event, node) { if (!event.active) simulation.alphaTarget(0); node.fx = null; node.fy = null }
+    function selectNode(id, rerender=true) {
+      if (!nodeById(id) || nodeById(id).at > step) id = eventAt(step).focus
+      selectedId = id
+      nodeLayer.selectAll('g').classed('selected', node => node.id === id)
+      renderDetail(nodeById(id))
+      if (rerender) renderEvents()
+    }
+    function renderDetail(node) {
+      const review = reviews[node.id]
+      const state = stateMeta[node.state] || [node.state,colors[node.type],fills[node.type],'·']
+      const rows = detailRows(node,review).map(ledgerRow).join('')
+      document.getElementById('detail').innerHTML = detailHtml(node,review,state,rows)
+      renderImpact(node)
+    }
+    function detailHtml(node,review,state,rows) {
+      return `<div class="detail-head"><span class="detail-code">${node.icon} ${node.id} · ${threadById(node.thread).label}</span><span class="detail-state" style="--state-color:${state[1]};--state-fill:${state[2]}">${state[0]}</span></div><h2>${node.title}</h2><p>${node.summary}</p>${agentHtml(node.id)}<section class="review-verdict" style="--state-color:${state[1]};--state-fill:${state[2]}"><i>${state[3]}</i><div><b>${review.verdict}</b><p>${review.reason}</p></div></section><section class="comparison"><div><span>预注册门槛</span><b>${review.gate}</b></div><div><span>实际观测</span><b>${review.observed}</b></div></section><section class="decision"><span>本次裁决</span><p>${decisionFor(node.id)}</p></section><div class="ledger">${rows}</div>`
+    }
+    function agentHtml(id) {
+      const agent = agentOwners[id]
+      return `<section class="agent-strip">${agentCell(agent.slice(0,3),'执行 Agent')}${agentCell(agent.slice(3),'审查 Agent')}</section>`
+    }
+    function agentCell([icon,name,run],label) {
+      return `<div class="agent-cell"><i>${icon}</i><span>${label}<b>${name}</b><small>${run}</small></span></div>`
+    }
+    function detailRows(node,review) {
+      return [['证据来源',node.source],['运行范围',node.owner],['审计',review.audit],node.unknown?['仍未知',node.unknown]:null].filter(Boolean)
+    }
+    function ledgerRow([key,value]) { return `<div class="ledger-row"><span>${key}</span><b>${value}</b></div>` }
+    function decisionFor(id) {
+      return events.find(event => event.focus === id)?.decision || reviews[id].reason
+    }
+    function renderImpact(node) {
+      const outgoing = visibleEdges().filter(edge => (edge.source.id || edge.source) === node.id)
+      const items = outgoing.map(edge => impactRow(edge)).join('')
+      document.getElementById('impact').innerHTML = `<h2>直接影响 · ${outgoing.length}</h2><div class="impact-list">${items || '<span class="empty">尚无下游节点</span>'}</div>`
+    }
+    function impactRow(edge) {
+      const target = nodeById(edge.target.id || edge.target)
+      return `<div class="impact-row"><i></i><div><b>${target.id} · ${target.title}</b><small>${edge.kind}</small></div></div>`
+    }
+    function goTo(index) {
+      stopPlayback()
+      step = Math.max(0, Math.min(index, events.length - 1))
+      selectedId = eventAt(step).focus
+      render()
+    }
+    function nextStep() {
+      if (step >= events.length - 1) return stopPlayback()
+      step += 1
+      selectedId = eventAt(step).focus
+      render()
+    }
+    function togglePlayback() {
+      if (playing) return stopPlayback()
+      if (step === events.length - 1) step = 0
+      playing = true
+      render()
+      timer = setInterval(nextStep, 1800)
+    }
+    function stopPlayback() {
+      playing = false
+      clearInterval(timer)
+      renderHeader()
+    }
+    function applyZoom(level) {
+      zoomLevel = Math.max(.55, Math.min(1.8, level))
+      svg.transition().duration(220).call(zoom.transform, d3.zoomIdentity.translate((1-zoomLevel)*svg.node().clientWidth/2,(1-zoomLevel)*svg.node().clientHeight/2).scale(zoomLevel))
+    }
+    document.getElementById('play').onclick = togglePlayback
+    document.getElementById('next').onclick = nextStep
+    document.getElementById('reset').onclick = () => goTo(0)
+    document.getElementById('zoom-in').onclick = () => applyZoom(zoomLevel + .2)
+    document.getElementById('zoom-out').onclick = () => applyZoom(zoomLevel - .2)
+    document.getElementById('zoom-reset').onclick = () => applyZoom(1)
+    window.addEventListener('resize', renderGraph)
+    render()
+  </script>
+</body>
+</html>

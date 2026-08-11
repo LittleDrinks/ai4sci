@@ -1,0 +1,752 @@
+﻿[
+    {
+        "id":  1,
+        "topic":  "Mathematical Sciences",
+        "title":  "What makes prime numbers so special?",
+        "full_text":  "There are infinite prime numbers—numbers that are only divisible by one and the number itself. Their existence and properties are extremely interesting to mathematicians, computer scientists, and other experts. While the entire number line—essentially every number—can be expressed as the product of prime numbers, there is great difficulty in factoring large numbers into primes. And since prime numbers have these unique properties associated with factorization, they are very useful in the field of cryptography. Imagine a computer encryption that relies on an extremely large number, such as a number with many factors of tens or even hundreds and hundreds of digits; even supercomputers will have a huge challenge in identifying its prime factors, making prime numbers especially appealing for encryption."
+    },
+    {
+        "id":  2,
+        "topic":  "Mathematical Sciences",
+        "title":  "Is the Riemann hypothesis true?",
+        "full_text":  "The Riemann hypothesis, one of the great unproven problems in mathematics, addresses the distribution of prime numbers. While no pattern of prime numbers is apparent among all natural numbers, G. F. B. Riemann conjectured that their frequency was related to a complex function called the Riemann zeta function, which he used for “for calculating how many primes there are, up to a cutoff, and at what intervals these primes occur, based on the zeroes of the zeta function,” as Frankie Schembri wrote in Science. “However, Riemann’s formula only holds if one assumes that the real parts of these zeta function zeroes are all equal to one-half”—meaning that all the infinitely many nontrivial zeros lie on a straight line equal to one-half. The Riemann hypothesis has been checked for the first 1,000 quintillion solutions."
+    },
+    {
+        "id":  3,
+        "topic":  "Mathematical Sciences",
+        "title":  "Will the Navier–Stokes problem ever be solved?",
+        "full_text":  "Despite the fact that they are practically useful, proof of the Navier–Stokes equations, used to model fluid flow, remains elusive. We still don’t know whether these equations are applicable at all times and particularly if global classical solutions exist for all points in a 3D space."
+    },
+    {
+        "id":  4,
+        "topic":  "Chemistry",
+        "title":  "Are there more color pigments to discover?",
+        "full_text":  "It is possible to create new pigments, but not new colors. The first synthetic pigment was made in the early 1700s. In 2009, chemist Mas Subramanian accidently created a new blue pigment called “YInMn Blue.”"
+    },
+    {
+        "id":  5,
+        "topic":  "Chemistry",
+        "title":  "Will the periodic table ever be complete?",
+        "full_text":  "The periodic table currently consists of 118 elements, the last four of which were announced in 2016. The International Union of Pure and Applied Chemistry (IUPAC), which formally verifies, recognizes, and names new elements, has a challenging task. Its guidelines for the criteria for element discovery were established 29 years ago, yet in 2018, IUPAC issued an update illustrating the challenges associated with resolving whether the periodic table will ever be complete. IUPAC’s updated report addressed how previously utilized methods and technologies for discovering new elements were being supplanted by innovative approaches. As new techniques are developed, it is possible more elements will be found—the limitations of human inventiveness may be our only obstacle."
+    },
+    {
+        "id":  6,
+        "topic":  "Chemistry",
+        "title":  "How can we measure interface phenomena on the microscopic level?",
+        "full_text":  "Interfacial chemistry is a fascinating field that seeks to expand and deepen our comprehension of behavior at the molecular interface of gases and liquids, liquids and solids, and solids and solids, among other systems. At these microscopic and nanoscale borders, an elemental dance occurs involving mass and heat transfer through evaporation, reaction, and micro- or even nanoscale explosions, but we still are unsure how these processes are choreographed by the chemicals themselves. In the case of gas–liquid or liquid–solid interfaces, optical interference methods can measure gas-film or liquid-film thicknesses up to nanoscale levels, but the information is too limited for sharpening our understanding of these complex physical and chemical phenomena. The study of microscopic interfaces is fueled by urgent research needs in fields such as materials synthesis, combustion, spray drying, and design of nextgeneration evaporative cooling nanodevices."
+    },
+    {
+        "id":  7,
+        "topic":  "Chemistry",
+        "title":  "What is the future for energy storage?",
+        "full_text":  "If we are to become more reliant on renewable energy such as wind and solar, we need to be able to store it efficiently and inexpensively. Storage is especially important, given the somewhat unpredictable nature of these energy sources. One of the most promising opportunities for energy storage is batteries. Invented in 1800, batteries have evolved into the convenient, handheld models to which we are now accustomed. Today, scientists with backgrounds in chemistry, materials science, electrical and mechanical engineering, and other fields have contributed to the advent of what some call the “Ion Age”—a new era of batteries that use lithium ions for their electrochemistry. The 2019 Nobel Prize in Chemistry was awarded in recognition of this innovation.\n\nThere are many benefits to lithium-ion batteries. They are energy efficient, have a high energy density, provide an abundance of current for high-power applications, are generally low cost, and are easily maintainable. They also have a long life cycle, a key component to employing them in large-scale energy storage. But the advantages of batteries extend beyond the electrical grid: “Because improving battery technology is essential to the widespread use of plug-in electric vehicles, storage is also key to reducing our dependency on petroleum for transportation,” as noted by the U.S. Department of Energy.\n\nAmong the impediments to widespread application of large-scale batteries for grid-level energy storage is access to raw materials. Lithium-ion batteries require cobalt, considered a “conflict mineral” because of the negative environmental and social ramifications associated with mining it, especially in the Democratic Republic of Congo, which supplies 60% of the world’s cobalt. Noncobalt, nonmetal cathodes, such as sulfurbased electrodes, offer great promise for the next generation of batteries. Lithium is mainly procured from Australia, Argentina, and Chile, where concerns over unethical labor practices and water consumption plague the industry. Advanced technologies for lithium extraction and battery recycling—or substituting lithium with, for example, sodium—are essential to alleviate these resource challenges.\n\nWorldwide, there are many battery technology advancement efforts coalescing across industry, government, and academia. In China, there are 93 “gigafactories” that manufacture lithium-ion battery cells, according to Benchmark Mineral Intelligence.\n\nBut lithium-ion batteries are just one possible solution for energy storage. Technologists are also experimenting with flow batteries (liquid batteries), pumped hydro, stacked blocks (which rely on gravity), and compressed air and liquid air, among others."
+    },
+    {
+        "id":  8,
+        "topic":  "Chemistry",
+        "title":  "Why does life require chirality?",
+        "full_text":  "Molecules in DNA and RNA have the interesting feature of “handedness,” also called chirality. While these molecules naturally appear in both left- and right-handed forms, only the right-handed molecules are found in living organisms. “Handedness serves an essential function in living beings,” writes Emily Singer in Quanta. “Many of the chemical reactions that drive our cells only work with molecules of the correct handedness.” Many scientists believe that chirality is an essential component of biochemistry, given that it affects how cellular elements interact with each other. Molecular locks require a molecule of the correct handedness to open them. But it is still unclear whether chirality is a defining requirement for life, especially if mankind formulates different definitions of “life” in the future."
+    },
+    {
+        "id":  9,
+        "topic":  "Chemistry",
+        "title":  "How can we better manage the world’s plastic waste?",
+        "full_text":  "One of the challenges of managing plastic waste is a lack of reliable data: The complicated global streams that produce and distribute waste from petroleum-based products are not always clear. Recently, experts in management and sustainability collaborated to address this issue by focusing on material flow analysis in Trinidad and Tobago, an island nation of 1.2 million people. Correlating publicly available data, researchers investigated the origins of waste and surmised that recycling plastic bottles and banning plastic bags would be economically feasible and environmentally advantageous, and also that plastics could be used as fuel in cement plants. They concluded that material flow analysis is useful for such efforts."
+    },
+    {
+        "id":  10,
+        "topic":  "Chemistry",
+        "title":  "Will AI redefine the future of chemistry?",
+        "full_text":  "AI and machine learning have the potential to greatly benefit organic chemistry, leading to more rapid synthesis of molecules. These computational technologies can greatly optimize and accelerate drug development by, for example, predicting successfu pathways to synthesize target molecules."
+    },
+    {
+        "id":  11,
+        "topic":  "Chemistry",
+        "title":  "How can matter be programmed into living materials?",
+        "full_text":  "Synthetic biology is an interdisciplinary field at the nexus of biochemistry, materials science and engineering, biology, chemistry, and other disciplines. Synthetic biologists aim to redesign or synthesize cells, life science systems, and even whole organisms to address grand challenges across sectors such as medicine and manufacturing. To engineer a new biological component, researchers combine DNA synthesis and genomics to assemble novel genomes. Self-assembly of nonliving and living components is another route being investigated, through both bottom-up and top-down processes. Wil Srubar, a materials scientist and architectural engineer, has been researching ways to embed cells with new abilities, “demonstrating the power and potential of engineered living materials at many scales, including electrically conductive biofilms, single-cell living catalysts for polymerization reactions, and living photovoltaics,” he writes."
+    },
+    {
+        "id":  12,
+        "topic":  "Chemistry",
+        "title":  "What drives reproduction in living systems?",
+        "full_text":  "Reproduction is the manner in which organisms ensure their survival. Individuals with genetic traits that give them advantages will reproduce more often through natural selection."
+    },
+    {
+        "id":  13,
+        "topic":  "Medicine \u0026 Health",
+        "title":  "Can we predict the next pandemic?",
+        "full_text":  "There will be other pandemics, perhaps in the next few decades, writes David Murdoch, Dean and Head of Campus at the University of Otago in Christchurch, New Zealand, in The Conversation. This prediction, he adds, is driven by the fact that epidemics are occurring more frequently, such as those caused by the SARS, Zika, and Ebola viruses, and are spurred by human-caused environmental and societal changes. The question of determining the timing and location of a pandemic is a complicated one. Pandemic prediction is multidisciplinary, requiring collaboration between experts in infectious disease, epidemiology, public health, public health policy, sociology, psychology, human behavior, climate and environmental science, data science, computer science, and crisis communications. Murdoch notes that we can heed lessons from COVID-19. These include boosting support for pandemic preparedness; surge capacity in health systems, laboratories, and supply-chain logistics; and public health communications.\n\nData scientists, harnessing more robust computer power and capabilities, have taken a lead role in predicting the next pandemic. Zoonosis is a special area of focus, whereby an infectious disease skips from an animal host to a human. Tracking zoonosis is highly challenging. However, researchers like David Redding of the Institute of Zoology in London are crafting powerful prediction models that can mine data harvested from perturbations in the environment and society, including deforestation expansion, animal movement, climate change, and transportation. Through modeling, Redding’s team predicted the location of the last three outbreaks. However, the timing of such outbreaks remains elusive.\n\nThe Global Virome Project, a USD 4 billion (RMB 25.7 billion) international effort, is aimed at transforming how we find and monitor infectious diseases. The goal is to improve the robustness and accessibility of such predictions in a manner akin to current weather prediction and surveillance. Zoonotic disease transmission prediction has traditionally been tied to surveillance and preparedness. This project aims to proactively plan and ultimately predict pandemics by building the capacity to identify, genetically catalog, and track upwards of 500,000 viruses that have the potential for spillover to humans. By seeking to better comprehend the complex web that links human health, ecology, and virology with zoonosis, we can begin to predict the next pandemics."
+    },
+    {
+        "id":  14,
+        "topic":  "Medicine \u0026 Health",
+        "title":  "Will we ever find a cure for the common cold?",
+        "full_text":  "Over 200 viruses cause the “common cold.” These viruses mutate very rapidly. Yet scientists have discovered a way to stop replication of certain viruses. Perhaps these discoveries will enable more effective treatments in the future."
+    },
+    {
+        "id":  15,
+        "topic":  "Medicine \u0026 Health",
+        "title":  "Can we design and manufacture medicines customized for individual people?",
+        "full_text":  "Personalized or precision medicine, in which treatments and interventions are designed specifically for individuals based on their individual genetics and biology, is an exciting avenue for health care in the future. Instead of a one-size-fits-all approach, we are closer to identifying disease risk and developing explicitly targeted drugs (and customized doses) to diagnose, treat, and prevent ailments and conditions on an individual basis. Manufacturing these types of medicines is within reach, thanks to advances in computing power, artificial intelligence, machine learning, and statistical tools that enable scientists to mine huge amounts of patient data. As complete genomes are sequenced and incorporated into our medical records, the personalized approach is reinforced. Although there is still much work to do, personalized medicine could be the biggest revolution in health care in our lifetime."
+    },
+    {
+        "id":  16,
+        "topic":  "Medicine \u0026 Health",
+        "title":  "Can a human tissue or organ be fully regenerated?",
+        "full_text":  "Many scientists believe that the future of medicine will be trailblazed by tissue and organ regeneration, which aims to replace a dysfunctional or injured human body part with one that has been regenerated. Regenerated tissues or organs could be made in vitro, perhaps in a factory by 3D printing/tissue culture, or in vivo, in an animal or directly in a human. The hope is that the effect of regeneration on medicine will be nothing short of spectacular, potentially revolutionizing the measures we use to treat diseases and injuries such as cancer and trauma.\n\nMany species have the ability to grow a new organ or body part without succumbing to the injury, for example, a salamander who loses its tail and grows a new one. While we do not have the ability to regenerate a lost limb within our bodies, researchers are looking to circumvent nature by growing tissue in the laboratory.\n\nOne of our model organisms is the zebrafish, a small freshwater animal with 70% genetic similarity and many of the same major organs and tissues as humans. The zebrafish is able to regenerate many organs, including fins, the spinal cord, the retina, and the heart. Biomedical engineers at Duke University are studying the mechanisms underlying zebrafish regeneration with the goal of discovering similar processes dormant in humans.\n\nCurrently, our knowledge has reached an interesting state, with different tissues successfully grown in the lab. In 2019, researchers at Tel Aviv University effectively bioprinted the first 3D human heart made from the patient’s own cells and various biological materials including collagen and glycoprotein.\n\nTechnological innovations, including 3D printing, artificial intelligence for data analysis, and tissue–computer interfaces are enabling deeper exploration of this topic than ever before. Scientific advancements in cell biology and gene editing have led to elucidation of the mechanisms underlying tissue/organ development. But the main roadblocks to human organ regeneration are both technical and scientific in nature. We need a better understanding of the cellular processes, biochemistry, and environment that foster tissue regeneration. And we must investigate more effective measures to overcome immune rejection of transplanted tissues/organs."
+    },
+    {
+        "id":  17,
+        "topic":  "Medicine \u0026 Health",
+        "title":  "How is immune homeostasis maintained and regulated?",
+        "full_text":  "Immune homeostasis is a state of internal equilibrium. Without homeostasis, the immune system cannot function correctly, leading to disease and infection. Knowing how this balance is maintained can provide a fuller picture of how the body works and may help us in calibrating medical interventions. For instance, instead of nonselectively boosting or suppressing the whole immune system as we currently do, in the future we may be able to rebalance a dysregulated immune system. Studies in humans and in animal models have pursued almost every aspect of immune response and examined many immune cell populations, yet several unanswered questions remain. Genomic, proteomic, and other ‘omics data are helpful. But the human immune system is dynamic and very individualized, making animal models of limited use—thus a robust platform to study and manipulate human immune cells is needed to address the problem."
+    },
+    {
+        "id":  18,
+        "topic":  "Medicine \u0026 Health",
+        "title":  "Is there a scientific basis to the Meridian System in traditional Chinese medicine?",
+        "full_text":  "Traditional Chinese medicine contends that energy flows through the body by way of 12 main channels called meridians, which correlate with organs. Various diseases are associated with blocked meridians, and acupuncture stimulates points on the body, releasing and easing the energy flow. There have been many scientific examinations exploring the Meridian System and the use of acupuncture for treatment of disorders, and some studies suggest that acupuncture may help ease chronic pain and prevent migraine headaches. Other investigations suggest that acupuncture impacts the way the brain processes pain, according to the U.S. National Institutes of Health. As for the meridians themselves, in 1987, scientists who analyzed the movement of radioisotopes in the body concluded that meridians are actually spaces within the body, not structures. More recently, a 2020 publication in the journal Research reached the same conclusion."
+    },
+    {
+        "id":  19,
+        "topic":  "Medicine \u0026 Health",
+        "title":  "How will the next generation of vaccines be made?",
+        "full_text":  "Next-generation vaccine platforms accelerate vaccine development by sequencing viral proteins. Today we are seeing viral vector vaccines, nucleic acid–based vaccines, and antigen-presenting cells being leveraged to fight COVID-19."
+    },
+    {
+        "id":  20,
+        "topic":  "Medicine \u0026 Health",
+        "title":  "What is the etiology of autism?",
+        "full_text":  "Autism spectrum disorder (ASD) is a neurodevelopmental condition that affects an individual’s ability to perceive and process information and socialize with others. It can lead to issues with social interaction, communication, and certain repetitive patterns of behavior. ASD is referred to as a “spectrum” because it includes a wide range of symptoms that can manifest in different ways and with different levels of severity. While ASD has been studied for decades, its cause is still a mystery. Although there appears to be increased risk of someone developing autism based on genetic and environmental causes, there is still no conclusive evidence identifying its etiology."
+    },
+    {
+        "id":  21,
+        "topic":  "Medicine \u0026 Health",
+        "title":  "Can we ever overcome antibiotic resistance?",
+        "full_text":  "Antibiotic resistance significantly threatens global health and food security. It can be addressed through contributions by those in policy, health care, research, and agriculture, and through prudent use of antibiotics by individuals."
+    },
+    {
+        "id":  22,
+        "topic":  "Medicine \u0026 Health",
+        "title":  "What role does our microbiome play in health and disease?",
+        "full_text":  "You may think of yourself as a single being, but on and under your skin and residing in organs and tissues throughout your body is an entire ecosystem of microorganisms known as the microbiome. We are inhabited by more than 100 trillion viruses, at least 80 genera of fungi, and 1,000 species of bacteria. It is estimated that the microbiome may weigh upwards of five pounds. For the most part, these communities exist harmoniously within us.\n\nThe microbiome, especially in the gut, mouth, and vagina, plays critical roles in many physiological processes and in the maintenance and modulation of the holistic health of the host. The microbiome is involved in everything from fiber catabolism and amino acid biosynthesis to host immune system modulation and pathogen resistance.\n\nInterestingly, the microbiome might affect our immune homeostasis, notes Xiao. Studies have shown that unbalanced microbiomes can lead to illness. “Dysregulation of the microbiome is related to many diseases, including metabolic disorders, immune and inflammatory diseases, neurodegenerative diseases, cancers, and even aging,” he says. Because the microbiome is so interconnected with all systems within our bodies, it also impacts prognosis and treatment options.\n\nBioinformatics and microbiology researchers are now developing and using cutting-edge technologies to identify and segregate the key players in the microbiome and gain mechanistic understanding of their symbiosis with other microbes and the host organism. Metagenomics investigations are moving from correlation to causality with the help of multiomics analysis (genomics, proteomics, metabolomics, and transcriptomics), as well as animal models. According to some studies, an individual’s microbiome contains as many as 232 million individual genes, at least half of which are unique to that person.\n\nScientific and technological innovations will be required to complete the picture. We will need to identify all members of our microbiome from a spatial and temporal perspective and decipher symbiotic relationships based on interaction and regulation networks. It will also be necessary to identify and characterize the core microbiota, the healthy microbiome, and the disease-related microbiome."
+    },
+    {
+        "id":  23,
+        "topic":  "Medicine \u0026 Health",
+        "title":  "Can xenotransplantation solve the shortage of donor organs?",
+        "full_text":  "The shortage of organs could be solved by xenotransplantation—the process of transplanting organs between species—if we can overcome toxicity, rejection, and coagulation dysfunction."
+    },
+    {
+        "id":  24,
+        "topic":  "Biology",
+        "title":  "What could help conservation of the oceans?",
+        "full_text":  "As the shortage of terrestrial resources has become increasingly acute, it is clear that the ocean is the last insurance humans have for survival and for combating climate change. Ocean conservation requires a global collaboration across diverse disciplines, industries, and professions. Ecologists, economists, social scientists, policy makers, communications specialists, engineers, geoscientists, mathematicians, and climate experts are just a few of the practitioners who must partner to address this dynamic challenge. Mathematical models can help us better understand complex, climate-related systems; predict opportunities for water conservation and pollution control; and show us how to mitigate the pervasive effects of climate change. There is not just one solution, and we need buy-in from worldwide stakeholders in government and economic sectors such as energy, plastics, and agriculture."
+    },
+    {
+        "id":  25,
+        "topic":  "Biology",
+        "title":  "Can we stop ourselves from aging?",
+        "full_text":  "The odds of dying increase significantly as we age. But an interesting 2018 paper in Science suggests that by the time we turn 105, we essentially stop aging, in the sense that the possibility of us dying remains mathematically the same as if we were 106 or older. Does this mean that centenarians stop aging? It is not an easy question to answer. It is important to recognize that aging itself does not cause death nor is it an illness. The U.S. National Institute on Aging of the National Institutes of Health clarifies that “aging is associated with changes in dynamic biological, physiological, environmental, psychological, behavioral, and social processes.” Scientists continue to search for the mechanisms that influence these processes. But if we could slow or stall these processes, what would it mean for humanity?"
+    },
+    {
+        "id":  26,
+        "topic":  "Biology",
+        "title":  "Why can only some cells become other cells?",
+        "full_text":  "Stem cells are special cells that have the ability to develop into other cell types. In the right ecosystem of surrounding cells, called a stem-cell niche, stem cells divide into daughter cells, which then become either new stem cells or specialized cells that perform a unique function, such as brain, stomach, and intestinal cells. No other cell has this transformative power to differentiate or create new cell types.\n\nThere are different sources of stem cells. Embryonic stem cells come from 3-to-5-day-old embryos. These cells are especially versatile and can be used to regenerate or repair unhealthy tissue. Adult stem cells are found in many types of tissue, including bone marrow, and while they can also become other cells, they don’t have as broad a potential when compared to embryonic stem cells. According to the Mayo Clinic, recent research has provided evidence that adult stem cells may be more adaptable in forming cell types from the tissue they are derived from, such as bone marrow, and thus could be used to create bone or heart muscle or other types of cells. Also, some adult stem cells can be genetically\n\nreprogrammed to\n\nhave the properties of embryonic stem cells. Using reprogrammed cells instead of embryonic stem cells may prevent the immune system from rejecting the new stem cells, but it is not yet known whether these modified adult stem cells will cause detrimental effects in humans.\n\nMedical research has expanded our universal understanding of cellular systems. The progress is stunning: Stem cell experimental therapy is already being used in human clinical trials. But we have only scratched the surface as we examine stem cell therapy in animal models and explore novel ways we can leverage stem cells to improve human health and relieve health burdens. We already know that differentiation in embryonic stem cells happens because of signaling mechanisms and is controlled by various growth factors and epigenetic processes. Continued investigation of the exact mechanisms responsible is warranted; we need to become more cognizant of how embryonic cells behave so we can better understand how to control the types of differentiated cells they form."
+    },
+    {
+        "id":  27,
+        "topic":  "Biology",
+        "title":  "Why are some genomes so big and others very small?",
+        "full_text":  "Genome size, which is the amount of DNA in a cel nucleus, is extremely diverse across animals and plants, and varies more than 64,000-fold. The smallest genome recorded exists in the microsporidian Encephalitozoon intestinalis (a parasite in certain mammals), and the largest genome belongs to a flowering plant known as Paris japonica, which has 150 billion base pairs of DNA per cell (50 times larger than that of a human). Plants are interesting in that their genome size plays an important role in their biology and evolution. But as the authors of a 2017 paper in Trends in Plant\n\nSciences wrote: “Although we now know the major contributors to genome size diversity are non-protein coding, often highly repetitive DNA sequences, why their amounts vary so much still remains enigmatic.”"
+    },
+    {
+        "id":  28,
+        "topic":  "Biology",
+        "title":  "Will it be possible to cure all cancers?",
+        "full_text":  "Our most important weapon for fighting disease is our own immunity. Immunity is especially critical for defending against cancer, where cells divide uncontrollably and migrate throughout tissue. Cancer is one of the leading causes of deaths worldwide: In 2018 alone, 18.1 million people were diagnosed with some form of the disease, a number that is expected to rise to 29.5 million per year by 2040, according to the International Agency for Research on Cancer. An astonishing 39.5% of adults will be diagnosed with cancer at some point in their lifetimes.\n\nWe have made important strides in treating cancer through decades of laboratory and clinical research. We know that cancer is caused by changes in DNA that can be triggered by internal or environmental stimuli. We also know that certain interventions, such as surgery, chemotherapy, and radiation, can in some cases make a huge difference in survival.\n\nIn recent years, scientists have made promising discoveries about the nature of the immune system. These discoveries have already led to treatments based"
+    },
+    {
+        "id":  29,
+        "topic":  "Biology",
+        "title":  "What genes make us uniquely human?",
+        "full_text":  "The human genome is believed to contain approximately 30,000 genes, of which \\~99% are shared with chimpanzees, our closest relatives. Scientists are leveraging innovative techniques and vast accumulated knowledge in bioinformatics, cellular biology, and genetics to pinpoint what makes us different. We have already mapped the human genome as well as the genomes of other primates, and through comparison with other genomes, it is possible to identify sequences in our genetic code that are different from other species. It is important to ask which of these genetic differences affect the evolution of the human brain. To answer this question, researchers at Yale School of Medicine are now building brain organoids (“minibrains”) from certain types of stem cells to observe human and chimpanzee brain development.\n\non immunotherapy, in which the body’s own immune system is leveraged to treat cancer, says the Cancer Research Institute.\n\nIn 2020, researchers at Cardiff University published a strategy for killing prostate, breast, lung, and other cancers in a laboratory environment. Their inspiration was to find unfamiliar and previously unknown ways that the immune system fights tumors. Using CRISPR-Cas9 screening techniques, they discovered a certain T-cell receptor that interacts with MR1, a molecule found on the surface of every cell in the body. MR1 may be helping the immune system recognize the distorted metabolism going on inside cancer cells. The scientists observed this T-cell find and kill a number of cancerous cells grown in the lab, but it did not touch normal tissues. More research is needed, as the exact mechanism is still not fully understood.\n\nTherapy with this T cell could result in a “one-stop” cancer treatment, as it has the potential to destroy many different types of cancers."
+    },
+    {
+        "id":  30,
+        "topic":  "Biology",
+        "title":  "How do migratory animals know where they’re going?",
+        "full_text":  "Migration is the regular movement of animals to new habitats, influenced by the seasons. The reasons for migration are well known: animals’ need for a different or better habitat, shelter, and food, as well as reproductive stressors. We are familiar with birds and butterflies that migrate north to south, but other types of migration involve heading between east and west or ocean and land, moving to different altitudes in mountain ranges, and even migrating within water columns in oceans and lakes. The diversity of migratory creatures is rich—from insects and mammals to fish. Even slime molds migrate!\n\nBut while humans have been observing animal migration for centuries, it is only recently that we have been able to better understand\n\nthe underlying mechanisms that allow migrating creatures to know where they are and where they are going. Yet many theories remain to be fully tested. We conjecture that some animals\n\nrely on visual cues, such as geographic landmarks. Others, such as certain songbirds, seals, and dung beetles, navigate using the position of the sun or stars.\n\nIn 2020, a study conducted by the University of Pennsylvania, Temple University, and the University of Oxford revealed how lobsters, newts, mole-rats, turtles, and pigeons steer their migration\n\nusing magnetoreception,\n\nthe ability to sense the planet’s\n\nmagnetic field. The scientists discovered a protein-based biophysical process that serves as the foundation of magnetoreception. There are three theories of how magnetic field sensitivity works, and they differ depending on the animal, writes Helen Matsos in Astrobiology Magazine. One involves biological magnetic minerals produced by bacteria and phytoplankton, and which scientists conjecture birds also have in their beaks. “The second theory, electromagnetic induction, involves animals sensitive to electric charges, such as aquatic animals, that have an internal cellular or neural mechanism that converts electro-receptivity into magnetic sensitivity,” she reports. “The third theory involves a biochemical reaction that generates radical pairs—quantum\n\nentangled molecules with unpaired electrons. Proteins called cryptochromes form radical pairs after they’ve been activated by energy absorption. Cryptochromes may hold a key to understanding the origin of magnetoreception in birds, which have cryptochromes in their eyes.”"
+    },
+    {
+        "id":  31,
+        "topic":  "Biology",
+        "title":  "Why did dinosaurs grow to be so big?",
+        "full_text":  "Paleontologists hypothesize that dinosaur size may be related to access to food sources (many dinosaurs browsed treetops), body temperature regulation, protection from predators, and other factors."
+    },
+    {
+        "id":  32,
+        "topic":  "Biology",
+        "title":  "How many species are there on Earth?",
+        "full_text":  "With \\~50 definitions of “species” and many unknown microorganisms, it is estimated that the total number of species on Earth is anywhere from 5.3 million to 1 trillion."
+    },
+    {
+        "id":  33,
+        "topic":  "Biology",
+        "title":  "How do organisms evolve?",
+        "full_text":  "Evolution refers to the cumulative changes that occur in a population over time. As Charles Darwin demonstrated, natural selection dictates that as organisms reproduce and develop heritable traits that allow them to better adapt to their environments, their species will favor those with beneficial genes. These genes will be carried on by the offspring over time. Natural selection serves as the essential mechanism for evolution. But the theory of evolution has many puzzles that are yet to be truly understood. For example, how did complex organs such as eyes or placentas evolve? Scientists are investigating these organs to identify genetic changes that have occurred over millions of years, with the understanding that evolution never stops."
+    },
+    {
+        "id":  34,
+        "topic":  "Biology",
+        "title":  "Is de-extinction possible?",
+        "full_text":  "Scientists are exploring options to possibly de-extinct certain species, while also considering the ethical implications of doing so. While it is not possible to bring a dinosaur back,\n\ndue to the limits on DNA survival, CRISPR could be a way forward for other extinct creatures. De-extinction is not cloning, so de-extincting a mammoth, for example, would necessitate editing the genomes of elephants and changing some of their DNA sequences to resemble mammoth DNA sequences, resulting in a hybrid animal."
+    },
+    {
+        "id":  35,
+        "topic":  "Biology",
+        "title":  "Did ancient humans interbreed with other human-like ancestors?",
+        "full_text":  "Interbreeding occurred, and thanks to advancements in computing power and the ability to extract ancient DNA from fossils, we know that Neanderthals mated with modern humans."
+    },
+    {
+        "id":  36,
+        "topic":  "Biology",
+        "title":  "Why do humans get so attached to dogs and cats?",
+        "full_text":  "Many of the reasons we are so attached to dogs and cats center around psychology: Our pets provide safety, security, comfort, emotional/physical support, and validation."
+    },
+    {
+        "id":  37,
+        "topic":  "Biology",
+        "title":  "Where do human emotions originate?",
+        "full_text":  "One of the fascinating aspects of being human is our emotions: how and what we feel about experiences and how we use emotions to make decisions. “While all mammals produce basic emotions like fear and anger, humans have especially highly-developed social emotions, such as shame, guilt, and pride,” notes the American Museum of Natural History. “Your senses tell you what’s going on in the outside world, while your emotions exist inside your body to tell you what these events and circumstances mean to you.”\n\nWe use emotion to process information, thus it also serves an evolutionary purpose. Emotion is not necessarily something we control—it is an automated mechanism for organisms, meant to protect us, and as such, each emotion corresponds to a function or an action we can take to help us understand our needs.\n\nWhile we know that emotions are tied to chemical and physiological responses, there is still debate about exactly what emotions are. Some neuroscientists believe that emotions are not objective states that\n\nautomatically “happen” to an organism, but are learned and constructed by the brain.\n\nTo better understand where emotions originate, researchers have focused on their development and classification, their influence on other psychological processes, and their physiological mechanisms, and have discovered independent neural circuits or “systems” in the mammalian brain that control three emotional responses. The first is the system that encourages positive behavior, such as a happy emotion that inspires an animal to explore its world. The next is the system that produces a fight-or-flight response, which is influenced by fear or anger. And the last is the system that produces negative behavior, causing an animal to have anxiety that leads it to harm itself or others.\n\nEmotions are difficult to measure. However, many emerging methods and technologies are being leveraged to investigate them further, including functional magnetic resonance imaging (fMRI), eventrelated potentials (ERPs), multichannel physiological recording, biofeedback, and eye movement recording, as well as cognitive behavior experiments and even hormone measurement."
+    },
+    {
+        "id":  38,
+        "topic":  "Biology",
+        "title":  "Will the world’s population keep growing indefinitely?",
+        "full_text":  "The growth of the world’s population, influenced by fertility, mortality, migration, and climate change, most likely will cease in 2100, when the world population is \\~11 billion."
+    },
+    {
+        "id":  39,
+        "topic":  "Biology",
+        "title":  "Why do we stop growing?",
+        "full_text":  "Our genes determine when we stop growing. When we reach the age of maturation and have the ability to reproduce, our physical growth ceases."
+    },
+    {
+        "id":  40,
+        "topic":  "Biology",
+        "title":  "Can humans hibernate?",
+        "full_text":  "Body temperature regulation is the issue—if we humans could decrease our body temperatures, we could theoretically induce a low metabolic state in which we would require no fuel."
+    },
+    {
+        "id":  41,
+        "topic":  "Biology",
+        "title":  "Will humans look physically different in the future?",
+        "full_text":  "It is possible that humans will look different. These changes would be influenced by variables including diet, environment, use of technology, and other factors. We are already evolving out of our wisdom teeth."
+    },
+    {
+        "id":  42,
+        "topic":  "Biology",
+        "title":  "Why were there species explosions and mass extinctions?",
+        "full_text":  "The evolutionary life cycle is permeated by two types of events: species explosions and mass extinctions. During the Cambrian Period, 540 million to 490 million years ago, Earth experienced its greatest emergence of species. Environmental changes, such as oxygenation, led to an expansion in small, mobile creatures exhibiting anatomical features seen in modern animals. Recent evidence has led to conjectures that this explosion resulted from small environmental changes that combined to trigger major evolutionary developments. This information may guide researchers to better characterize other species explosions. As for the five mass extinctions identified, scientists attest that the “press-pulse” model is the culprit, in which long-term changes or pressures on the ecosystem and environment (press) are met with an abrupt catastrophic event (pulse)."
+    },
+    {
+        "id":  43,
+        "topic":  "Biology",
+        "title":  "How might genome editing be used to cure disease?",
+        "full_text":  "The epoch of genome editing is upon us, thanks to the invention of CRISPR-Cas9 (CRISPR for short). This simple but powerful and versatile tool enables scientists to alter DNA sequences, thereby modifying genes within a cell. It sparked a revolution in genome editing in basic and applied research in many fields, including medicine—after all, if we can alter the messages encoded by DNA, the potential to positively impact human health is enormous, making it possible to treat the underlying causes of genetic disease by targeted modification of the genome. In 2020, biologists Emmanuelle Charpentier and Jennifer A. Doudna shared the Nobel Prize in Chemistry for their development of these “genetic scissors,” which they first reported on in 2012.\n\nThe CRISPR system relies on short RNA sequences that guide it to matching sequences of DNA. Cas9—a critical enzyme of the CRISPR system—binds to the DNA at the target site, disabling the gene of interest by cutting it. Modifying the Cas9 protein allows researchers to extend its capabilities, such as activating gene expression instead of abrogating it, in order to more fully study a gene’s function.\n\nSince the introduction of CRISPR in 2012, the use of genome editing has exploded, and scientists are continuously looking for avenues to expand its utility. In vitro investigations combined with animal models of human disease have clarified that CRISPR can be used to correct genetic defects, and scientists have incorporated it into research for fighting cystic fibrosis, cataracts, and Fanconi anemia. In fact, in a 2016 paper in Nature Biotechnology, authors Doudna and Rodolphe Barrangou wrote, “CRISPR systems are already being used to alleviate genetic disorders in animals and are likely to be employed soon in the clinic to treat human diseases of the eye and blood. Two clinical trials investigating the use of CRISPR for targeted cancer therapies have been approved in China and the United States. Beyond biomedical applications, these tools are now being used to expedite crop and livestock breeding, engineer new antimicrobials, and control disease-carrying insects.”"
+    },
+    {
+        "id":  44,
+        "topic":  "Biology",
+        "title":  "Can a cell be artificially synthesized?",
+        "full_text":  "Why are scientists interested in creating an artificia cell? Because we want to—by comparison—better appreciate our humanity, and because such an achievement would have tremendous implications in fields such as medicine and biology. But the quest to de novo engineer living, organic tissue transcends disciplinary and inspirational boundaries. By pushing these boundaries of science and technology to design an artificial cell, we may be able to better understand the origins of life and how life works, which may lead to a change in our definition of “life.” And yet, while we aim for these lofty goals, along the way we are gaining invaluable insight about biological systems that will enable us to improve many areas of society, from food and smart technologies to communications and medical care.\n\nSynthetic biologists, in partnership with other life scientists, physicists, chemists, engineers (biological, chemical, electrical, mechanical, and systems), computer scientists, and bioinformaticists, have been forging ahead with the goal of synthesizing a cell for decades. Various international, academic– industrial–governmental partnerships exist that enable this cutting-edge work, which focuses on “piecing together biomolecules in just the right context to approximate different aspects of life,” reports science journalist Kendall Powell in Nature. “Although there are many such aspects, they generally fall into three categories: compartmentalization, or the separation of biomolecules in space; metabolism, the biochemistry that sustains life; and information control, the storage and management of cellular instructions.”\n\nIn 2010, scientists with the J. Craig Venter Institute (JCVI) announced they had successfully synthesized a bacterial chromosome, which they then placed into a bacterium, supplanting its native DNA. “Powered by the synthetic genome, that microbial cell began replicating and making a new set of proteins,” wrote Science journalist Elizabeth Pennisi. The endeavor cost \\$40 million and took 20 people over a decade to achieve, but it significantly accelerated the field of synthetic biology. The late 2010s saw new milestones in technologies needed for artificial cells, including the application of CRISPR-Cas9 genome editing (first harnessed in 2013) and other advances in microfluidics, membrane science, nanotechnology, and imaging capabilities.\n\nThe JCVI team now wants to install the synthetic genome into a synthetic liposome “containing the machinery needed to convert DNA into protein, to see whether it can survive,” adds Powell. “In that case, both the software and the hardware of the cell would be synthetic from the start.”"
+    },
+    {
+        "id":  45,
+        "topic":  "Biology",
+        "title":  "How are biomolecules organized in cells to function orderly and effectively?",
+        "full_text":  "Researchers note that cells are crowded with many surprisingly harmonious groups of biomolecules, including proteins, nucleic acid, lipids, and carbohydrates. Yet cells still manage to ensure that the diverse functions of these biomolecules are orderly and effective. It’s well known that cell membranes set up subcellular compartments to provide physical barriers for different cellular activities to occur. Recent findings of phase-separation effects in the dynamic regulation of biomolecule gathering and condensation uncovered another important level of control for the organization and availability of biomolecules in cells. Scientists are using a combination of cryo-fluorescence microscopy and cryo-electron tomography to reveal the nanoscale organizations of biomolecules in different phases. The booming development in this field continues to provide valuable mechanistic perspectives for cell biology."
+    },
+    {
+        "id":  46,
+        "topic":  "Astronomy",
+        "title":  "How many dimensions are there in space?",
+        "full_text":  "We experience three dimensions of space—length, width, and height—and one of time. String theorists suggest there may be over 10 dimensions, with most being too small to perceive. However, we have yet to find evidence to prove or disprove the existence of these extra dimensions."
+    },
+    {
+        "id":  47,
+        "topic":  "Astronomy",
+        "title":  "What is the shape of the universe?",
+        "full_text":  "Astrophysicists have thought that space was essentially infinitely flat—that is, if you head in one direction, you will never return. But recent studies have potentially upended this theory, plunging the field into what is now being called a “cosmological crisis.” Scientists now theorize that the universe is actually “closed” or spherical in shape. Researchers analyzed data obtained from the Planck Observatory, which was operational from 2009 to 2013. They observed gravitational lensing—the distortion of light created by massive amounts of matter—impacting the cosmic microwave background radiation, the remnant light from the Big Bang. While they are 99% confident that their results indicate a curvature of the cosmos, the problem is far from being solved, because if the universe is closed, it doesn’t reconcile with the majority of current cosmological data."
+    },
+    {
+        "id":  48,
+        "topic":  "Astronomy",
+        "title":  "Where did the Big Bang start?",
+        "full_text":  "It is not a question of where, but rather how. It occurred 13.8 billion years ago, when it expanded our universe into existence, creating space and time. The exact mechanism remains unknown."
+    },
+    {
+        "id":  49,
+        "topic":  "Astronomy",
+        "title":  "Why don’t the orbits of planets decay and cause them to crash into each other?",
+        "full_text":  "Gravity keeps planets in stable orbits around the sun. Yet orbits do decay very gradually. Eventually, the planets will swirl into the sun."
+    },
+    {
+        "id":  50,
+        "topic":  "Astronomy",
+        "title":  "Is it possible to live permanently on another planet?",
+        "full_text":  "A number of engineering challenges would need to be addressed if we were to homestead elsewhere. The first focuses on fuel. What would we use for power generation and storage? Could we set up fueling stations in space that would allow us to travel to other planets and possibly settle there? We are still a long way from leveraging asteroid mining. We need to develop more robust life-support systems that can produce breathable air, food, water, and shelter for large numbers of people for long periods of time, as well as innovative waste recycling and significant understanding of the ecosystem of the planet(s) we would inhabit. And of course, this is all assuming that we could actually get to such a planet and survive physically, psychologically, and sociologically."
+    },
+    {
+        "id":  51,
+        "topic":  "Astronomy",
+        "title":  "Why do black holes exist?",
+        "full_text":  "Nobel laureate Sir Roger Penrose proved Einstein’s prediction of the existence of black holes, which form when supermassive stars burn out and collapse in on themselves."
+    },
+    {
+        "id":  52,
+        "topic":  "Astronomy",
+        "title":  "What is the universe made of?",
+        "full_text":  "Gravity keeps planets in stable orbits around the sun. Yet orbits do decay very gradually. Eventually, the planets will swirl into the sun.\n\nThe universe consists of measurable matter (5% of all matter, most of which is hydrogen), as well as dark matter (20%–25%) and dark energy (70%–75%). However, we do not fully understand the nature of dark matter or dark energy."
+    },
+    {
+        "id":  53,
+        "topic":  "Astronomy",
+        "title":  "When will the universe die? Will it continue to expand?",
+        "full_text":  "Before the universe dies, which will not happen for at least 200 billion years, expansion could continue. But whether expansion does continue will await a better understanding of astrophysics and the universe in its current and earlier forms."
+    },
+    {
+        "id":  54,
+        "topic":  "Astronomy",
+        "title":  "What is the origin of cosmic rays?",
+        "full_text":  "A 2017 Science paper offered evidence that ultrahigh-energy cosmic rays, which consist of protons and heavier atomic nuclei streaming in from space, originate from beyond the Milky Way. But their physical origins and acceleration mechanism remain a mystery."
+    },
+    {
+        "id":  55,
+        "topic":  "Astronomy",
+        "title":  "Are we alone in the universe?",
+        "full_text":  "To answer this, we first have to agree upon a definition of life, find the places where life can live, and develop the technologies to enable experiments that can detect life. Powerful telescopes, networks of radio and optical telescopes, and missions to the surfaces of planets in our solar system are advancing these investigations. Over 4,000 exoplanets have been identified since 1992, when the first exoplanet was discovered orbiting a pulsar 2,300 light years away. Astronomers use numerous techniques to catalog and assess new exoplanets and the stars they orbit, including methods for radial velocity, transit, direct imaging, microlensing, and astrometry. By analyzing spectra of the atmosphere of these exoplanets, we may be able to tell whether biosignatures are (or could be) present. There is also a drive to search for technology signatures from alien civilizations."
+    },
+    {
+        "id":  56,
+        "topic":  "Astronomy",
+        "title":  "What is the origin of mass?",
+        "full_text":  "The Big Bang did not immediately produce particles with mass. After the universe cooled to a critically low temperature, an invisible field called the Higgs Field appeared. It is this field that gives particles mass. But this is only the beginning of our quest. Most of the mass of protons and neutrons is not due to the Higgs Field, but results from a property of the strong force that binds quarks. And the mass of neutrinos is not considered to be associated with the Higgs Field. Furthermore, and perhaps most importantly, the Higgs Field does not explain the mass of dark matter. Indeed, the unknown properties of the Higgs Field still need to be scrutinized before we can solve this massive problem in physics."
+    },
+    {
+        "id":  57,
+        "topic":  "Astronomy",
+        "title":  "Is our Milky Way Galaxy special?",
+        "full_text":  "The spiral-shaped Milky Way is just one of billions of galaxies. Studying dwarf stars (the majority of stars in our galaxy) may reveal if it is unique."
+    },
+    {
+        "id":  58,
+        "topic":  "Astronomy",
+        "title":  "What is the smallest scale of space-time?",
+        "full_text":  "The smallest scale of space-time has not yet been determined, although it can’t be lower than the Planck scale, where known laws of physics break down and the formulation of meaningful measurements becomes an issue."
+    },
+    {
+        "id":  59,
+        "topic":  "Astronomy",
+        "title":  "Is Einstein’s general theory of relativity correct?",
+        "full_text":  "Einstein’s general theory of relativity (GR) successfully describes gravity. Although it has been proven in the local universe in weak-field limits, it remains largely untested in the general strong-field cases. Although Einstein’s theory of gravity has passed all tests thus far, we can’t be sure that it applies everywhere under every condition, and that it extends to the farthest limits of the universe. The largest deviations from GR are expected in the strongest gravitational fields around black holes, where different theories of gravity make significantly different predictions. Now, thanks to the advances in observations such as gravitational-wave detection and the imaging of supermassive black holes, we can test GR in a strong-field regime. It is indeed a timely question."
+    },
+    {
+        "id":  60,
+        "topic":  "Astronomy",
+        "title":  "Is water necessary for all life in the universe, or just on Earth?",
+        "full_text":  "On Earth, water serves many important functions that sustain life. It is considered to be a “universal solvent” that supports cellular structure and stability, engages cellular functions such as energy production and conversion and waste removal, and facilitates the movements of molecules like oxygen through the blood. It allows our DNA and proteins to function. It even dictates the shape of our cells, which ensures they operate efficiently. But life beyond the borders of our world may rely on very different chemical components and systems. Scientists believe that if they find liquid water, they will therefore find life. However, finding life elsewhere may not necessitate finding water. There might be exotic life that relies on other solvents, such as ammonia, methane, formamide, or sulfuric acid."
+    },
+    {
+        "id":  61,
+        "topic":  "Astronomy",
+        "title":  "How are pulsars formed?",
+        "full_text":  "Pulsars are rotating neutron stars that produce pulses of radio waves, X-rays, and gamma rays. They are formed when a massive star runs out of fuel and collapses in on itself. The remnants are neutron stars with magnetic fields that range in strength from 100 million times to 1 quadrillion (a million billion) times that of Earth’s. The correct mix of spin frequency and magnetic field strength is needed for a neutron star to be a pulsar. A pulsar’s radiation bursts typically repeat in a time range anywhere from milliseconds to seconds. It is believed that millisecond pulsars may have formed by consuming fuel from another companion object, thus earning the moniker “black widow pulsars.”"
+    },
+    {
+        "id":  62,
+        "topic":  "Astronomy",
+        "title":  "What is preventing humans from carrying out deep-space exploration?",
+        "full_text":  "In 2012, Voyager 1 entered interstellar space. This mission, launched in 1977, represents the first time a human-made craft has traveled beyond our solar system. In the 35 years it took to pierce the interstellar realm of the universe, we have gained much insight, knowledge, and technical skill, enabling us to explore space at an even deeper level. We have expanded our use of computing power, batteries, materials, storage, and imaging and sensor technologies.\n\nBut to travel the next frontier of deep space, there are many significant challenges to be overcome. We need to improve propulsion, power, and life-support systems and develop more robust methods of countering the physical and mental stress of traveling through space, especially for long periods. In particular, we need to answer these questions:\n\nHow will we power the exploratory mission? We will need a way of harnessing the power sources available in deep space or of creating new power sources.\n\nHow will we navigate and communicate? Currently, it takes 20 hours for digital messages to travel between Earth and Voyager 1.\n\nHow will we ensure safe travel? Space is inherently perilous: We have to design and implement security systems that will protect us from radiation, space junk, and other forces that are magnified in space.\n\nHow will we survive? Human space travelers will need food and water, safe shelter, and tools. Carrying all the required resources is impossible, so it will be necessary to build, mine, and grow whatever will be needed for food and a livable habitat. Further research in agriculture, food systems, and nutrition will be indispensable, as will innovations in manufacturing and industrial engineering to enable space mining.\n\nAnd course, how will we get “there”? The propulsion systems that exist today do not have the capability to take us as far as we may want to travel at a speed conducive to human survival.\n\nNevertheless, while we are far from being able to personally venture beyond the perimeter of Pluto, the collective work of scientists, engineers, and technologists is helping to breach the solar system’s borders."
+    },
+    {
+        "id":  63,
+        "topic":  "Astronomy",
+        "title":  "What is the volume, composition, and significance of the deep biosphere?",
+        "full_text":  "The deep-ocean biosphere is an extreme environment, consisting of bacteria and archaea living in depths greater than 1,000 meters (3,280 feet), in the absence of light, in temperatures of only 4°C (39°F), and in pressures about 40 to 110 times that of Earth’s atmosphere. Our increased understanding of the deep ocean is shedding new light on climate change, biodiversity, natural resources, and even our search for extraterrestrial life."
+    },
+    {
+        "id":  64,
+        "topic":  "Astronomy",
+        "title":  "Will humans one day have to leave the planet (or die trying)?",
+        "full_text":  "There are many realistic threats to humans on Earth. Many are extraterrestrial, such as the potential for space junk crashing into the planet and destroying life (not unlike what that pesky asteroid did to the dinosaurs 65 million years ago). But we also face perils of our own design. Before his death in 2018, Stephen Hawking surmised that we will have to leave our planetary abode at some point or risk complete destruction from nuclear war or severe climate change. “One way or another, I regard it as almost inevitable that either a nuclear confrontation or environmental catastrophe will cripple the Earth at some point in the next 1,000 years,” Hawking wrote in Brief Answers to the Big Questions. “Spreading out [beyond Earth] may be the only thing that saves us from ourselves.”"
+    },
+    {
+        "id":  65,
+        "topic":  "Astronomy",
+        "title":  "Is it possible to understand the structure of compact stars and matter?",
+        "full_text":  "Compact stars (white dwarfs, neutron stars, and black holes) are enigmatic. Neutron stars, for example, have a dense carbon atmosphere that is only a few centimeters thick, and a thin crust of iron nuclei. Recently discovered gravitational waves, in combination with theoretical calculations, may one day elucidate detailed structures of these compact objects."
+    },
+    {
+        "id":  66,
+        "topic":  "Astronomy",
+        "title":  "What is the origin of high-energy cosmic neutrinos?",
+        "full_text":  "Scientists with the IceCube Neutrino Observatory are exploring possible sources of high-energy cosmic neutrinos, including supermassive black holes/active galactic nuclei and starburst galaxies. The next generation of more sensitive, high-energy neutrino telescopes may be able to solve this mystery and make connections with the origins of ultrahigh-energy cosmic rays."
+    },
+    {
+        "id":  67,
+        "topic":  "Astronomy",
+        "title":  "What is gravity?",
+        "full_text":  "The universe consists of four fundamental forces: the weak force, which governs particle decay; the strong force, which allows for the formation of matter from particles like quarks and gluons; electromagnetism, which dictates how charged particles interact; and gravity, which describes and predicts movement, such as the orbits, formation, and stability of stars, galaxies, and anything that has mass or energy. But the makeup of gravity is still a mystery, igniting the curiosity of theoretical physicists. While Newton labeled it clearly as attraction, Einstein’s genera theory of relativity proposed that gravity is actually the bending of space-time. Furthermore, as science journalist Dan Falk writes, “no one has figured out how to reconcile general relativity with the other great theory of physics, quantum mechanics, which describes the inner workings of the subatomic realm.”"
+    },
+    {
+        "id":  68,
+        "topic":  "Astronomy",
+        "title":  "Where do the heavy elements in the universe come from?",
+        "full_text":  "The origins of heavy elements (which have an atomic number of 92 or higher) and superheavy elements (with an atomic number of at least 112) are still somewhat of a mystery to scientists. We have been able to produce some heavy elements in experiments that take place in reactors, and artificially produce heavy elements in cyclotrons. But beyond those produced on terra firma, what is the origin story of heavy elements?\n\nWe turn to astrophysics for our answer. We know that the light elements, such as hydrogen, helium, and lithium, were formed at the dawn of the universe by the Big Bang. Elements as heavy as iron (atomic number 26) are the product of fusion in the cores of stars. The higher the atomic number, the more force is needed to create the element, and indeed, gallium (31) and bromine (35) need a huge celestial event, such as a supernova. Another astrophysical process, the rapid neutron-capture process (r-process), entails neutrons being quickly added to an atom’s nucleus; this process is responsible for many of the elements heavier than iron, such as gold and uranium.\n\nOne potential source for heavy elements was recently confirmed: In 2019, an international team of researchers reported that neutron stars may be a significant source. The scientists examined a kilonova (neutron star merger) 140 million light-years from Earth, which they were able to observe through the detection of the merger’s gravitational waves.\n\nWhat they saw was incredibly exciting. As Science reporter Daniel Clery notes, “Computer modeling revealed that strontium [atomic number 38] in the expanding ball of gas would absorb light at wavelengths of 350 and 850 nanometers. When they looked again at the X-shooter spectra, they found dips in the spectra at those wavelengths. The end result: five Earth masses worth of strontium.”\n\nThe presence of strontium confirms that heavy elements are created by neutron star mergers and other cataclysmic astrophysical events. The work was additionally important because it marked the first time that scientists were able to see an individual element in a kilonova’s aftermath."
+    },
+    {
+        "id":  69,
+        "topic":  "Physics",
+        "title":  "Is there a diffraction limit?",
+        "full_text":  "The 2014 Nobel Prize in Physics recognized the development of techniques that bypass the diffraction limit, which is the physical limit for maximum resolution of traditional optical microscopy."
+    },
+    {
+        "id":  70,
+        "topic":  "Physics",
+        "title":  "What is the microscopic mechanism for high-temperature superconductivity?",
+        "full_text":  "The 2014 Nobel Prize in Physics recognized the development of techniques that bypass the diffraction limit, which is the physical limit for maximum resolution of traditional optical microscopy.\n\nSuperconductors, materials that conduct electricity with no resistance, are integral components of game-changing innovations in medicine, energy, and transportation. In the quest to develop more powerful, versatile technologies such as quantum computers, scientists are endeavoring to design and harness the power of superconductors at room temperature. But this goal remains elusive and requires a better understanding of the mechanisms for high-temperature superconductivity, which occurs above 77 Kelvin (K), the boiling point of liquid nitrogen. Physicists have approached this puzzle by experimenting with different types of superconducting materials, including ceramics. Last year, a group announced that it found a material made of three elements that achieves superconductivity at a record 288 K. These types of investigations expand the potential for research that will explain this phenomenon."
+    },
+    {
+        "id":  71,
+        "topic":  "Physics",
+        "title":  "What are the limits of heat transfer in matter?",
+        "full_text":  "Materials science research may help us address the challenge of high power-density heat transfer, from nanometer-scale devices such as circuits to industrialscale processes such as power plants."
+    },
+    {
+        "id":  72,
+        "topic":  "Physics",
+        "title":  "What are the fundamental principles of collective motion?",
+        "full_text":  "Despite differences in the length scales and cognitive abilities of constituent individuals, collective motion in systems as diverse as bird flocks, mammal herds, and swarming bacteria produces similar patterns of extended spatiotemporal coherence. Our understanding of collective motion, which has obvious relevance to the life sciences, can lead to technological progress in many applications, such as swarm control of unmanned aerial vehicles. Given that collective motion is inherently a multidisciplinary field, its scrutinization and application require a concerted effort between practitioners in physics, biology, mathematics, materials science, engineering, and related fields."
+    },
+    {
+        "id":  73,
+        "topic":  "Physics",
+        "title":  "Will we ever travel at the speed of light?",
+        "full_text":  "Based on our current understanding of physics, our technological needs, and our biological limitations, it is unlikely we will ever travel at the speed of light."
+    },
+    {
+        "id":  74,
+        "topic":  "Physics",
+        "title":  "What is quantum uncertainty and why is it important?",
+        "full_text":  "The Heisenberg Uncertainty Principle is a key principle of quantum mechanics and states that we cannot measure an object’s velocity and location at the same time. “The more accurately you measure an object’s position, the more inherently inaccurate your knowledge of its momentum becomes,” writes astronomer and science journalist Ethan Siegel. “It isn’t just a failure of our instrumentation; that uncertainty is fundamental to the Universe.” Uncertainty serves an important function in quantum computing, which relies on electron superposition to store information. But quantum superpositions are tricky things. They can collapse (in quantum speak) when you try to measure them or even through a common interaction with the environment, such as encountering a random pulse of electromagnetic radiation."
+    },
+    {
+        "id":  75,
+        "topic":  "Physics",
+        "title":  "What are the smallest building blocks of matter?",
+        "full_text":  "The objects we observe and interact with every day are made of atoms, each approximately 10–10 meters in size. But the question of what matter is made of doesn’t end there. Inside the cavernous space of an atom are electrons orbiting a nucleus consisting of protons and neutrons. In fact, the majority of the mass (over 99%) of an atom is found inside the nucleus. The riddle concerning the basic building blocks of matter originates inside protons and neutrons, and the solution forms the basis of particle physics, a welltested theory known as the Standard Model.\n\nThe Standard Model establishes that there are fundamental particles that cannot be subdivided further. All matter in the universe consists of fermions, of which there are two types: quarks and leptons. There are six types of quarks that exist in pairs, or “generations”: up and down quarks, top and bottom quarks, and charm and strange quarks. Leptons also have multiple types of generations: electrons and the electron neutrinos, muons and muon neutrinos, and taus and tau neutrinos. “The electron, the muon and"
+    },
+    {
+        "id":  76,
+        "topic":  "Physics",
+        "title":  "Why does time seem to flow in only one direction?",
+        "full_text":  "According to the second law of thermodynamics, isolated systems move from states of low entropy to high entropy—that is, from order to chaos. What we observe as time moving forward is actually an increase in entropy. Once a system achieves its fully disordered state (known as equilibrium), entropy is no longer increasing, and the arrow of time evaporates. In essence, we currently experience the forward movement of time because we’re not in equilibrium. The arrow of time is an interesting aspect of cosmology. The Big Bang accelerated all matter into a state of high entropy. As it continues its expansion, eventually all its components—stars, black holes, and galaxies—will burn out, leading to equilibrium and the disappearance of time’s arrow."
+    },
+    {
+        "id":  77,
+        "topic":  "Physics",
+        "title":  "Are there any particles that behave oppositely to the properties or states of photons?",
+        "full_text":  "An antiphoton is the same as a photon. Both are massless particles made of energy with no charge."
+    },
+    {
+        "id":  78,
+        "topic":  "Physics",
+        "title":  "Will Bose–Einstein condensates be widely used in the future?",
+        "full_text":  "A Bose–Einstein condensate is an exotic state of matter consisting of a dense cloud of ultracold atoms. Potential applications range from atom lasers to quantum computing.\n\nthe tau all have an electric charge and a sizeable mass, whereas the neutrinos are electrically neutral and have very little mass,” notes the European Organization for Nuclear Research (CERN), home of the world’s largest and most powerful particle accelerator.\n\nWhile much about these fundamental particles remains an enigma, there is quite a bit we do know about them. Quarks first appeared in the nascent universe approximately 10–12 seconds after the Big Bang. And with the advent of advanced particle accelerators such as cyclotrons and sensor techniques and technology, we have been able to observe quarks right here on Earth.\n\nThere are other fundamental particles, known as bosons, which essentially serve as force carriers. Each force has its own corresponding boson; for example, the gluon is the boson that carries the strong force. While two fermions cannot occupy the same quantum state, there is no limit to the number of bosons that can be put into the same quantum state."
+    },
+    {
+        "id":  79,
+        "topic":  "Physics",
+        "title":  "What is the maximum speed to which we can accelerate a particle?",
+        "full_text":  "The Large Hadron Collider at CERN is the most powerful particle accelerator in the world. It can accelerate particles close to the speed of light."
+    },
+    {
+        "id":  80,
+        "topic":  "Physics",
+        "title":  "Can we accurately simulate the macro- and microworld?",
+        "full_text":  "While we can typically simulate the macroworld in a straightforward manner, doing so at the microlevel requires rigorous and powerful quantum computers. We are getting closer."
+    },
+    {
+        "id":  81,
+        "topic":  "Physics",
+        "title":  "Can humans make intense lasers with incoherence comparable to sunlight?",
+        "full_text":  "Intense lasers with properties resembling sunlight, such as a broad frequency spectrum and random polarization, have significant advantages in reducing resonant excitation of certain instabilities in laser– plasma interactions. Such instabilities often lead to reduced laser-energy absorption in plasma and produce harmful energetic electrons that become one of the most significant challenges to the realization of laser-driven inertial confinement fusion. Scientists are developing technologies to generate broadband lasers, and intense lasers have been planned for the next-generation of high-power lasers for fusion research. Inertial confinement fusion is well recognized as one of the most promising prospects for fusion energy, a useful and potentially sustainable energy source. If we can generate high-power lasers with properties aligned with sunlight, we may eventually realize controllable fusion ignition and fusion energy on Earth."
+    },
+    {
+        "id":  82,
+        "topic":  "Physics",
+        "title":  "Is quantum many-body entanglement more fundamental than quantum fields?",
+        "full_text":  "Quantum entanglement involves how the behavior of two particles impacts each other, even when they are not physically close—like twins separated at birth. It has been used to explain many important physical phenomena, such as superconductivity, for example, and can help us develop a framework to better understand the physical world, and possibly even a new direction to unify different physics theories. Scientists are endeavoring to construct theories based on quantum entanglement from which quantum field theory can be derived. A central theme is to understand how space-time can emerge from manybody quantum entanglement, and how general relativity can be incorporated into the physical picture of unified quantum information and quantum matter. Ultimately, quantum entanglement can offer a new way of thinking to predict physical phenomena."
+    },
+    {
+        "id":  83,
+        "topic":  "Physics",
+        "title":  "Can we make a real, human-size invisibility cloak?",
+        "full_text":  "Not likely. We will be prevented by fundamental bounds on cloaking (i.e., bandwidth, level of scattering suppression, and object size), combined with fundamental limitations stemming from causality and stability."
+    },
+    {
+        "id":  84,
+        "topic":  "Physics",
+        "title":  "Will there ever be a “theory of everything”?",
+        "full_text":  "For decades, physicists have been tirelessly working towards a theory of everything: one theory and set of simple, fundamental principles that can explain all of the physical phenomena in the universe. Einstein’s theory of relativity and the discovery of quantum mechanics served as the impetus for this endeavor, and although we have made progress, the prospect of such a theory breaks down when comparing quantum-level systems with macro systems. While some scientists view a grand unified theory as fantasy, there is still a desire to pursue it, and ever increasingly, physicists are drawing from innovative sources for inspiration—and a potential framework.\n\nWhen Einstein began his work in the 1920s, he asserted there was a bridge between the need to unify gravity and electromagnetism (the two fundamental forces that were known at the time), and the challenges of quantum mechanics. There has been movement towards this goal. “In the 1960s, physicists demonstrated that electromagnetism and the weak nuclear force were actually a single phenomenon, and the Higgs Boson is the reason why the two forces seem so different,” says physicist Don Lincoln of Fermilab in an educational video from the U.S. Department of Energy. “Naturally, scientists wonder if the seemingly independent remaining forces…might actually be different manifestations of a simpler and more inclusive force.”\n\nAnalysis of the fundamental forces, in particular a comparison of force strength as it relates to energy, prompts more discussion. In what Lincoln calls “a most provocative coincidence,” the strength of three forces (strong, weak, and electromagnetic) become the same at the high energy of 1015 electronvolts.\n\nThe Standard Model of particle physics has been referred to as a “theory of almost everything,” because it still does not reconcile certain aspects of the universe, such as the nature of dark matter and dark energy. While some physicists conjecture that one of the best platforms for a theory of everything is string theory, in which particles are one-dimensional “strings” vibrating in 11 dimensions, the debate rages on. As Einstein said in his Nobel lecture, “The intellect seeking after an integrated theory cannot rest content with the assumption that there exist two distinct fields totally independent of each other by their nature.”"
+    },
+    {
+        "id":  85,
+        "topic":  "Physics",
+        "title":  "What is dark matter?",
+        "full_text":  "Approximately 95% of the constitution of the universe is unknown to us. That 95% seemingly has to account for the acceleration of the expansion of the universe, which has been proven thanks to data obtained by astronomers with modern instruments, starting with the Hubble Space Telescope. If the universe consisted only of observable matter, the accelerated expansion would not be happening—gravity would take hold. So, something unknown is causing this phenomenon. But what is it?\n\nWe call this unknown dark matter and dark energy, which account for 25%–27% and 68% of the universe, respectively. And while we are literally in the dark about both of these, certain understandings have come to light in recent years, especially relating to dark matter. According to NASA, we have confirmed that dark matter does not consist of the same matter that makes up other universal objects. “It is not in the form of dark clouds of normal matter, matter made up of particles called baryons,” notes NASA’s science website. “We know this because we would be able to detect baryonic clouds by their absorption of radiation passing through them.” We know that dark matter does not emit light—in fact, observations have clarified that there is not enough visible matter to make up the 27%. We also know that dark matter cannot be antimatter. If this theory were true, we would detect unique gamma rays that occur when antimatter and matter collide and annihilate. Lastly, “we can rule out large galaxy-sized black holes on the basis of how many gravitational lenses we see. High concentrations of matter bend light passing near them from objects further away, but we do not see enough lensing events to suggest that such objects make up the required 25% dark matter contribution,” reports NASA.\n\nAstrophysicists are considering some interesting candidates. “Baryonic matter could still make up the dark matter if it were all tied up in brown dwarfs or in small, dense chunks of heavy elements. These possibilities are known as massive compact halo objects,” offers NASA. There is also strong evidence that dark matter consists of new types of elementary particles, such as weakly interacting massive particles (WIMPs), axions, or sterile neutrinos, among others."
+    },
+    {
+        "id":  86,
+        "topic":  "Physics",
+        "title":  "What is the optimum hardware for quantum computers?",
+        "full_text":  "Quantum computing relies on the changing phase of certain particles to encode information. Critical to a quantum computer is the superposition of states, i.e., the possibility of particles to be in two states at the same time, and the use of entanglement, where one particle’s behavior affects the others. The quest to design and build quantum hardware is a worldwide, multisector effort. A key goal is to integrate conventional hardware such as the user interface and operating systems with quantum mechanical systems such as π Josephson junctions to enable quantum bits (qubits) to be programmed and analyzed. Some materials research groups are considering silicon technologies. But there are still many challenges to overcome, particularly with the current need for low temperatures to prevent loss of quantum coherence."
+    },
+    {
+        "id":  87,
+        "topic":  "Engineering \u0026 Materials Science",
+        "title":  "What is the ultimate statistical invariance of turbulence?",
+        "full_text":  "To better understand turbulence, one of the models of general complex nonlinear systems, scientists are collaborating across the fields of math, physics, computer science, and engineering."
+    },
+    {
+        "id":  88,
+        "topic":  "Engineering \u0026 Materials Science",
+        "title":  "How can we develop manufacturing systems on Mars?",
+        "full_text":  "It is not too far-fetched to presume that one day human beings will leave Earth and emigrate to Mars. A stunning red orb with mountains and valleys not unlike those on our world, Mars is the planet in our solar system that is most similar to Earth. Exploratory missions, including China’s first Mars mission, Tianwen-1, which is currently in orbit, aim to reveal information that will be vital should we ever establish colonies there. But to take this step, we will need to develop functional and economically viable manufacturing systems that can operate in the unique ecosystem and climate limitations of Mars.\n\nThe extreme environments of Mars challenge existing manufacturing theories and methods. Scientists and engineers must consider the many elements that would impact effective production there, including extreme temperature, solar radiation, and microgravity. We must also contend with questions about fuel and energy to power manufacturing and habitats on the Red\n\nPlanet. This interdisciplinary quest requires scientists and engineers from seemingly disparate fields to collaborate across the globe.\n\nOne key to Mars manufacturing will be utilizing the resources the planet has to offer. This is especially pertinent given the distance between Earth and Mars (225 million kilometers) and the prohibitive cost of shipping materials through space. Martian geology is a potential gold mine: Its regolith—a layer of loose, rocky material located on the planet’s surface—could be very useful as a prime construction material, once we develop the technical capabilities to bind it and build with it.\n\n3D printing may be a game-changing technology in this respect, especially as we continue to advance our expertise in materials science, engineering, and chemistry, combined with the software and hardware innovations necessary for large-scale 3D printing."
+    },
+    {
+        "id":  89,
+        "topic":  "Engineering \u0026 Materials Science",
+        "title":  "How can we break the current limit on energy-conversion efficiencies?",
+        "full_text":  "Energy-conversion efficiency is the central metric in determining the success of an energy system. It simply takes the useful energy output (benefit) and divides it by the energy input (cost). In photovoltaic (PV), (solar) cells, the efficiency is the percentage of the solar energy shining on a PV device that is converted into usable electricity, as noted by the U.S. Department of Energy. “Improving this conversion efficiency is a key goal of research and helps make PV technologies cost-competitive with conventional sources of energy.” The energy efficiency of current commercially available cells is 15%–20%. Several factors contribute to the limit on energy efficiency, including the wavelength of photons, recombination, temperature, and reflection. Scientists in academia, industry, and government labs are experimenting with different materials and methods to push the current limit. Similar issues exist with other energy-conversion systems, such as thermoelectrics, piezoelectrics, and thermophotovoltaics."
+    },
+    {
+        "id":  90,
+        "topic":  "Engineering \u0026 Materials Science",
+        "title":  "Is a future of only self-driving cars realistic?",
+        "full_text":  "We cannot scale the use of self-driving cars until we solve underlying problems relating to their sensors, communication, infrastructure, and ability to respond to other vehicles—not to mention the public’s perception of autonomous vehicles."
+    },
+    {
+        "id":  91,
+        "topic":  "Information Science",
+        "title":  "Is there an upper limit to computer processing speed?",
+        "full_text":  "One of the most well-known principles of computing design and power is Moore’s Law, named after the cofounder of Intel Corporation, Gordon Moore. He predicted in the 1960s that that the number of transistors that could fit on a silicon chip would double every 2 years. This prediction is not a law of physics, but rather an empirical relationship related to production. However, Moore’s law will soon cease to be relevant, because the laws of physics will prevent further expansion of computing power. We can’t change the size of atoms, and thus won’t be able to pack more transistors into a computer beyond a certain point.\n\nBut that’s where quantum computers can really shine. By their nature, quantum computers are not constrained by the size of a motherboard or microchip, which means the computer processing speed limits on silicon-based machines do not apply. The quantum superpositions of qubits allow for significantly more information to be stored and the power and speed of the machine itself to expand exponentially.\n\nQuantum computing also presents opportunities beyond qubits. Recently, scientists announced they had built a photon-based quantum computer that was able to achieve quantum supremacy: It outperformed a conventional supercomputer in a significant way, accomplishing in just 200 seconds a task called boson sampling that would have taken current supercomputers 2.5 billion years.\n\nResearch in quantum computing is varied, plentiful, and well-funded, accelerated by federal governments and companies around the world investing billions of dollars. In 2017, a scientist at the U.S. National Institutes of Standards and Technology demonstrated the feasibility of a quantum computer that breaks previously suggested speed limits. He notes that his findings do not suggest the absence of limits on calculation speed, but rather that these limits derive from other aspects of physics than merely the availability of energy. “Energy considerations alone are not sufficient to obtain an upper bound on computational speed,” he writes. “Additional physical assumptions such as limits to information density and information transmission speed are necessary to obtain such a bound.”"
+    },
+    {
+        "id":  92,
+        "topic":  "Information Science",
+        "title":  "Can DNA act as an information storage medium?",
+        "full_text":  "DNA, which stores huge amounts of organismal data at high densities with great stability, may one day be used to store other types of information."
+    },
+    {
+        "id":  93,
+        "topic":  "Information Science",
+        "title":  "Can AI replace a doctor?",
+        "full_text":  "There’s no doubt that artificial intelligence (AI) can improve our health care. With AI’s computing power, it could access monumentally more data and make connections more rapidly to diagnose and treat disease more efficiently. Imagine integrating patient and family histories, genetic profiles, and environmental stimuli to predict risk for illnesses or flare-ups even on a daily basis. AI has been shown to outperform physicians in cancer screenings and disease diagnoses. But it is not positioned to replace doctors— at least not yet. There’s still data bias. And currently, the involvement of a human doctor, who also relies on instinct, experience, and emotion to make medical decisions, cannot be replicated by AI. For now, rather than replace humans, some suggest that AI could improve the doctor– patient relationship and lead to better health care outcomes."
+    },
+    {
+        "id":  94,
+        "topic":  "Information Science",
+        "title":  "Can topological quantum computing be realized?",
+        "full_text":  "Topological quantum computing involves exploitation of the phases of groups of particles through manipulation of their geometry. As naturally occurring quantum particles change position, their phase is represented either as a conventional manifold or mobius strip. Topological quantum computing is based on “intermediate particles” whose superposition produces other geometries, and thus has more flexibility for information processing. Traditional quantum computers are sensitive to external perturbations causing particle decoherence, but exploiting topologies may be able to get around some of their limitations, like the need for low temperatures or error correction schemes to overcome decoherence. Solid-state material investigations could enable a physical system that would support the “intermediate particles” needed."
+    },
+    {
+        "id":  95,
+        "topic":  "Neuroscience",
+        "title":  "Where does consciousness lie?",
+        "full_text":  "Consciousness could be described as the subjective experience of our minds. Indeed, consciousness is defined as everything a sentient being experiences. It does not necessarily imply self-awareness, and the two concepts should not be conflated. Naturally, the study of consciousness is a collaborative field that entices a diversity of scholars, including neuroscientists, philosophers, psychologists, and even electrical engineers. But despite a concerted effort, experts still disagree about the nature, mechanisms, and location of consciousness. In fact, the field of consciousness studies is considered rogue, controversial, and in some ways a minefield for mind scientists.\n\nSome scientists argue that consciousness is simply a chain of biochemical reactions, a dance of tangled neurons firing and signaling with every input and arousal. But others, including pioneering physicist Sir Roger Penrose, frequent collaborator of the late Stephen Hawking and 2020 Nobel laureate in physics, posit something else. Penrose and his colleague Stuart Hameroff, founder of the Center for Consciousness Studies at the University of Arizona, have been exploring consciousness for decades. Their controversial research proposes that “consciousness arises from quantum vibrations in protein polymers called microtubules inside the brain’s neurons, vibrations which interfere, ‘collapse’ and resonate across scale, control neuronal firings, generate consciousness, and connect ultimately to ‘deeper\n\norder’ ripples in spacetime geometry.” In this way, the team notes, “consciousness is more like music than computation.” Other scientists have conjectured that consciousness is a feature of the universe itself.\n\nA true understanding of the nature and mechanisms of consciousness will open the floodgates of knowledge to advance many fields that orbit neuroscience, including computer science and medicine. Our continued explorations of consciousness could buttress an understanding of the molecular mechanisms of complex brain disease and promote the development of brain-like intelligent algorithms. We have far to go and still need more elaborate highdimensional molecular data to simulate the brain’s dynamics, but fortunately, we are aided by modern techniques in high-resolution imaging technology and high-performance algorithms."
+    },
+    {
+        "id":  96,
+        "topic":  "Neuroscience",
+        "title":  "What are the coding principles embedded in neuronal spike trains?",
+        "full_text":  "Spike trains—the readout of individual neurons firing—can be measured across different states in many species. How to connect (or “map”) a stimulus to a particular neuron’s response is not fully clarified, but is being intensively researched."
+    },
+    {
+        "id":  97,
+        "topic":  "Neuroscience",
+        "title":  "Can human memory be stored, manipulated, and transplanted digitally?",
+        "full_text":  "Science fiction movies depict a day when we can upload our memories to the cloud and then have them downloaded into some form of a computer—would this be a robot perhaps, or an artificial life form? Neuroscientists and cognitive science researchers don’t laugh at this prospect, but rather use it as inspiration to push the boundaries of knowledge and better understand how memory works and how it is stored in the bundles of neurons within our skulls.\n\nMemory is the way in which the brain retains information. Our brain can record all that we, as a conscious being, experience—the feelings something evokes; the smells, sounds, sights, and thoughts it engenders; and the actions that we take and observe. Memory is a foundational aspect of our cognition that guides the way we interact with and navigate the world. Its inner workings are generally believed to rely on a dual process of two different systems, in which unconscious and routine thought processes cooperate with more conscious, problem-solving thought processes. In a certain sense, memory parallels a computer-like model, in that it involves inputs, encoding, storage, and retrieval."
+    },
+    {
+        "id":  98,
+        "topic":  "Neuroscience",
+        "title":  "Why do we need sleep?",
+        "full_text":  "We sleep between 25% to 30% of our lives. But don’t think of this as leisure, laziness, or luxury. Sleep, induced through processes such as circadian rhythms and sleep drive, serves many extremely important roles for most animals. Sleep ensures brain plasticity—its ability to adapt to different inputs. Evidence indicates that too little sleep negatively impacts our ability to process what we’ve learned that day and reduces our recall of events in the future. Sleep may serve as a way to clear out waste from brain cells and is tied to our overall holistic health. Indeed, sleep impacts many of our core physical functions, and less sleep is tied to compromised immunity and the likelihood of health concerns such as high blood pressure, depression, and seizures.\n\nBut how close are we to copying our memories onto a thumb drive? Closer than ever before—but still many years away from this reality. And yet recently, scientists have made fascinating progress. In 2019, a team reported that they were able to reverse-engineer a natural memory in a mouse’s brain. Essentially, they mapped the neural circuits that helped form and store the memory and then “trained” another mouse by “stimulating the brain cells in the pattern of the natural memory,” writes neurodegeneration specialist Robert Martone. “Doing so created an artificial memory that was retained and recalled in a manner indistinguishable from a natural one.”\n\nThe achievement of forging artificial memories could impact theoretical and experimental cognitive research as well as clinical medical science: Perhaps we can leverage our understanding of memory storage and manipulation for emancipation from devastating ailments such as Alzheimer’s and posttraumatic stress disorder."
+    },
+    {
+        "id":  99,
+        "topic":  "Neuroscience",
+        "title":  "What is addiction and how does it work?",
+        "full_text":  "The U.S. National Institute on Drug Abuse, National Institutes of Health (NIH), defines\n\naddiction as “a chronic, relapsing disorder characterized by compulsive drug [or other substance] seeking, continued use despite harmful consequences, and long-lasting changes in the brain. It is considered both a complex brain disorder and a mental illness.” The repeated use of a substance or activity has dynamic consequences for our brain’s ability to process natural inhibition, reward, self-control, learning, memory, and decision-making. The NIH reports that “much of addiction’s power lies in its ability to hijack” and harm the brain. Over the years, science has transformed the way we think of and approach addiction. There are many environmental, genetic, and other biological risk factors at play, and researchers are beginning to examine the genetic variations that influence addiction’s development and progression."
+    },
+    {
+        "id":  100,
+        "topic":  "Neuroscience",
+        "title":  "Why do we fall in love?",
+        "full_text":  "It’s the age-old question pondered by philosophers, anthropologists, psychologists, and physiologists, and we may now be closer to understanding the mechanisms in our bodies and brains that contribute to the feeling of love. Our desire to mate and our sometimes-consequential attachment to another person are fundamentally driven by the need to ensure the survival of the species. Researchers classify romantic love by lust, attraction, and attachment; and not surprisingly, hormones play a huge role. Testosterone and estrogen, produced in the hypothalamus, drive lust, which is fueled by the need for sexual gratification. Levels of dopamine and norepinephrine (which make us euphoric and happy) increase, while serotonin decreases when we experience attraction. In behaviors that align with bonding, such as sex and childbirth, oxytocin (the “cuddle” hormone) and vasopressin are released, defining attachment."
+    },
+    {
+        "id":  101,
+        "topic":  "Neuroscience",
+        "title":  "Can we cure neurodegenerative diseases?",
+        "full_text":  "Neurodegenerative diseases, in which nerve cells in the brain or nervous system lose function and die, cause great suffering. Millions of people each year experience the pain and trauma of these ailments, the most common of which are Alzheimer’s disease and Parkinson’s disease. Interventions can reduce or relieve symptoms, but not in their entirety, and to date, there is no cure and no way to completely halt or reverse disease progression. Age is a significant risk factor—the possibility of being diagnosed with a neurodegenerative disease increases exponentially as we get older. According to the World Health Organization, neurodegenerative diseases will become the second most frequent cause of death within the next two decades.\n\nBillions of dollars are invested in this important area of research. Scientists draw on three sources for therapies, as Fernando Durães recently wrote in the journal Pharmaceuticals (Basel): newly synthesized small molecules, natural products, and existing pharmaceuticals. The last choice, also called drug repurposing, is potentially promising because “the drug’s pharmacokinetic and pharmacodynamic profiles are already established, and the investment put into this strategy is not as significant as for the classic development of new drugs,” states Durães. Chemists and pharmaceutical experts have been tinkering with already existing drugs to try to better understand, treat, and, perhaps in the future, counteract the mechanisms of neurodegenerative diseases.\n\nWe are well positioned for success: Our collective knowledge concerning genetics and the mechanism of neuronal pathogenesis, combined with innovative technologies, have led to exciting discoveries. For example, we have identified specific commonalties among neurodegenerative diseases, including protein misfolding, aggregation, and inclusion body formation. Inflammation is also prevalent and a factor that scientists continue to explore. There is also new—albeit preliminary—evidence to suggest that the microbiome might play a role. We have also made important technological advancements that enable us to image the brain and individual cells with more clarity than ever before. And research in the use of stem cell therapy may become a cornerstone for a future free of neurodegenerative disease."
+    },
+    {
+        "id":  102,
+        "topic":  "Neuroscience",
+        "title":  "Why are most people right-handed?",
+        "full_text":  "It is estimated that 85%–90% of humans are righthanded, but there’s no simple reason why. It could be influenced by genetics, culture, other heritable factors, or a combination of these factors."
+    },
+    {
+        "id":  103,
+        "topic":  "Neuroscience",
+        "title":  "Is it possible to predict the future?",
+        "full_text":  "Forecasting models for many types of complex systems—from climate and weather to economic and public health—helps us understand possibilities and probabilities. We are easily able to predict positions of satellites and stars. Could an advanced intelligent machine help us predict the future?"
+    },
+    {
+        "id":  104,
+        "topic":  "Neuroscience",
+        "title":  "How did speech evolve and what parts of the brain control it?",
+        "full_text":  "The most prevalent theory is that speech, controlled by the left hemisphere of the cerebrum, developed about 200,000 years ago, although new insight suggests it could have been as much as \\~27 million years ago in a common human and monkey ancestor. But how speech evolved and why it is centered in the left brain remain unclear."
+    },
+    {
+        "id":  105,
+        "topic":  "Neuroscience",
+        "title":  "How smart are nonhuman animals?",
+        "full_text":  "Animals are incredibly intelligent in many ways. They can even use tools; for example, some crows have mastered the ability to fashion a hook to snag food and place nuts in roadways so that passing vehicles dismantle the shells. Dolphins, who have built-in sonar capabilities and their own language, are so smart they have even been referred to as “nonhuman persons” by researchers. Octopuses can quickly identify threats and camouflage, and have been observed to carry objects like coconut shells to use as armor and \u003csup\u003eto\u003c/sup\u003e \u003csup\u003eunscrew\u003c/sup\u003e \u003csup\u003ejar\u003c/sup\u003e \u003csup\u003elids\u003c/sup\u003e \u003csup\u003eto\u003c/sup\u003e \u003csup\u003eget\u003c/sup\u003e \u003csup\u003eto\u003c/sup\u003e \u003csup\u003efood.\u003c/sup\u003e \u003csup\u003eChimpanzees,\u003c/sup\u003e arguably the most intelligent animals, can learn sign language and use and combine symbols to express a complicated point. They have excellent memory capacity, outperforming humans in certain tasks."
+    },
+    {
+        "id":  106,
+        "topic":  "Neuroscience",
+        "title":  "Can we more effectively diagnose and treat complex mental disorders?",
+        "full_text":  "Mental disorders such as depression, schizophrenia, and anxiety are complex and often overlap with other psychiatric illnesses. Diagnosis and treatment often piggyback on one another, where one intervention may serve multiple purposes, providing relief for several symptoms or concerns. But there is no guarantee that a pharmaceutical, for example, will work for the patient’s lifetime; its efficaciousness might decrease or disappear completely. Moreover, pharmaceutical response may fluctuate widely between individuals. To address this variability and vulnerability in care, clinical psychiatrists and psychologists, together with neuroscientists, are researching the mechanisms that enable successful treatments, in order to better understand how they actually work. In 2020, the United Kingdom–based Wellcome Trust launched a £200 million (USD 277 million) initiative, designed to unite diverse global teams to support research, more access to data, better communication, and policy outreach."
+    },
+    {
+        "id":  107,
+        "topic":  "Neuroscience",
+        "title":  "Can we stop global climate change?",
+        "full_text":  "Climate change is one of the most pressing, complex, and frightening challenges facing us today, and scientists agree that ending it hinges on two major issues, both of which are now being addressed. The first roadblock is associated with the amount of climate data we are able to collect and share. We still lack a global climate observational system. We also need more investment in climate data infrastructure. Additionally, we contend with a lack of coordination and planning, with diverse actors spanning different countries, governments (national and local), sectors, and agencies. Moreover, much of our approach to climate change has been reactive rather than proactive. To truly stop climate change, more robust risk management systems must be established that complement and transform the work of environmental scientists, before further climate crises unfold.\n\nThe other major barrier we must overcome to stop climate change is our dependence on fossil fuels for most of our energy needs. If we can harness and utilize more green energy, such as solar, wind, geothermal,"
+    },
+    {
+        "id":  108,
+        "topic":  "Neuroscience",
+        "title":  "Where do we put all the excess carbon dioxide?",
+        "full_text":  "The 2019 global emissions of carbon dioxide (CO\u003csub\u003e2\u003c/sub\u003e) were estimated to be approximately 33.1 billion metric tons, according to the U.S. Energy Information Administration, for which the United States is responsible for 15.4%. CO\u003csub\u003e2\u003c/sub\u003e arrives in the atmosphere mostly by two means: natural sources, such as human and animal exhalation and waste, and human actions, largely from energy production, such as burning coal, oil, and natural gas. One of the chief drivers of climate change research focuses on geologic and biologic carbon sequestration methods, where CO is stored in underground geologic formations or in organic materials such as vegetation, soils, and woody products, as well as in aquatic environments. As the U.S. Geological Survey notes, “by encouraging the growth of plants—particularly larger plants like trees— advocates of biologic sequestration hope to help remove $C O _ { 2 }$ from the atmosphere.”"
+    },
+    {
+        "id":  109,
+        "topic":  "Neuroscience",
+        "title":  "What creates the Earth’s magnetic field (and why does it move)?",
+        "full_text":  "Earth’s liquid-metal outer core creates electric currents. The planet’s rotation causes these currents to form a dynamic magnetic field. The currents and changes in the ionosphere influence the movement of the magnetic field.\n\nand nuclear, we have a fighting chance. Many nations, including China, the United States, and others around the world, are financing advanced research in this realm, although some of the concerns yet to be addressed include adjusting electrical grids to be able to manage the unpredictability of green energy as well as energy storage.\n\nBut we are not hobbled. We are in the midst of an extraordinary technological revolution in data science, computing, and energy science. We know how to build tools to collect valuable environmental data. Computer scientists are working with ecologists to apply unique artificial intelligence, deep-learning, and machinelearning techniques to Earth observation systems. And more funding for green energy research is becoming available across sectors. We have the capability: We can reduce our dependence on fossil fuels. We can practice better stewardship of the planet. With the help of the public and professionals alike, we may be able to arrive at a solution that is feasible, useful, and realistic."
+    },
+    {
+        "id":  110,
+        "topic":  "Ecology",
+        "title":  "Will we be able to predict catastrophic weather events (tsunamis, hurricanes, earthquakes) more accurately?",
+        "full_text":  "The precise prediction of sudden damaging events such as earthquakes, tropical cyclones, and tsunamis is an unsolved problem. In modern history, massive earthquakes and their tsunamis have caused hundreds of thousands of deaths: The 2004 Indian Ocean Tsunami, triggered by a magnitude 9.1 earthquake, killed over 200,000 people. Tropical cyclones routinely lead to massive damage and death, as do hurricanes. Given that more than half of the world’s population lives in coastal regions, which are more vulnerable to catastrophic events on weather time scales, enhancing predictive capabilities is urgent.\n\nYet we are still far being able to achieve precision, accuracy, and timeliness in predicting such events. At the present time, accurate weather forecasting is possible for a week in the future about 80%–90% of the time, experts say. Earthquake forecasting is much less precise and even controversial. In fact, some scientists claim that earthquakes are not predictable.\n\nHardware innovations, such as satellite imaging technology with more powerful and versatile cameras and other observational instruments, combined with software and algorithmic assets, including data analysis, have hastened the interdisciplinary field of weather forecasting. Better observational networks are being built, and with the increase in computer power, computer models are becoming more and more accurate. Data collection from space is also proving to be a valuable predictive tool.\n\nBut there are limiting technological and scientific factors. The quality and quantity of data, as well as inadequate computational power to run large-scale models, are two concerns. A larger influence is much more fundamental and complex: We need better theories and models. Scientists suggest a two-pronged approach, where we cultivate a better understanding of the physics and dynamics of weather and climate systems, while also investing in more powerful tools such as AI."
+    },
+    {
+        "id":  111,
+        "topic":  "Ecology",
+        "title":  "What happens if all the ice on the planet melts?",
+        "full_text":  "If all the ice on the planet melts, sea level will rise 70 meters (230 feet), and every coastal city on the planet will flood."
+    },
+    {
+        "id":  112,
+        "topic":  "Ecology",
+        "title":  "Can we create an environmentally friendly replacement for plastics?",
+        "full_text":  "In the last 70 years, the world produced \\~8.3 billion tons of plastic, and 91% is not recyclable. Not surprisingly, there are clear environmental, economic, and social imperatives to develop environmentally friendly replacements for petroleum-based polymers. Experts are exploring the properties of both bioplastics (natural polymers formed from renewable natural components) and biodegradable plastics that can be broken down by microorganisms. Investigations are being pursued into how vegetable oils, sugars, food waste, and modified natural polymers can replace petroleum-based plastics, and nature is helping. Researchers are proposing biocompatible synthetic polymers that mimic nature, which are especially applicable in medical and packaging arenas."
+    },
+    {
+        "id":  113,
+        "topic":  "Ecology",
+        "title":  "Can we achieve a situation where essentially every material can be recycled and reused?",
+        "full_text":  "Recycling technology has come a long way— some argue it is now possible to recycle almost any object, from diapers to cigarette butts. And some materials can be endlessly recycled, such as glass and aluminum. But just because we have the capability to recycle something does not make it economically viable. Currently, trash-related costs that impact the evironment and health are not factored into calculations; materials are recycled only if there’s money to be made. There are issues with contaminated items, such as greasy pizza boxes, and materials that can only be processed in certain facilities—all of which contribute to less waste being recycled. Many engineering, social science, and economic questions remain."
+    },
+    {
+        "id":  114,
+        "topic":  "Ecology",
+        "title":  "Will we soon see the end of monocultures like wheat, maize, rice, and soy?",
+        "full_text":  "Monoculture agriculture involves the farming of a single crop in a given location. The majority of today’s monocultures are wheat, maize, rice, and soy, which serve two-thirds of the world’s population and make up the majority of the processed food that humans and livestock consume. Monoculture has benefits such as a reduction in agriculture costs, some higher yields, and easier maintenance over time. But there are also significant downsides, including erosion and degradation of soil quality. Additionally, plants and animals are negatively impacted; for example, studies have shown that the decline in bee-population size and diversity is related to monoculture agriculture.\n\nOver time, this type of farming leads to lower crop yields and puts humans and livestock at risk. One of the most pressing concerns around monocultures relates to pests and disease: With only four crops serving the majority of the world’s population, we are particularly susceptible to insects, bacteria, or viruses that could wipe out entire crops. Climate change is hastening these fears. It is clear: We are in a precarious position\n\nand the possibility of the annihilation of our food supply is real.\n\nScientists are increasingly exploring new solutions to cushion against these types of assaults on our food security. One exciting focus of research is on so-called forgotten or ignored crops, which are species of cereal, vegetables, fruits, nuts, and root and tuber crops that have not been exploited as food sources on a global level. National efforts to invest in forgotten crops can help to diversify our food sources and mitigate climate change by reducing the burden of importing monocultures with large carbon footprints, buttressing a multitude of efforts in food security, economic health, and nutrition support for communities. As Sayed Azam-Ali, head of Malaysia-based Crops For the Future (CFF), a company devoted to research in the greater use of neglected crops, notes, “dietary diversification is critical to the future of humanity.”\n\nWhile monocultures may still be with us for a while, reliable and relevant options are being pursued."
+    },
+    {
+        "id":  115,
+        "topic":  "Energy Science",
+        "title":  "Could we live in a fossil-fuel-free world?",
+        "full_text":  "Fossil fuels, made from the fossilized remains of animals and plants that roamed the Earth millions of years ago, are part of our everyday existence. The oil, natural gas, and coal that we use for energy, heat, and petroleum-based packaging is ubiquitous. But a simple cost-benefit analysis demonstrates that the convenience, ease of use, and low-cost advantages of fossil fuels are far outweighed by their negative and in many cases disturbing costs: We are in the age of human-induced climate change, where warming oceans, sea-level rise, and melting glaciers are directly related to human exploitation of fossil fuels.\n\nThe need to find appropriate substitutions for fossil fuels is dire. Many research explorations have been undertaken to offer novel solutions, including heightened investment in green energy initiatives such as biofuels, wind, solar, hydroelectric, and geothermal. We are also more mindful of the effects of our dependency on fossil fuels—including an increase in plastic waste. Governments in collaboration with industry and academic partners are pursuing avenues to alleviate this reliance.\n\nWhile these activities provide a glimmer of hope, an abundance of complex technical and scientific challenges and social, economic, and policy hurdles must be overcome, all of which will take time. For example, the nature of renewable energy sources is that they can be unpredictable. We need to have more agile and robust solar panels that can harness the sun’s energy more quickly and efficiently. We need to develop an electric grid that can handle, convert, and store renewables on a large scale. We need to create financial, social, and psychological incentives for communities, organizations, and individuals to significantly reduce their fossil fuel footprint. According to the International Monetary Fund, global subsidies for fossil fuel extraction are an astounding USD 4.7 trillion annually.\n\nThe global imperative to reduce and replace our use of fossil fuels is driving pioneering research alliances. Economists are working with materials chemists and physicists; ecologists are cooperating with industry engineers; and chemical engineers are teaming up with marketing strategists, all in an attempt to maintain a habitable planet well into the future."
+    },
+    {
+        "id":  116,
+        "topic":  "Energy Science",
+        "title":  "What is the future of hydrogen energy?",
+        "full_text":  "While there are technical barriers to producing it, hydrogen energy can reduce our reliance on fossil fuels, cut emissions of greenhouse gases, and expand our use of renewable power."
+    },
+    {
+        "id":  117,
+        "topic":  "Energy Science",
+        "title":  "Will cold fusion ever be possible?",
+        "full_text":  "Most scientists do not believe cold fusion is theoretically possible. Recent experiments designed to explore the mechanisms associated with cold fusion also produced no evidence of its existence."
+    },
+    {
+        "id":  118,
+        "topic":  "Artificial Intelligence",
+        "title":  "Will injectable, disease-fighting nanobots ever be a reality?",
+        "full_text":  "Advances in nanotechnology, engineering, and pharmaceutical chemistry, combined with a better understanding of biological systems, are paving the way for the possibility of nanobots being purposed for fighting illness within the body. Nanobots—robots of approximately 50–100 nanometers (nm) in size—could be utilized to make diagnoses, take cellular samples, and examine the health of organs and systems. They are especially promising for drug delivery, as nanobots could target drugs to a specific location, thereby reducing side effects and increasing a drug’s efficiency, efficacy, and safety.\n\nThere are still technological obstacles to building and deploying robust nanobots that can navigate the bloodstream. One challenge is associated with power and movement. At present, there is no battery small enough to sufficiently power a nanobot. To address this gap, researchers are experimenting with a variety of mechanisms to control nanobots, ranging from electromagnetic and chemical processes to biomimicry.\n\nAnother interesting challenge relates to how an organism fights infection. Entities that are introduced into a living system are treated as hostile intruders."
+    },
+    {
+        "id":  119,
+        "topic":  "Artificial Intelligence",
+        "title":  "Is there a limit to human intelligence?",
+        "full_text":  "IQ test scores appear to have increased by about 30 points during the 20th century, according to experts interviewed in a recent BBC documentary. Overall, increased quality of nutrition, better education, and greater exposure to new technologies have all contributed to our intelligence increasing. Some scientists purport that we will never hit a limit to our intelligence because there will always be new problems to solve and challenges to navigate. It may be a cycle in which more intelligence begets more solutions and new solutions beget more intelligence. So, is there a limit to human intelligence? “We have no idea,” says developmental and psychological scientist Tenelle Porter in the documentary, adding, “We’ve only scratched the surface.”"
+    },
+    {
+        "id":  120,
+        "topic":  "Artificial Intelligence",
+        "title":  "Will it be possible to create sentient robots?",
+        "full_text":  "We may see sentient robots if humans can sharpen AI and contend with the ethical considerations of creating machines that are self-aware and “conscious.”"
+    },
+    {
+        "id":  121,
+        "topic":  "Artificial Intelligence",
+        "title":  "Will artificial intelligence replace humans?",
+        "full_text":  "While AI can perform tasks at speeds beyond human ability, its power is limited by its inability to use intuitive, holistic approaches to deal with uncertainty and equivocality problems.\n\nIf a nanobot is to do its job inside the body, we need to create nanosystems that don’t trigger an immune response. Furthermore, for brain applications, the nanobot’s shape, size, and function must allow it to slip through the blood–brain barrier. Nanobots must also be able to navigate and survive severe environments such as stomach acid and the body’s natural defense mechanisms.\n\nSize is another issue. To be successful and costeffective, a nanobot has to be just the right size to enter a cell. But shrinking tools to the nanoscale while retaining function is not an easy endeavor. We have made headway, however: In 2018, a team at the University of Texas at San Antonio created a nanobot that holds the Guinness Book of World Records title for smallest medical robot. At 120 nm, it can transport tiny payloads, pierce the membrane of a cell, and move cells from one location to another. There have been other successes, such as a multi-institutional team who created injectable nanobots that shrunk tumors in mice by blocking the tumors’ blood supply. More research and testing are needed for large-scale nanobot rollouts to humans."
+    },
+    {
+        "id":  122,
+        "topic":  "Artificial Intelligence",
+        "title":  "Could we integrate with computers to form a human–machine hybrid species?",
+        "full_text":  "We are on the cusp of human–machine hybrids, especially given advancements in smart exoskeletons and prosthetics, implantable sensors and chips, AI, and genomic editing technologies."
+    },
+    {
+        "id":  123,
+        "topic":  "Artificial Intelligence",
+        "title":  "How does group intelligence emerge?",
+        "full_text":  "Group or collective intelligence occurs when individuals come together and collaborate. In his book Social Media Security, Michael Cross discusses how groups collectively solve problems through interaction and competition between individuals within the group. Through consensus, ideas that detract from the solution are resolved and discarded. This phenomenon is not limited to human–human interaction. Scientists at the MIT Center for Collective Intelligence are exploring “how people and computers can be connected so that—collectively—they act more intelligently than any person, group, or computer has ever done before.” The team’s multidisciplinary insights can offer a window into how group intelligence emerges, using methods that range from measuring human intelligence with\n\nstatistical tools, to developing “a taxonomy of organizational building blocks or genes, that can be combined and recombined to harness the intelligence of crowds.”"
+    },
+    {
+        "id":  124,
+        "topic":  "Artificial Intelligence",
+        "title":  "Can robots or AIs have human creativity?",
+        "full_text":  "In 2016, Google’s AI program AlphaGo bested a human in the ancient game of Go. But the win was not the headline: The machine had played moves that resemble human creativity and made a move that befuddled and bemused Go experts, some of whom called it “beautiful.” The program’s ability to replicate human creativity by learning from huge datasets and rapidly generating solutions to challenging problems is impressive and exemplifies the vast possibilities that AI is opening up. Creative AI systems are being used innovatively in manufacturing, music, and other arenas; they are even writing papers and inventing objects. But for AI to rival human creativity, we must have a better understanding of brain activity, provide access to large datasets, and create a system that has human “general intelligence.”"
+    },
+    {
+        "id":  125,
+        "topic":  "Artificial Intelligence",
+        "title":  "Can quantum artificial intelligence imitate the human brain?",
+        "full_text":  "The human brain is incredibly complex, with its 100 billion neurons, 1,000 trillion synapses, and storage capacity equivalent to at least 1 petabyte. While experts have fashioned artificial neural networks that simulate information processing in our brains, they are never complete, because scientists are still beginners when it comes to grasping the brain’s intricacy and sophistication. Moreover, the majority of artificial neural networks differ considerably from brains. For example, they rely on mathematical tricks beyond the reach of most biological systems. But there is one intriguing similarity between our brains and AI models: Researchers are still baffled as to why they work as well as they do! There is growing interest in the possibility that quantum effects may play a role in consciousness and information processing, but evidence is still limited. With more research, we may see even greater understanding of the brain through the application of quantum AI."
+    }
+]

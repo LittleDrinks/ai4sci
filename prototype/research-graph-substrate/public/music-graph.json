@@ -1,0 +1,2606 @@
+{
+  "nodes": [
+    {
+      "id": "question:root",
+      "kind": "question",
+      "title": "Exact instrument-aware transcription",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "registry",
+      "detail": {}
+    },
+    {
+      "id": "direction:C01",
+      "kind": "direction",
+      "title": "Instance-owned note graph",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[C01]",
+      "detail": {
+        "hypothesis": "Explicit instance ownership and paired offsets remove an exact-program representability ceiling that token and piano-roll states alias.",
+        "prior_percent": 17,
+        "status": "retained_pending"
+      }
+    },
+    {
+      "id": "direction:C02",
+      "kind": "direction",
+      "title": "Baseline-preserving sparse editor",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[C02]",
+      "detail": {
+        "hypothesis": "Copy-by-default sparse edits preserve correct baseline mass that full replacement decoders destroy.",
+        "prior_percent": 14,
+        "status": "retained_pending"
+      }
+    },
+    {
+      "id": "direction:C03",
+      "kind": "direction",
+      "title": "Factorized event and scene-identity decisions",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[C03]",
+      "detail": {
+        "hypothesis": "Separating event existence, timing, and scene-roster identity decisions avoids destructive coupling inside one joint token decision.",
+        "prior_percent": 17,
+        "status": "retained_pending"
+      }
+    },
+    {
+      "id": "direction:C04",
+      "kind": "direction",
+      "title": "Latent-source mixture decomposition",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[C04]",
+      "detail": {
+        "hypothesis": "Latent source objects constrained by transcription and remix consistency expose ownership evidence hidden in a mixture waveform.",
+        "prior_percent": 13,
+        "status": "retained_pending"
+      }
+    },
+    {
+      "id": "direction:C05",
+      "kind": "direction",
+      "title": "Persistent source-object state",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[C05]",
+      "detail": {
+        "hypothesis": "Continuously active, dormant/re-entering, and arrangement-level sources require three distinct temporal states that window-local decoding cannot represent.",
+        "prior_percent": 7,
+        "status": "retained_pending"
+      }
+    },
+    {
+      "id": "direction:C06",
+      "kind": "direction",
+      "title": "Compositional and transportable identity ontology",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[C06]",
+      "detail": {
+        "hypothesis": "Compositional GM attributes, retrieved timbre prototypes, and many-to-many vocabulary transport can bind unseen acoustic evidence to a frozen exact-GM target without lossy aliases.",
+        "prior_percent": 6,
+        "status": "retained_pending"
+      }
+    },
+    {
+      "id": "direction:C07",
+      "kind": "direction",
+      "title": "Counterfactual real-mixture supervision",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[C07]",
+      "detail": {
+        "hypothesis": "Source add-remove counterfactuals on admitted real mixtures provide ownership supervision absent from synthetic-only or marginal labels.",
+        "prior_percent": 12,
+        "status": "retained_pending"
+      }
+    },
+    {
+      "id": "direction:C08",
+      "kind": "direction",
+      "title": "Scene-level inference objectives",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[C08]",
+      "detail": {
+        "hypothesis": "Global acoustic energy, posterior decision risk, and counterfactual note contribution expose scene errors that token-local scores cannot distinguish.",
+        "prior_percent": 5,
+        "status": "retained_pending"
+      }
+    },
+    {
+      "id": "direction:C09",
+      "kind": "direction",
+      "title": "Density-aware event allocation",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[C09]",
+      "detail": {
+        "hypothesis": "Fixed local proposal cardinality causes deletion errors as density rises; adaptive allocation can recover events without buying recall through false additions.",
+        "prior_percent": 7,
+        "status": "retained_pending"
+      }
+    },
+    {
+      "id": "direction:C10",
+      "kind": "direction",
+      "title": "Uncertainty-marginalized target likelihood",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[C10]",
+      "detail": {
+        "hypothesis": "Separately marginalizing time alignment, program-confusion, and event-presence observation processes prevents fitting one noisy annotation while preserving a fixed primary estimand.",
+        "prior_percent": 2,
+        "status": "retained_pending"
+      }
+    },
+    {
+      "id": "object:output_representation",
+      "kind": "object",
+      "title": "output representation",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "candidate_objects",
+      "detail": {}
+    },
+    {
+      "id": "object:baseline_update_operator",
+      "kind": "object",
+      "title": "baseline update operator",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "candidate_objects",
+      "detail": {}
+    },
+    {
+      "id": "object:decision_factorization",
+      "kind": "object",
+      "title": "decision factorization",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "candidate_objects",
+      "detail": {}
+    },
+    {
+      "id": "object:observation_factorization",
+      "kind": "object",
+      "title": "observation factorization",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "candidate_objects",
+      "detail": {}
+    },
+    {
+      "id": "object:temporal_source_state",
+      "kind": "object",
+      "title": "temporal source state",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "candidate_objects",
+      "detail": {}
+    },
+    {
+      "id": "object:identity_ontology",
+      "kind": "object",
+      "title": "identity ontology",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "candidate_objects",
+      "detail": {}
+    },
+    {
+      "id": "object:supervision_operator",
+      "kind": "object",
+      "title": "supervision operator",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "candidate_objects",
+      "detail": {}
+    },
+    {
+      "id": "object:inference_objective",
+      "kind": "object",
+      "title": "inference objective",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "candidate_objects",
+      "detail": {}
+    },
+    {
+      "id": "object:event_allocation_policy",
+      "kind": "object",
+      "title": "event allocation policy",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "candidate_objects",
+      "detail": {}
+    },
+    {
+      "id": "object:target_likelihood",
+      "kind": "object",
+      "title": "target likelihood",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "candidate_objects",
+      "detail": {}
+    },
+    {
+      "id": "immutable:benchmark_bytes",
+      "kind": "immutable",
+      "title": "benchmark bytes",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "shared_immutable_objects",
+      "detail": {}
+    },
+    {
+      "id": "immutable:data_roles",
+      "kind": "immutable",
+      "title": "data roles",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "shared_immutable_objects",
+      "detail": {}
+    },
+    {
+      "id": "immutable:reference_taxonomy",
+      "kind": "immutable",
+      "title": "reference taxonomy",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "shared_immutable_objects",
+      "detail": {}
+    },
+    {
+      "id": "immutable:evaluator",
+      "kind": "immutable",
+      "title": "evaluator",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "shared_immutable_objects",
+      "detail": {}
+    },
+    {
+      "id": "immutable:aggregation",
+      "kind": "immutable",
+      "title": "aggregation",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "shared_immutable_objects",
+      "detail": {}
+    },
+    {
+      "id": "immutable:compute_budget",
+      "kind": "immutable",
+      "title": "compute budget",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "shared_immutable_objects",
+      "detail": {}
+    },
+    {
+      "id": "gate:admitted_primary_real_mixture_benchmark",
+      "kind": "gate",
+      "title": "admitted primary real mixture benchmark",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "selection_gates",
+      "detail": {}
+    },
+    {
+      "id": "gate:frozen_duplicate_song_source_consumed_test_policy",
+      "kind": "gate",
+      "title": "frozen duplicate song source consumed test policy",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "selection_gates",
+      "detail": {}
+    },
+    {
+      "id": "gate:frozen_authoritative_evaluator",
+      "kind": "gate",
+      "title": "frozen authoritative evaluator",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "selection_gates",
+      "detail": {}
+    },
+    {
+      "id": "gate:eligible_strong_baseline",
+      "kind": "gate",
+      "title": "eligible strong baseline",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "selection_gates",
+      "detail": {}
+    },
+    {
+      "id": "gate:reproduced_or_formally_replaced_paper_baseline",
+      "kind": "gate",
+      "title": "reproduced or formally replaced paper baseline",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "selection_gates",
+      "detail": {}
+    },
+    {
+      "id": "gate:quantified_event_identity_and_representation_ceilings",
+      "kind": "gate",
+      "title": "quantified event identity and representation ceilings",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "selection_gates",
+      "detail": {}
+    },
+    {
+      "id": "gate:maestro_sanity_and_second_real_population",
+      "kind": "gate",
+      "title": "maestro sanity and second real population",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "selection_gates",
+      "detail": {}
+    },
+    {
+      "id": "gate:complete_per_unit_evidence",
+      "kind": "gate",
+      "title": "complete per unit evidence",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "selection_gates",
+      "detail": {}
+    },
+    {
+      "id": "gate:remote_payload_residency",
+      "kind": "gate",
+      "title": "remote payload residency",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "selection_gates",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:reference_topology_inventory",
+      "kind": "prerequisite",
+      "title": "reference topology inventory",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:canonical_program_contract",
+      "kind": "prerequisite",
+      "title": "canonical program contract",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:eligible_baseline_predictions",
+      "kind": "prerequisite",
+      "title": "eligible baseline predictions",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:canonical_note_schema",
+      "kind": "prerequisite",
+      "title": "canonical note schema",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:event_oracle",
+      "kind": "prerequisite",
+      "title": "event oracle",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:identity_oracle",
+      "kind": "prerequisite",
+      "title": "identity oracle",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:joint_oracle",
+      "kind": "prerequisite",
+      "title": "joint oracle",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:admitted_source_level_real_audio",
+      "kind": "prerequisite",
+      "title": "admitted source level real audio",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:aligned_source_notes",
+      "kind": "prerequisite",
+      "title": "aligned source notes",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:equal_compute_control",
+      "kind": "prerequisite",
+      "title": "equal compute control",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:session_safe_sequences",
+      "kind": "prerequisite",
+      "title": "session safe sequences",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:source_continuity_labels",
+      "kind": "prerequisite",
+      "title": "source continuity labels",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:reference_program_inventory",
+      "kind": "prerequisite",
+      "title": "reference program inventory",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:raw_model_state_inventory",
+      "kind": "prerequisite",
+      "title": "raw model state inventory",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:frozen_reference_taxonomy",
+      "kind": "prerequisite",
+      "title": "frozen reference taxonomy",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:rights_cleared_fresh_population",
+      "kind": "prerequisite",
+      "title": "rights cleared fresh population",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:source_audio",
+      "kind": "prerequisite",
+      "title": "source audio",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:discrete_notes",
+      "kind": "prerequisite",
+      "title": "discrete notes",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:performer_safe_split",
+      "kind": "prerequisite",
+      "title": "performer safe split",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:admitted_real_audio_probe",
+      "kind": "prerequisite",
+      "title": "admitted real audio probe",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:renderer_bank",
+      "kind": "prerequisite",
+      "title": "renderer bank",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:frozen_candidate_scenes",
+      "kind": "prerequisite",
+      "title": "frozen candidate scenes",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:density_strata",
+      "kind": "prerequisite",
+      "title": "density strata",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:event_error_decomposition",
+      "kind": "prerequisite",
+      "title": "event error decomposition",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:equal_total_compute",
+      "kind": "prerequisite",
+      "title": "equal total compute",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:independent_time_identity_or_presence_annotations",
+      "kind": "prerequisite",
+      "title": "independent time identity or presence annotations",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "prerequisite:frozen_primary_evaluator",
+      "kind": "prerequisite",
+      "title": "frozen primary evaluator",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].prerequisites",
+      "detail": {}
+    },
+    {
+      "id": "control:legacy_serialization",
+      "kind": "control",
+      "title": "legacy serialization",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:singleton_control",
+      "kind": "control",
+      "title": "singleton control",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:capacity_matched_decoder",
+      "kind": "control",
+      "title": "capacity matched decoder",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:byte_identity_noop",
+      "kind": "control",
+      "title": "byte identity noop",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:full_replacement",
+      "kind": "control",
+      "title": "full replacement",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:equal_capacity_editor",
+      "kind": "control",
+      "title": "equal capacity editor",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:joint_decoder",
+      "kind": "control",
+      "title": "joint decoder",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:event_only_factorization",
+      "kind": "control",
+      "title": "event only factorization",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:identity_only_factorization",
+      "kind": "control",
+      "title": "identity only factorization",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:capacity_match",
+      "kind": "control",
+      "title": "capacity match",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:direct_mixture",
+      "kind": "control",
+      "title": "direct mixture",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:equal_call_views",
+      "kind": "control",
+      "title": "equal call views",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:oracle_stems",
+      "kind": "control",
+      "title": "oracle stems",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:equal_compute",
+      "kind": "control",
+      "title": "equal compute",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:reset_memory",
+      "kind": "control",
+      "title": "reset memory",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:shuffled_memory",
+      "kind": "control",
+      "title": "shuffled memory",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:current_window_only",
+      "kind": "control",
+      "title": "current window only",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:flat_exact_head",
+      "kind": "control",
+      "title": "flat exact head",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:shuffled_structure",
+      "kind": "control",
+      "title": "shuffled structure",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:frequency_matched",
+      "kind": "control",
+      "title": "frequency matched",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:identity_oracle",
+      "kind": "control",
+      "title": "identity oracle",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:ordinary_paired_supervision",
+      "kind": "control",
+      "title": "ordinary paired supervision",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:synthetic_only",
+      "kind": "control",
+      "title": "synthetic only",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:label_shuffled_interventions",
+      "kind": "control",
+      "title": "label shuffled interventions",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:matched_training_budget",
+      "kind": "control",
+      "title": "matched training budget",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:score_only",
+      "kind": "control",
+      "title": "score only",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:structure_shuffle",
+      "kind": "control",
+      "title": "structure shuffle",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:equal_compute_discriminative",
+      "kind": "control",
+      "title": "equal compute discriminative",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:fixed_local_budget",
+      "kind": "control",
+      "title": "fixed local budget",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:oracle_density_budget",
+      "kind": "control",
+      "title": "oracle density budget",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:equal_total_proposals",
+      "kind": "control",
+      "title": "equal total proposals",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:single_reference_likelihood",
+      "kind": "control",
+      "title": "single reference likelihood",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "control:random_perturbations",
+      "kind": "control",
+      "title": "random perturbations",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].controls",
+      "detail": {}
+    },
+    {
+      "id": "artifact:topology_manifest",
+      "kind": "artifact",
+      "title": "topology manifest",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:roundtrip_cases",
+      "kind": "artifact",
+      "title": "roundtrip cases",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:collision_audit",
+      "kind": "artifact",
+      "title": "collision audit",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:capacity_ledger",
+      "kind": "artifact",
+      "title": "capacity ledger",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:baseline_hashes",
+      "kind": "artifact",
+      "title": "baseline hashes",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:edit_ledger",
+      "kind": "artifact",
+      "title": "edit ledger",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:noop_audit",
+      "kind": "artifact",
+      "title": "noop audit",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:factorial_contract",
+      "kind": "artifact",
+      "title": "factorial contract",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:per_unit_cells",
+      "kind": "artifact",
+      "title": "per unit cells",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:interaction_interval",
+      "kind": "artifact",
+      "title": "interaction interval",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:event_safety_audit",
+      "kind": "artifact",
+      "title": "event safety audit",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:source_contract",
+      "kind": "artifact",
+      "title": "source contract",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:remix_audit",
+      "kind": "artifact",
+      "title": "remix audit",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:compute_ledger",
+      "kind": "artifact",
+      "title": "compute ledger",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:oracle_gap_decomposition",
+      "kind": "artifact",
+      "title": "oracle gap decomposition",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:sequence_manifest",
+      "kind": "artifact",
+      "title": "sequence manifest",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:boundary_errors",
+      "kind": "artifact",
+      "title": "boundary errors",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:reset_control",
+      "kind": "artifact",
+      "title": "reset control",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:shuffle_control",
+      "kind": "artifact",
+      "title": "shuffle control",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:leaf_boundary_contract",
+      "kind": "artifact",
+      "title": "leaf boundary contract",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:ontology_table",
+      "kind": "artifact",
+      "title": "ontology table",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:collision_cases",
+      "kind": "artifact",
+      "title": "collision cases",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:projection_loss_report",
+      "kind": "artifact",
+      "title": "projection loss report",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:identity_ceiling",
+      "kind": "artifact",
+      "title": "identity ceiling",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:c06_identity_information_target_joint_disentanglement",
+      "kind": "artifact",
+      "title": "c06 identity information target joint disentanglement",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:rights_record",
+      "kind": "artifact",
+      "title": "rights record",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:split_manifest",
+      "kind": "artifact",
+      "title": "split manifest",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:intervention_pairs",
+      "kind": "artifact",
+      "title": "intervention pairs",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:training_ledger",
+      "kind": "artifact",
+      "title": "training ledger",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:scene_pairs",
+      "kind": "artifact",
+      "title": "scene pairs",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:renderer_matrix",
+      "kind": "artifact",
+      "title": "renderer matrix",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:ranking_metrics",
+      "kind": "artifact",
+      "title": "ranking metrics",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:c08_inference_information_target_joint_disentanglement",
+      "kind": "artifact",
+      "title": "c08 inference information target joint disentanglement",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:density_manifest",
+      "kind": "artifact",
+      "title": "density manifest",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:allocation_predictions",
+      "kind": "artifact",
+      "title": "allocation predictions",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:error_strata",
+      "kind": "artifact",
+      "title": "error strata",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:reference_family",
+      "kind": "artifact",
+      "title": "reference family",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:perturbation_contract",
+      "kind": "artifact",
+      "title": "perturbation contract",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:ranking_stability",
+      "kind": "artifact",
+      "title": "ranking stability",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "artifact:estimand_report",
+      "kind": "artifact",
+      "title": "estimand report",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].required_artifacts",
+      "detail": {}
+    },
+    {
+      "id": "history:1",
+      "kind": "history",
+      "title": "1",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:4",
+      "kind": "history",
+      "title": "4",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:5",
+      "kind": "history",
+      "title": "5",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:8",
+      "kind": "history",
+      "title": "8",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:7",
+      "kind": "history",
+      "title": "7",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:13",
+      "kind": "history",
+      "title": "13",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:17",
+      "kind": "history",
+      "title": "17",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:20",
+      "kind": "history",
+      "title": "20",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:21",
+      "kind": "history",
+      "title": "21",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:22",
+      "kind": "history",
+      "title": "22",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:30",
+      "kind": "history",
+      "title": "30",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:14",
+      "kind": "history",
+      "title": "14",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:26",
+      "kind": "history",
+      "title": "26",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:10",
+      "kind": "history",
+      "title": "10",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:11",
+      "kind": "history",
+      "title": "11",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:12",
+      "kind": "history",
+      "title": "12",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:23",
+      "kind": "history",
+      "title": "23",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:25",
+      "kind": "history",
+      "title": "25",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:9",
+      "kind": "history",
+      "title": "9",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:15",
+      "kind": "history",
+      "title": "15",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:16",
+      "kind": "history",
+      "title": "16",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:18",
+      "kind": "history",
+      "title": "18",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:28",
+      "kind": "history",
+      "title": "28",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:29",
+      "kind": "history",
+      "title": "29",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:19",
+      "kind": "history",
+      "title": "19",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:24",
+      "kind": "history",
+      "title": "24",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:2",
+      "kind": "history",
+      "title": "2",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:3",
+      "kind": "history",
+      "title": "3",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:6",
+      "kind": "history",
+      "title": "6",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    },
+    {
+      "id": "history:27",
+      "kind": "history",
+      "title": "27",
+      "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+      "sourceField": "directions[*].historical_direction_ids",
+      "detail": {}
+    }
+  ],
+  "links": [
+    {
+      "source": "question:root",
+      "target": "direction:C01",
+      "relation": "candidate"
+    },
+    {
+      "source": "direction:C01",
+      "target": "object:output_representation",
+      "relation": "changes"
+    },
+    {
+      "source": "direction:C01",
+      "target": "gate:admitted_primary_real_mixture_benchmark",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C01",
+      "target": "gate:frozen_duplicate_song_source_consumed_test_policy",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C01",
+      "target": "gate:frozen_authoritative_evaluator",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C01",
+      "target": "gate:eligible_strong_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C01",
+      "target": "gate:reproduced_or_formally_replaced_paper_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C01",
+      "target": "gate:quantified_event_identity_and_representation_ceilings",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C01",
+      "target": "gate:maestro_sanity_and_second_real_population",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C01",
+      "target": "gate:complete_per_unit_evidence",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C01",
+      "target": "gate:remote_payload_residency",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C01",
+      "target": "prerequisite:reference_topology_inventory",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C01",
+      "target": "prerequisite:canonical_program_contract",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C01",
+      "target": "control:legacy_serialization",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C01",
+      "target": "control:singleton_control",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C01",
+      "target": "control:capacity_matched_decoder",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C01",
+      "target": "artifact:topology_manifest",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C01",
+      "target": "artifact:roundtrip_cases",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C01",
+      "target": "artifact:collision_audit",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C01",
+      "target": "artifact:capacity_ledger",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C01",
+      "target": "history:1",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C01",
+      "target": "history:4",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "question:root",
+      "target": "direction:C02",
+      "relation": "candidate"
+    },
+    {
+      "source": "direction:C02",
+      "target": "object:baseline_update_operator",
+      "relation": "changes"
+    },
+    {
+      "source": "direction:C02",
+      "target": "gate:admitted_primary_real_mixture_benchmark",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C02",
+      "target": "gate:frozen_duplicate_song_source_consumed_test_policy",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C02",
+      "target": "gate:frozen_authoritative_evaluator",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C02",
+      "target": "gate:eligible_strong_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C02",
+      "target": "gate:reproduced_or_formally_replaced_paper_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C02",
+      "target": "gate:quantified_event_identity_and_representation_ceilings",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C02",
+      "target": "gate:maestro_sanity_and_second_real_population",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C02",
+      "target": "gate:complete_per_unit_evidence",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C02",
+      "target": "gate:remote_payload_residency",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C02",
+      "target": "prerequisite:eligible_baseline_predictions",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C02",
+      "target": "prerequisite:canonical_note_schema",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C02",
+      "target": "control:byte_identity_noop",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C02",
+      "target": "control:full_replacement",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C02",
+      "target": "control:equal_capacity_editor",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C02",
+      "target": "artifact:baseline_hashes",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C02",
+      "target": "artifact:edit_ledger",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C02",
+      "target": "artifact:noop_audit",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C02",
+      "target": "artifact:capacity_ledger",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C02",
+      "target": "history:5",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C02",
+      "target": "history:8",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "question:root",
+      "target": "direction:C03",
+      "relation": "candidate"
+    },
+    {
+      "source": "direction:C03",
+      "target": "object:decision_factorization",
+      "relation": "changes"
+    },
+    {
+      "source": "direction:C03",
+      "target": "gate:admitted_primary_real_mixture_benchmark",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C03",
+      "target": "gate:frozen_duplicate_song_source_consumed_test_policy",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C03",
+      "target": "gate:frozen_authoritative_evaluator",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C03",
+      "target": "gate:eligible_strong_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C03",
+      "target": "gate:reproduced_or_formally_replaced_paper_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C03",
+      "target": "gate:quantified_event_identity_and_representation_ceilings",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C03",
+      "target": "gate:maestro_sanity_and_second_real_population",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C03",
+      "target": "gate:complete_per_unit_evidence",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C03",
+      "target": "gate:remote_payload_residency",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C03",
+      "target": "prerequisite:event_oracle",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C03",
+      "target": "prerequisite:identity_oracle",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C03",
+      "target": "prerequisite:joint_oracle",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C03",
+      "target": "control:joint_decoder",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C03",
+      "target": "control:event_only_factorization",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C03",
+      "target": "control:identity_only_factorization",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C03",
+      "target": "control:capacity_match",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C03",
+      "target": "artifact:factorial_contract",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C03",
+      "target": "artifact:per_unit_cells",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C03",
+      "target": "artifact:interaction_interval",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C03",
+      "target": "artifact:event_safety_audit",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C03",
+      "target": "history:7",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C03",
+      "target": "history:13",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C03",
+      "target": "history:17",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "question:root",
+      "target": "direction:C04",
+      "relation": "candidate"
+    },
+    {
+      "source": "direction:C04",
+      "target": "object:observation_factorization",
+      "relation": "changes"
+    },
+    {
+      "source": "direction:C04",
+      "target": "gate:admitted_primary_real_mixture_benchmark",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C04",
+      "target": "gate:frozen_duplicate_song_source_consumed_test_policy",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C04",
+      "target": "gate:frozen_authoritative_evaluator",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C04",
+      "target": "gate:eligible_strong_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C04",
+      "target": "gate:reproduced_or_formally_replaced_paper_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C04",
+      "target": "gate:quantified_event_identity_and_representation_ceilings",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C04",
+      "target": "gate:maestro_sanity_and_second_real_population",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C04",
+      "target": "gate:complete_per_unit_evidence",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C04",
+      "target": "gate:remote_payload_residency",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C04",
+      "target": "prerequisite:admitted_source_level_real_audio",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C04",
+      "target": "prerequisite:aligned_source_notes",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C04",
+      "target": "prerequisite:equal_compute_control",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C04",
+      "target": "control:direct_mixture",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C04",
+      "target": "control:equal_call_views",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C04",
+      "target": "control:oracle_stems",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C04",
+      "target": "control:equal_compute",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C04",
+      "target": "artifact:source_contract",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C04",
+      "target": "artifact:remix_audit",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C04",
+      "target": "artifact:compute_ledger",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C04",
+      "target": "artifact:oracle_gap_decomposition",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C04",
+      "target": "history:20",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C04",
+      "target": "history:21",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C04",
+      "target": "history:22",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C04",
+      "target": "history:30",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "question:root",
+      "target": "direction:C05",
+      "relation": "candidate"
+    },
+    {
+      "source": "direction:C05",
+      "target": "object:temporal_source_state",
+      "relation": "changes"
+    },
+    {
+      "source": "direction:C05",
+      "target": "gate:admitted_primary_real_mixture_benchmark",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C05",
+      "target": "gate:frozen_duplicate_song_source_consumed_test_policy",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C05",
+      "target": "gate:frozen_authoritative_evaluator",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C05",
+      "target": "gate:eligible_strong_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C05",
+      "target": "gate:reproduced_or_formally_replaced_paper_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C05",
+      "target": "gate:quantified_event_identity_and_representation_ceilings",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C05",
+      "target": "gate:maestro_sanity_and_second_real_population",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C05",
+      "target": "gate:complete_per_unit_evidence",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C05",
+      "target": "gate:remote_payload_residency",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C05",
+      "target": "prerequisite:session_safe_sequences",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C05",
+      "target": "prerequisite:source_continuity_labels",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C05",
+      "target": "control:reset_memory",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C05",
+      "target": "control:shuffled_memory",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C05",
+      "target": "control:current_window_only",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C05",
+      "target": "artifact:sequence_manifest",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C05",
+      "target": "artifact:boundary_errors",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C05",
+      "target": "artifact:reset_control",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C05",
+      "target": "artifact:shuffle_control",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C05",
+      "target": "artifact:leaf_boundary_contract",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C05",
+      "target": "history:14",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C05",
+      "target": "history:26",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "question:root",
+      "target": "direction:C06",
+      "relation": "candidate"
+    },
+    {
+      "source": "direction:C06",
+      "target": "object:identity_ontology",
+      "relation": "changes"
+    },
+    {
+      "source": "direction:C06",
+      "target": "gate:admitted_primary_real_mixture_benchmark",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C06",
+      "target": "gate:frozen_duplicate_song_source_consumed_test_policy",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C06",
+      "target": "gate:frozen_authoritative_evaluator",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C06",
+      "target": "gate:eligible_strong_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C06",
+      "target": "gate:reproduced_or_formally_replaced_paper_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C06",
+      "target": "gate:quantified_event_identity_and_representation_ceilings",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C06",
+      "target": "gate:maestro_sanity_and_second_real_population",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C06",
+      "target": "gate:complete_per_unit_evidence",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C06",
+      "target": "gate:remote_payload_residency",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C06",
+      "target": "prerequisite:reference_program_inventory",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C06",
+      "target": "prerequisite:raw_model_state_inventory",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C06",
+      "target": "prerequisite:frozen_reference_taxonomy",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C06",
+      "target": "control:flat_exact_head",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C06",
+      "target": "control:shuffled_structure",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C06",
+      "target": "control:frequency_matched",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C06",
+      "target": "control:identity_oracle",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C06",
+      "target": "artifact:ontology_table",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C06",
+      "target": "artifact:collision_cases",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C06",
+      "target": "artifact:projection_loss_report",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C06",
+      "target": "artifact:identity_ceiling",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C06",
+      "target": "artifact:c06_identity_information_target_joint_disentanglement",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C06",
+      "target": "history:10",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C06",
+      "target": "history:11",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C06",
+      "target": "history:12",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C06",
+      "target": "history:23",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C06",
+      "target": "history:25",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "question:root",
+      "target": "direction:C07",
+      "relation": "candidate"
+    },
+    {
+      "source": "direction:C07",
+      "target": "object:supervision_operator",
+      "relation": "changes"
+    },
+    {
+      "source": "direction:C07",
+      "target": "gate:admitted_primary_real_mixture_benchmark",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C07",
+      "target": "gate:frozen_duplicate_song_source_consumed_test_policy",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C07",
+      "target": "gate:frozen_authoritative_evaluator",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C07",
+      "target": "gate:eligible_strong_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C07",
+      "target": "gate:reproduced_or_formally_replaced_paper_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C07",
+      "target": "gate:quantified_event_identity_and_representation_ceilings",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C07",
+      "target": "gate:maestro_sanity_and_second_real_population",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C07",
+      "target": "gate:complete_per_unit_evidence",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C07",
+      "target": "gate:remote_payload_residency",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C07",
+      "target": "prerequisite:rights_cleared_fresh_population",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C07",
+      "target": "prerequisite:source_audio",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C07",
+      "target": "prerequisite:discrete_notes",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C07",
+      "target": "prerequisite:performer_safe_split",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C07",
+      "target": "control:ordinary_paired_supervision",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C07",
+      "target": "control:synthetic_only",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C07",
+      "target": "control:label_shuffled_interventions",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C07",
+      "target": "control:matched_training_budget",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C07",
+      "target": "artifact:rights_record",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C07",
+      "target": "artifact:split_manifest",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C07",
+      "target": "artifact:intervention_pairs",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C07",
+      "target": "artifact:training_ledger",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C07",
+      "target": "history:9",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C07",
+      "target": "history:15",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C07",
+      "target": "history:16",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C07",
+      "target": "history:18",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C07",
+      "target": "history:28",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C07",
+      "target": "history:29",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "question:root",
+      "target": "direction:C08",
+      "relation": "candidate"
+    },
+    {
+      "source": "direction:C08",
+      "target": "object:inference_objective",
+      "relation": "changes"
+    },
+    {
+      "source": "direction:C08",
+      "target": "gate:admitted_primary_real_mixture_benchmark",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C08",
+      "target": "gate:frozen_duplicate_song_source_consumed_test_policy",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C08",
+      "target": "gate:frozen_authoritative_evaluator",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C08",
+      "target": "gate:eligible_strong_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C08",
+      "target": "gate:reproduced_or_formally_replaced_paper_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C08",
+      "target": "gate:quantified_event_identity_and_representation_ceilings",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C08",
+      "target": "gate:maestro_sanity_and_second_real_population",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C08",
+      "target": "gate:complete_per_unit_evidence",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C08",
+      "target": "gate:remote_payload_residency",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C08",
+      "target": "prerequisite:admitted_real_audio_probe",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C08",
+      "target": "prerequisite:renderer_bank",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C08",
+      "target": "prerequisite:frozen_candidate_scenes",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C08",
+      "target": "control:score_only",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C08",
+      "target": "control:structure_shuffle",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C08",
+      "target": "control:equal_compute_discriminative",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C08",
+      "target": "artifact:scene_pairs",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C08",
+      "target": "artifact:renderer_matrix",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C08",
+      "target": "artifact:ranking_metrics",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C08",
+      "target": "artifact:compute_ledger",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C08",
+      "target": "artifact:c08_inference_information_target_joint_disentanglement",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C08",
+      "target": "history:19",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C08",
+      "target": "history:24",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "question:root",
+      "target": "direction:C09",
+      "relation": "candidate"
+    },
+    {
+      "source": "direction:C09",
+      "target": "object:event_allocation_policy",
+      "relation": "changes"
+    },
+    {
+      "source": "direction:C09",
+      "target": "gate:admitted_primary_real_mixture_benchmark",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C09",
+      "target": "gate:frozen_duplicate_song_source_consumed_test_policy",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C09",
+      "target": "gate:frozen_authoritative_evaluator",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C09",
+      "target": "gate:eligible_strong_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C09",
+      "target": "gate:reproduced_or_formally_replaced_paper_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C09",
+      "target": "gate:quantified_event_identity_and_representation_ceilings",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C09",
+      "target": "gate:maestro_sanity_and_second_real_population",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C09",
+      "target": "gate:complete_per_unit_evidence",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C09",
+      "target": "gate:remote_payload_residency",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C09",
+      "target": "prerequisite:density_strata",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C09",
+      "target": "prerequisite:event_error_decomposition",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C09",
+      "target": "prerequisite:equal_total_compute",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C09",
+      "target": "control:fixed_local_budget",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C09",
+      "target": "control:oracle_density_budget",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C09",
+      "target": "control:equal_total_proposals",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C09",
+      "target": "artifact:density_manifest",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C09",
+      "target": "artifact:allocation_predictions",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C09",
+      "target": "artifact:error_strata",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C09",
+      "target": "artifact:compute_ledger",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C09",
+      "target": "artifact:leaf_boundary_contract",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C09",
+      "target": "history:2",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C09",
+      "target": "history:3",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "direction:C09",
+      "target": "history:6",
+      "relation": "historical_direction_ids"
+    },
+    {
+      "source": "question:root",
+      "target": "direction:C10",
+      "relation": "candidate"
+    },
+    {
+      "source": "direction:C10",
+      "target": "object:target_likelihood",
+      "relation": "changes"
+    },
+    {
+      "source": "direction:C10",
+      "target": "gate:admitted_primary_real_mixture_benchmark",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C10",
+      "target": "gate:frozen_duplicate_song_source_consumed_test_policy",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C10",
+      "target": "gate:frozen_authoritative_evaluator",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C10",
+      "target": "gate:eligible_strong_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C10",
+      "target": "gate:reproduced_or_formally_replaced_paper_baseline",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C10",
+      "target": "gate:quantified_event_identity_and_representation_ceilings",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C10",
+      "target": "gate:maestro_sanity_and_second_real_population",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C10",
+      "target": "gate:complete_per_unit_evidence",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C10",
+      "target": "gate:remote_payload_residency",
+      "relation": "requires"
+    },
+    {
+      "source": "direction:C10",
+      "target": "prerequisite:independent_time_identity_or_presence_annotations",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C10",
+      "target": "prerequisite:frozen_primary_evaluator",
+      "relation": "prerequisites"
+    },
+    {
+      "source": "direction:C10",
+      "target": "control:single_reference_likelihood",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C10",
+      "target": "control:random_perturbations",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C10",
+      "target": "control:matched_training_budget",
+      "relation": "controls"
+    },
+    {
+      "source": "direction:C10",
+      "target": "artifact:reference_family",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C10",
+      "target": "artifact:perturbation_contract",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C10",
+      "target": "artifact:ranking_stability",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C10",
+      "target": "artifact:estimand_report",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C10",
+      "target": "artifact:leaf_boundary_contract",
+      "relation": "required_artifacts"
+    },
+    {
+      "source": "direction:C10",
+      "target": "history:27",
+      "relation": "historical_direction_ids"
+    }
+  ],
+  "source": "/home/q2635/wsl-workspace/music/directions.yaml",
+  "generatedFrom": "explicit YAML fields only"
+}

@@ -1,0 +1,2 @@
+"""Local ResearchHarness worker."""
+

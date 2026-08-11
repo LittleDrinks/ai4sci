@@ -1,0 +1,20 @@
+{
+  "name": "research-graph-substrate",
+  "private": true,
+  "scripts": {
+    "data": "node scripts/build-graph.mjs",
+    "dev": "npm run data && vite",
+    "build": "npm run data && vite build"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "@xyflow/react": "latest",
+    "cytoscape": "latest",
+    "dagre": "latest",
+    "vite": "latest",
+    "yaml": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {}
+}

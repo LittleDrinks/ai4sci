@@ -217,6 +217,7 @@ input::placeholder, textarea::placeholder { color: #8b938c; }
 .timeline-attempt li { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
 .timeline-attempt li time { color: var(--muted); font-size: 13px; }
 .timeline-attempt li p { margin: 3px 0 0; color: var(--muted); }
+.trace-tool { display: block; margin-top: 6px; padding: 6px 8px; white-space: pre-wrap; overflow-wrap: anywhere; background: #f3f5f2; }
 .state-dot { width: 8px; height: 8px; margin-left: 4px; border-radius: 50%; background: var(--amber); }
 .state-dot.completed { background: var(--accent); }
 .wire-search { height: 42px; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding: 0 11px; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); }

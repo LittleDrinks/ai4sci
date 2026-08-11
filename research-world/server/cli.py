@@ -214,11 +214,10 @@ def run_command(args, world: World):
 
 
 def task_command(args, world: World):
-    require_task(world, args.attempt)
+    attempt = require_task(world, args.attempt)
     if args.action == "show":
-        return world.attempt(args.attempt)
-    value = read_json(args.file)
-    attempt = world.attempt(args.attempt)
+        return attempt
+    value = read_task_json(attempt, args.file)
     return world.record_event(attempt["run_id"], attempt["generation_id"], attempt["id"], "agent", value["type"], value["entity"], value["payload"])
 
 
@@ -235,7 +234,8 @@ def graph_command(args, world: World):
 def artifact_command(args, world: World):
     attempt = require_task(world, args.attempt)
     if args.action == "add":
-        artifact = world.add_artifact(task_path(args.file).read_bytes(), args.media_type)
+        artifact = world.add_artifact(task_path(attempt, args.file).read_bytes(), args.media_type)
+        world.grant_artifact(attempt["id"], artifact["id"], "agent_output")
         world.record_event(attempt["run_id"], attempt["generation_id"], attempt["id"], "agent", "artifact_added", {"type": "artifact", "id": artifact["id"]}, {})
         return artifact
     world.require_artifact_access(attempt["id"], args.artifact_id)
@@ -243,7 +243,7 @@ def artifact_command(args, world: World):
         return world.artifacts.get(args.artifact_id)
     content = world.artifacts.read(args.artifact_id)
     if args.action == "materialize":
-        path = task_path(args.path)
+        path = task_path(attempt, args.path, writable=True)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(content)
         return {"path": str(path), "size": len(content)}
@@ -251,28 +251,30 @@ def artifact_command(args, world: World):
 
 
 def tools_command(args, world: World):
-    require_task(world, args.attempt)
+    attempt = require_task(world, args.attempt)
     broker = ToolBroker(world, McpClient())
     if args.action == "list":
         return broker.list(args.attempt)
-    value = read_json(args.file)
+    value = read_task_json(attempt, args.file)
     return broker.call(args.attempt, value["server"], value["tool"], value["arguments"])
 
 
 def submit_command(args, world: World):
     attempt = require_task(world, args.attempt)
-    value = read_json(args.file)
+    value = read_task_json(attempt, args.file)
     if value.get("generation_id") != attempt["generation_id"]:
         raise PermissionError("task can submit only its own generation")
+    require_package_artifacts(world, attempt["id"], value)
     run = world.run(attempt["run_id"])
     return world.submit_package(run["project_id"], value)
 
 
 def source_command(args, world: World):
     attempt = require_task(world, args.attempt)
-    result = ToolBroker(world, McpClient()).call(args.attempt, "anysearch", "extract", {"url": args.url})
-    content = result if isinstance(result, str) else json.dumps(result)
+    source = SearchBroker(ToolBroker(world, McpClient())).extract({"url": args.url}, args.attempt)
+    content = source["content"]
     artifact = world.add_artifact(content.encode(), "text/markdown")
+    world.grant_artifact(attempt["id"], artifact["id"], "source_snapshot")
     project_id = world.run(attempt["run_id"])["project_id"]
     lines = max(1, len(content.splitlines()))
     snapshot = world.add_source_snapshot(project_id, args.url, artifact, {"line_start": 1, "line_end": lines})
@@ -282,17 +284,19 @@ def source_command(args, world: World):
 
 def environment_command(args, world: World):
     attempt = require_task(world, args.attempt)
-    value = read_json(args.file)
+    value = read_task_json(attempt, args.file)
     project_id = world.run(attempt["run_id"])["project_id"]
     return EnvironmentBuilder(world, runner_controller()).build(project_id, args.attempt, value["setup"])
 
 
 def experiment_command(args, world: World):
     attempt = require_task(world, args.attempt)
-    value = read_json(args.file)
+    value = read_task_json(attempt, args.file)
     project_id = world.run(attempt["run_id"])["project_id"]
-    inputs = {path: Path(path).read_bytes() for path in value["inputs"]}
+    inputs = {path: task_path(attempt, Path(path)).read_bytes() for path in value["inputs"]}
     environment = world.environment(value["environment_id"])
+    if environment["attempt_id"] != attempt["id"] or environment["project_id"] != project_id:
+        raise PermissionError("environment is outside the task capability")
     return ExperimentRunner(world, runner_controller()).run(project_id, args.attempt, environment, value["command"], inputs, value.get("seed", 0))
 
 
@@ -366,10 +370,31 @@ def require_task(world: World, attempt_id: str) -> dict:
     return attempt
 
 
-def task_path(path: Path) -> Path:
-    if path.is_absolute() or ".." in path.parts:
-        raise PermissionError("task paths must stay inside the attempt workspace")
-    return path
+def task_path(attempt: dict, path: Path, writable: bool = False) -> Path:
+    if not attempt.get("workspace"):
+        raise PermissionError("attempt has no bound workspace")
+    root = Path(attempt["workspace"]).resolve()
+    target = (root / path).resolve()
+    boundary = (root / "overlay").resolve() if writable else root
+    try:
+        target.relative_to(boundary)
+    except ValueError as error:
+        raise PermissionError("task path is outside its capability") from error
+    return target
+
+
+def read_task_json(attempt: dict, path: Path | None) -> dict:
+    return json.loads(task_path(attempt, path).read_text(encoding="utf-8")) if path else json.load(sys.stdin)
+
+
+def require_package_artifacts(world: World, attempt_id: str, payload: dict) -> None:
+    ids = [item["artifact_id"] for item in payload["sources"] + payload["artifacts"]]
+    ids.extend(citation["artifact_id"] for claim in payload["claims"] for citation in claim["citations"])
+    for artifact_id in ids:
+        world.require_artifact_access(attempt_id, artifact_id)
+    for code in payload["code"]:
+        if world.execution(code["execution_id"])["attempt_id"] != attempt_id:
+            raise PermissionError("execution is outside the task capability")
 
 
 def doctor(args) -> dict:
@@ -387,8 +412,7 @@ def doctor_check(name: str, settings) -> dict:
     if name == "embedding":
         return {"dimensions": len(EmbeddingClient(settings.model_api_base, settings.model_api_key)("orbit")), "ok": True}
     if name == "mcp":
-        tools = McpClient().list_tools({"type": "http", "url": "https://api.anysearch.com/mcp"})
-        return {"tools": [tool["name"] for tool in tools], "ok": True}
+        return doctor_mcp(settings)
     response = httpx.post(os.getenv("RUNNER_CONTROLLER_URL", "http://127.0.0.1:8096") + "/doctor", timeout=60)
     response.raise_for_status()
     return response.json()
@@ -398,6 +422,15 @@ def model_headers(settings) -> dict:
     if not settings.model_api_base or not settings.model_api_key:
         raise RuntimeError("MODEL_API_BASE and MODEL_API_KEY are required")
     return {"Authorization": f"Bearer {settings.model_api_key}"}
+
+
+def doctor_mcp(settings) -> dict:
+    configs = sorted(settings.projects_root.glob("*/.mcp.json"))
+    if not configs:
+        raise FileNotFoundError("no project .mcp.json found")
+    servers = json.loads(configs[0].read_text())["mcpServers"]
+    tools = {name: [tool["name"] for tool in McpClient().list_tools(config)] for name, config in servers.items()}
+    return {"servers": tools, "ok": True}
 
 
 def runner_controller() -> HttpRunnerController:

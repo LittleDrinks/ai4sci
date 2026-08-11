@@ -29,7 +29,10 @@ class ExperimentRunner:
         replay = self.controller.run(spec)
         self._verify_replay(result, replay)
         result["usage"] = {**result["usage"], "replay_verified": True, "replay_output_hash": self._output(replay)[1]}
-        return self._record(project_id, attempt_id, environment, command, artifact, spec, result, seed)
+        execution = self._record(project_id, attempt_id, environment, command, artifact, spec, result, seed)
+        self.world.grant_artifact(attempt_id, artifact["id"], "execution_input")
+        self.world.grant_artifact(attempt_id, execution["output_artifact_id"], "execution_output")
+        return execution
 
     def replay(self, execution_id: str) -> dict:
         receipt = self.world.execution(execution_id)
@@ -77,6 +80,7 @@ class EnvironmentBuilder:
         files = self._files(attempt["snapshot_id"])
         result = self.controller.build({"files": files, "setup": setup})
         lock = self.world.add_artifact(result["lock"].encode(), "text/plain")
+        self.world.grant_artifact(attempt_id, lock["id"], "environment_lock")
         return self.world.add_environment(project_id, attempt_id, result["image_digest"], lock["id"], setup)
 
     def _files(self, snapshot_id: str) -> dict[str, str]:

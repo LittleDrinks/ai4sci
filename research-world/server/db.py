@@ -14,10 +14,11 @@ CREATE TABLE IF NOT EXISTS generations(id TEXT PRIMARY KEY,project_id TEXT NOT N
 CREATE TABLE IF NOT EXISTS packages(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,generation_id TEXT NOT NULL,payload TEXT NOT NULL,status TEXT NOT NULL,created_at TEXT NOT NULL,admitted_at TEXT);
 CREATE TABLE IF NOT EXISTS nodes(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,generation_id TEXT,package_id TEXT,kind TEXT NOT NULL,payload TEXT NOT NULL,status TEXT NOT NULL,created_at TEXT NOT NULL,admitted_at TEXT);
 CREATE TABLE IF NOT EXISTS edges(source TEXT NOT NULL,target TEXT NOT NULL,type TEXT NOT NULL,package_id TEXT NOT NULL,PRIMARY KEY(source,target,type));
-CREATE TABLE IF NOT EXISTS reviews(id TEXT PRIMARY KEY,package_id TEXT NOT NULL,reviewer TEXT NOT NULL,decision TEXT NOT NULL,feedback TEXT NOT NULL,created_at TEXT NOT NULL,UNIQUE(package_id,reviewer));
+CREATE TABLE IF NOT EXISTS reviews(id TEXT PRIMARY KEY,package_id TEXT NOT NULL,reviewer TEXT NOT NULL,decision TEXT NOT NULL,feedback TEXT NOT NULL,category TEXT NOT NULL,created_at TEXT NOT NULL,UNIQUE(package_id,reviewer));
 CREATE TABLE IF NOT EXISTS node_embeddings(node_id TEXT PRIMARY KEY,vector TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS runs(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,question_id INTEGER NOT NULL,status TEXT NOT NULL,apply_selected INTEGER NOT NULL,project_snapshot_id TEXT,final_markdown_id TEXT,final_html_id TEXT,created_at TEXT NOT NULL,completed_at TEXT);
-CREATE TABLE IF NOT EXISTS attempts(id TEXT PRIMARY KEY,run_id TEXT NOT NULL,generation_id TEXT NOT NULL,snapshot_id TEXT NOT NULL,actor TEXT NOT NULL,status TEXT NOT NULL,wire_artifact_id TEXT,context_artifact_id TEXT,created_at TEXT NOT NULL,completed_at TEXT);
+CREATE TABLE IF NOT EXISTS attempts(id TEXT PRIMARY KEY,run_id TEXT NOT NULL,generation_id TEXT NOT NULL,snapshot_id TEXT NOT NULL,actor TEXT NOT NULL,status TEXT NOT NULL,workspace TEXT,wire_artifact_id TEXT,context_artifact_id TEXT,manifest_artifact_id TEXT,created_at TEXT NOT NULL,completed_at TEXT);
+CREATE TABLE IF NOT EXISTS attempt_artifacts(attempt_id TEXT NOT NULL,artifact_id TEXT NOT NULL,role TEXT NOT NULL,PRIMARY KEY(attempt_id,artifact_id));
 CREATE TABLE IF NOT EXISTS task_tokens(token_hash TEXT PRIMARY KEY,attempt_id TEXT NOT NULL,expires_at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,run_id TEXT NOT NULL,generation_id TEXT,attempt_id TEXT,actor TEXT NOT NULL,type TEXT NOT NULL,time TEXT NOT NULL,entity TEXT NOT NULL,payload TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS tool_receipts(id TEXT PRIMARY KEY,attempt_id TEXT NOT NULL,server TEXT NOT NULL,tool TEXT NOT NULL,arguments TEXT NOT NULL,result TEXT NOT NULL,error TEXT,created_at TEXT NOT NULL);

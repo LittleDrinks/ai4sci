@@ -120,9 +120,14 @@ class World:
 
     def create_attempt(self, run_id: str, generation_id: str, snapshot_id: str, actor: str) -> dict:
         attempt_id = f"attempt:{secrets.token_hex(12)}"
-        values = (attempt_id, run_id, generation_id, snapshot_id, actor, "created", None, None, now(), None)
+        values = (attempt_id, run_id, generation_id, snapshot_id, actor, "created", None, None, None, None, now(), None)
         with self.db.connect() as connection:
-            connection.execute("INSERT INTO attempts VALUES(?,?,?,?,?,?,?,?,?,?)", values)
+            connection.execute("INSERT INTO attempts VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", values)
+        return self.attempt(attempt_id)
+
+    def bind_attempt_workspace(self, attempt_id: str, workspace: Path) -> dict:
+        with self.db.connect() as connection:
+            connection.execute("UPDATE attempts SET workspace=? WHERE id=?", (str(workspace.resolve()), attempt_id))
         return self.attempt(attempt_id)
 
     def attempt(self, attempt_id: str) -> dict:
@@ -137,14 +142,21 @@ class World:
             return self._many("SELECT * FROM attempts WHERE run_id=? AND actor=? ORDER BY created_at", (run_id, actor))
         return self._many("SELECT * FROM attempts WHERE run_id=? ORDER BY created_at", (run_id,))
 
-    def complete_attempt(self, attempt_id: str, wire: bytes, context: bytes) -> dict:
+    def complete_attempt(self, attempt_id: str, wire: bytes, context: bytes, manifest: bytes) -> dict:
         wire_artifact = self.add_artifact(wire, "application/json")
         context_artifact = self.add_artifact(context, "application/json")
+        manifest_artifact = self.add_artifact(manifest, "application/json")
         with self.db.connect() as connection:
-            connection.execute("UPDATE attempts SET status='completed',wire_artifact_id=?,context_artifact_id=?,completed_at=? WHERE id=?", (wire_artifact["id"], context_artifact["id"], now(), attempt_id))
+            sql = "UPDATE attempts SET status='completed',wire_artifact_id=?,context_artifact_id=?,manifest_artifact_id=?,completed_at=? WHERE id=?"
+            connection.execute(sql, (wire_artifact["id"], context_artifact["id"], manifest_artifact["id"], now(), attempt_id))
         attempt = self.attempt(attempt_id)
-        self.record_event(attempt["run_id"], attempt["generation_id"], attempt_id, attempt["actor"], "attempt_completed", {"type": "attempt", "id": attempt_id}, {"wire_artifact_id": wire_artifact["id"], "context_artifact_id": context_artifact["id"]})
+        payload = {"wire_artifact_id": wire_artifact["id"], "context_artifact_id": context_artifact["id"], "manifest_artifact_id": manifest_artifact["id"]}
+        self.record_event(attempt["run_id"], attempt["generation_id"], attempt_id, attempt["actor"], "attempt_completed", {"type": "attempt", "id": attempt_id}, payload)
         return attempt
+
+    def grant_artifact(self, attempt_id: str, artifact_id: str, role: str) -> None:
+        with self.db.connect() as connection:
+            connection.execute("INSERT OR IGNORE INTO attempt_artifacts VALUES(?,?,?)", (attempt_id, artifact_id, role))
 
     def issue_task_token(self, attempt_id: str, minutes: int = 30) -> str:
         token = secrets.token_urlsafe(32)
@@ -223,11 +235,11 @@ class World:
         return bool(self._rows(sql, (project_id, artifact_id)))
 
     def _attempt_artifact(self, attempt: dict, artifact_id: str) -> bool:
-        direct = artifact_id in {attempt["wire_artifact_id"], attempt["context_artifact_id"]}
+        direct = artifact_id in {attempt["wire_artifact_id"], attempt["context_artifact_id"], attempt["manifest_artifact_id"]}
         sql = "SELECT 1 FROM executions WHERE attempt_id=? AND (input_artifact_id=? OR output_artifact_id=?)"
         execution = bool(self._rows(sql, (attempt["id"], artifact_id, artifact_id)))
-        event = bool(self._rows("SELECT 1 FROM events WHERE attempt_id=? AND json_extract(entity,'$.id')=?", (attempt["id"], artifact_id)))
-        return direct or execution or event
+        grant = bool(self._rows("SELECT 1 FROM attempt_artifacts WHERE attempt_id=? AND artifact_id=?", (attempt["id"], artifact_id)))
+        return direct or execution or grant
 
     def project_edges(self, project_id: str) -> list[dict]:
         sql = "SELECT e.source,e.target,e.type FROM edges e JOIN nodes s ON s.id=e.source JOIN nodes t ON t.id=e.target WHERE s.project_id=? AND s.status='admitted' AND t.status='admitted'"
@@ -402,7 +414,9 @@ class World:
 
     def _validate_computational_claims(self, claims: list[dict], execution_ids: set[str]) -> None:
         for claim in claims:
-            if claim.get("kind") == "computational" and claim.get("execution_id") not in execution_ids:
+            if claim.get("kind") not in {"evidence", "computational"}:
+                raise InvalidPackage("claim kind must be evidence or computational")
+            if claim["kind"] == "computational" and claim.get("execution_id") not in execution_ids:
                 raise InvalidPackage("computational claim requires a verified execution")
 
     def _validate_package_shape(self, payload: dict) -> None:
@@ -452,12 +466,13 @@ class World:
         if not 1 <= locator["line_start"] <= locator["line_end"] <= line_count:
             raise InvalidPackage("locator is outside the artifact")
 
-    def review_package(self, package_id: str, reviewer: str, decision: str, feedback: str) -> dict:
+    def review_package(self, package_id: str, reviewer: str, decision: str,
+                       feedback: str, category: str = "none") -> dict:
         if decision not in {"approve", "revise", "uncertain"}:
             raise ValueError("invalid review decision")
         review_id = stable_id("review", {"package": package_id, "reviewer": reviewer})
         with self.db.connect() as connection:
-            self._insert_review(connection, review_id, package_id, reviewer, decision, feedback)
+            self._insert_review(connection, review_id, package_id, reviewer, decision, feedback, category)
             self._resolve_reviews(connection, package_id)
         return self._one("SELECT * FROM reviews WHERE id=?", (review_id,))
 
@@ -467,12 +482,12 @@ class World:
             if status != "conflict":
                 raise InvalidPackage("only a conflicted package can be human-approved")
             self._admit(connection, package_id)
-            self._insert_review(connection, stable_id("review", {"package": package_id, "reviewer": "human-resolver"}), package_id, "human-resolver", "approve", feedback)
+            self._insert_review(connection, stable_id("review", {"package": package_id, "reviewer": "human-resolver"}), package_id, "human-resolver", "approve", feedback, "none")
         return self._one("SELECT * FROM packages WHERE id=?", (package_id,))
 
-    def _insert_review(self, connection, review_id, package_id, reviewer, decision, feedback) -> None:
-        sql = "INSERT INTO reviews VALUES(?,?,?,?,?,?)"
-        connection.execute(sql, (review_id, package_id, reviewer, decision, feedback, now()))
+    def _insert_review(self, connection, review_id, package_id, reviewer, decision, feedback, category) -> None:
+        sql = "INSERT INTO reviews VALUES(?,?,?,?,?,?,?)"
+        connection.execute(sql, (review_id, package_id, reviewer, decision, feedback, category, now()))
 
     def _resolve_reviews(self, connection: sqlite3.Connection, package_id: str) -> None:
         decisions = [row[0] for row in connection.execute("SELECT decision FROM reviews WHERE package_id=?", (package_id,))]
@@ -544,8 +559,8 @@ class World:
         if not seeds:
             return ordered
         marks = ",".join("?" for _ in seeds)
-        sql = f"SELECT source,target FROM edges WHERE type IN ('addresses','supports','contradicts','derived_from','contains') AND (source IN ({marks}) OR target IN ({marks}))"
-        for row in self._rows(sql, (*seeds, *seeds)):
+        sql = f"SELECT e.source,e.target FROM edges e JOIN nodes s ON s.id=e.source JOIN nodes t ON t.id=e.target WHERE e.type IN ('addresses','supports','contradicts','derived_from','contains') AND (e.source IN ({marks}) OR e.target IN ({marks})) AND s.project_id=? AND t.project_id=? AND s.status='admitted' AND t.status='admitted'"
+        for row in self._rows(sql, (*seeds, *seeds, project_id, project_id)):
             ordered.extend((row["source"], row["target"]))
         return list(dict.fromkeys(ordered))
 

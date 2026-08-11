@@ -1,6 +1,8 @@
 import io
 import json
+from pathlib import Path
 
+import pytest
 from fastapi.testclient import TestClient
 
 from server.app import create_app
@@ -72,11 +74,33 @@ def test_task_cannot_read_an_unrelated_artifact(world, project, monkeypatch):
     generation = world.create_generation(project["id"], 0, run_id=run["id"])
     attempt = world.create_attempt(run["id"], generation["id"], snapshot["id"], "producer")
     monkeypatch.setenv("RW_TASK_TOKEN", world.issue_task_token(attempt["id"]))
+    monkeypatch.setenv("RW_TASK_WORKSPACE", str(world.path(project["root"])))
     artifact = world.add_artifact(b"private", "text/plain")
     error = io.StringIO()
     code = main(["artifact", "read", artifact["id"], "--attempt", attempt["id"]], world, error=error)
     assert code == 2
     assert "outside the task capability" in error.getvalue()
+
+
+def test_task_event_does_not_grant_artifact_access(world, project, monkeypatch):
+    snapshot = world.sync_project(project["id"])
+    run = world.create_run(project["id"], 49, False)
+    generation = world.create_generation(project["id"], 0, run_id=run["id"])
+    attempt = world.create_attempt(run["id"], generation["id"], snapshot["id"], "producer")
+    artifact = world.add_artifact(b"foreign pending", "text/plain")
+    world.record_event(run["id"], generation["id"], attempt["id"], "agent", "artifact_added", {"type": "artifact", "id": artifact["id"]}, {})
+    with pytest.raises(PermissionError, match="outside the task capability"):
+        world.require_artifact_access(attempt["id"], artifact["id"])
+
+
+def test_task_paths_are_anchored_to_workspace(tmp_path, monkeypatch):
+    from server.cli import task_path
+    workspace = tmp_path / "workspace"
+    (workspace / "overlay").mkdir(parents=True)
+    attempt = {"workspace": str(workspace)}
+    assert task_path(attempt, Path("overlay/result.txt"), writable=True).is_relative_to(workspace)
+    with pytest.raises(PermissionError, match="outside"):
+        task_path(attempt, Path("../private"))
 
 
 def test_watch_emits_one_json_envelope_per_event(world, project):

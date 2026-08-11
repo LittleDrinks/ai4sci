@@ -51,21 +51,58 @@ function Timeline({ events, jobs, wire, context }) {
 }
 
 function Attempt({ job, events, wire, context }) {
-  const metrics = attemptMetrics(job, events, wire, context);
-  return <details open className="timeline-attempt"><summary><span>{job.actor}</span><small>{metrics.duration}</small><code>{shortId(job.id)}</code><i className={`state-dot ${job.status}`} /></summary><details open className="timeline-turn"><summary><b>Turn 1</b><small>{metrics.tokens} tokens · context +{metrics.context} · {metrics.errors} errors · {metrics.truncations} truncations · wait {metrics.wait}</small></summary><ol>{pairedEvents(events).map((event, index) => <li key={event.event_id}><time>Step {index + 1}</time><div><b>{event.pair ? `${displayLabel(event.type)} / ${displayLabel(event.pair.type)}` : displayLabel(event.type)}</b><p>{eventSummary(event)}</p></div></li>)}</ol></details></details>;
+  const turns = traceTurns(wire);
+  return <details open className="timeline-attempt"><summary><span>{job.actor}</span><small>{elapsed(job.created_at, job.completed_at)}</small><code>{shortId(job.id)}</code><i className={`state-dot ${job.status}`} /></summary>{turns.map((turn, index) => <TraceTurn turn={turn} index={index} key={turn.key} />)}<ControlSteps events={events} /></details>;
 }
 
-function attemptMetrics(job, events, wire, context) {
-  const records = traceRecords(wire);
-  const tokens = records.reduce((sum, item) => sum + (item.payload?.response?.usage?.total_tokens || 0), 0);
-  const errors = events.filter((event) => event.payload.error).length + records.filter((item) => item.error).length;
-  const truncations = records.filter((item) => item.payload?.response?.finish_reason === "length").length;
-  return { tokens, errors, truncations, context: JSON.stringify(context?.content || {}).length,
-    duration: elapsed(job.created_at, job.completed_at), wait: maximumWait(events) };
+function TraceTurn({ turn, index }) {
+  const metrics = turnMetrics(turn);
+  return <details open className="timeline-turn"><summary><b>Turn {index + 1}</b><small>{metrics.tokens} tokens · context {signed(metrics.context)} · {metrics.errors} errors · {metrics.truncations} truncations · wait {metrics.wait}</small></summary><ol>{turn.records.map((record, step) => <TraceStep record={record} step={step} key={`${turn.key}:${record.event_index}`} />)}</ol></details>;
 }
 
-function traceRecords(wire) {
-  return (wire?.content?.trace || []).flatMap((trace) => trace.jsonl.split("\n").filter(Boolean).map(parseRecord).filter(Boolean));
+function TraceStep({ record, step }) {
+  const tools = (record.tool_names || []).map((name, index) => ({ name, arguments: record.tool_arguments?.[index] }));
+  return <li><time>Step {step + 1}</time><div><b>{displayLabel(record.role || record.capture_type || "trace")}</b><p>{record.text || record.error || record.termination || "Recorded event"}</p>{tools.map((tool) => <code className="trace-tool" key={tool.name}>{tool.name} {readable(tool.arguments)}</code>)}</div></li>;
+}
+
+function ControlSteps({ events }) {
+  const steps = pairedEvents(events);
+  if (!steps.length) return null;
+  return <details className="timeline-turn"><summary><b>Control steps</b><small>{steps.length} recorded</small></summary><ol>{steps.map((event, index) => <li key={event.event_id}><time>Step {index + 1}</time><div><b>{event.pair ? `${displayLabel(event.type)} / ${displayLabel(event.pair.type)}` : displayLabel(event.type)}</b><p>{eventSummary(event)}</p></div></li>)}</ol></details>;
+}
+
+function traceTurns(wire) {
+  const traces = wire?.content?.trace || [];
+  let previousPrompt = 0;
+  let previousEnd = null;
+  return traces.flatMap((trace) => groupTurns(trace)).map((turn) => {
+    const prompt = responseUsage(turn.records).prompt_tokens || previousPrompt;
+    const value = { ...turn, context: prompt - previousPrompt, wait: gap(previousEnd, turn.start) };
+    previousPrompt = prompt;
+    previousEnd = turn.end;
+    return value;
+  });
+}
+
+function groupTurns(trace) {
+  const records = trace.jsonl.split("\n").filter(Boolean).map(parseRecord).filter(Boolean);
+  const indexes = [...new Set(records.map((record) => record.turn_index))];
+  return indexes.map((index) => makeTurn(trace.name, index, records.filter((record) => record.turn_index === index)));
+}
+
+function makeTurn(name, index, records) {
+  return { key: `${name}:${index}`, records, start: records[0]?.timestamp, end: records.at(-1)?.timestamp };
+}
+
+function turnMetrics(turn) {
+  const usage = responseUsage(turn.records);
+  const errors = turn.records.filter((record) => record.error).length;
+  const truncations = turn.records.filter((record) => record.payload?.response?.finish_reason === "length").length;
+  return { tokens: usage.total_tokens || 0, context: turn.context, errors, truncations, wait: turn.wait };
+}
+
+function responseUsage(records) {
+  return records.reduce((usage, record) => record.payload?.response?.usage || usage, {});
 }
 
 function parseRecord(line) {
@@ -77,9 +114,12 @@ function elapsed(start, end) {
   return `${Math.max(0, new Date(end) - new Date(start))} ms`;
 }
 
-function maximumWait(events) {
-  const gaps = events.slice(1).map((event, index) => new Date(event.time) - new Date(events[index].time));
-  return `${Math.max(0, ...gaps)} ms`;
+function gap(start, end) {
+  return start && end ? `${Math.max(0, new Date(end) - new Date(start))} ms` : "0 ms";
+}
+
+function signed(value) {
+  return `${value >= 0 ? "+" : ""}${value}`;
 }
 
 function eventSummary(event) {

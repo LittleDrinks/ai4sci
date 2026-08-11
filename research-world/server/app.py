@@ -13,17 +13,13 @@ from .world import InvalidPackage, World
 
 def create_app(world: World) -> FastAPI:
     app = FastAPI(title="Research World", version="1")
-    routes(app, world)
-    return app
-
-
-def routes(app: FastAPI, world: World) -> None:
     project_read_routes(app, world)
     project_write_routes(app, world)
     run_routes(app, world)
     run_view_routes(app, world)
     graph_routes(app, world)
     frontend_routes(app)
+    return app
 
 
 def project_read_routes(app: FastAPI, world: World) -> None:

@@ -1,9 +1,9 @@
 {
   "schema_version": "1",
-  "checked_at": "2026-08-12T05:11:24+08:00",
+  "checked_at": "2026-08-12T05:35:05+08:00",
   "model": {"model": "qwen3.7-flash", "ok": true},
   "embedding": {"model": "qwen3.7-text-embedding", "dimensions": 1024, "ok": true},
-  "mcp": {"server": "anysearch", "tools": ["batch_search", "extract", "get_sub_domains", "search"], "ok": true},
+  "mcp": {"servers": {"anysearch": ["batch_search", "extract", "get_sub_domains", "search"]}, "transport": "mcp-sdk-streamable-http", "ok": true},
   "runner": {"ok": true, "network": "none", "read_only": true, "exit_code": 0, "input_mount_stdout": "isolated-input-ok\n", "input_volume_cleaned": true},
   "environment": {"image_digest": "sha256:d000484638dd92bee909056ca99f691b61c0ae0b2be0165442cb3cd56291f9e2", "lock_has_pip": true}
 }

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import textwrap
 from pathlib import Path
 
@@ -16,6 +17,8 @@ class Orchestrator:
         self.agents = agents
         self.broker = broker
         self.workspaces = workspaces
+        self.pending = {}
+        self.repairs = {}
 
     def execute(self, run_id: str) -> dict:
         run = self._start(run_id)
@@ -120,7 +123,7 @@ class Orchestrator:
                 payload = self.agents.produce(context, workspace)
                 payload["generation_id"] = generation["id"]
                 package = self.world.submit_package(run["project_id"], payload)
-                self._complete_attempt(attempt, context, payload, workspace)
+                self.pending[generation["id"]] = (attempt, workspace, context, payload)
                 return package
             except (InvalidPackage, KeyError, TypeError, ValueError) as error:
                 context["mechanical_feedback"] = str(error)
@@ -136,7 +139,7 @@ class Orchestrator:
         acquired = self._acquire_sources(selected, attempt["id"])
         if len(acquired) < min(2, len(selected)):
             raise ValueError("source acquisition requires two extracted sources")
-        return [self._snapshot_source(project, value) for value in acquired]
+        return [self._snapshot_source(project, value, attempt["id"]) for value in acquired]
 
     def _select_sources(self, project, parent, candidates, workspace) -> list[dict]:
         if not hasattr(self.agents, "select_sources"):
@@ -172,10 +175,11 @@ class Orchestrator:
                 context["mechanical_feedback"] = str(error)
         raise ValueError(f"{label} mechanical revision limit exceeded")
 
-    def _snapshot_source(self, project: dict, value: dict) -> dict:
+    def _snapshot_source(self, project: dict, value: dict, attempt_id: str) -> dict:
         lines = self._source_lines(value["content"])
         content = "\n".join(lines).encode()
         artifact = self.world.add_artifact(content, "text/plain")
+        self.world.grant_artifact(attempt_id, artifact["id"], "source_snapshot")
         locator = {"line_start": 1, "line_end": len(lines)}
         snapshot = self.world.add_source_snapshot(project["id"], value["url"], artifact, locator)
         numbered = "\n".join(f"{number}: {line}" for number, line in enumerate(lines, 1))
@@ -195,20 +199,65 @@ class Orchestrator:
 
     def _review(self, run: dict, generation: dict, package: dict) -> str:
         existing = {value["reviewer"]: value for value in self.world.reviews(package["id"])}
-        decisions = []
+        reviews = []
         for label in ("reviewer-a", "reviewer-b"):
             if label in existing:
-                decisions.append(existing[label]["decision"])
+                reviews.append(existing[label])
                 continue
             attempt, workspace = self._attempt(run, generation, label)
             context = self._review_context(run, package)
             review = self._review_agent(run, generation, attempt, context, workspace, label)
-            self.world.review_package(package["id"], label, review["decision"], review["feedback"])
+            saved = self.world.review_package(package["id"], label, review["decision"], review["feedback"], review["category"])
             self._complete_attempt(attempt, context, review, workspace)
-            decisions.append(review["decision"])
+            reviews.append(saved)
+        outcome = self._review_outcome(reviews)
+        if outcome == "mechanical":
+            return self._repair_package(run, generation, reviews)
+        self._complete_producer(generation["id"])
+        return outcome
+
+    def _review_outcome(self, reviews: list[dict]) -> str:
+        decisions = [review["decision"] for review in reviews]
         if decisions == ["approve", "approve"]:
             return "approve"
-        return "revise" if decisions == ["revise", "revise"] else "conflict"
+        if decisions == ["revise", "revise"]:
+            return "mechanical" if all(review["category"] == "mechanical" for review in reviews) else "revise"
+        return "conflict"
+
+    def _repair_package(self, run: dict, generation: dict, reviews: list[dict]) -> str:
+        count = self.repairs.get(generation["id"], 0) + 1
+        self.repairs[generation["id"]] = count
+        if count > 2 or generation["id"] not in self.pending:
+            self._complete_producer(generation["id"])
+            return "conflict"
+        attempt, workspace, context, _ = self.pending[generation["id"]]
+        context["review_feedback"] = reviews
+        self._event(run, generation, attempt, "system", "mechanical_revision", "attempt", attempt["id"], {"reviews": reviews})
+        package = self._revised_package(run, generation, context, workspace)
+        change = package["payload"].get("strategy_change") or generation["strategy_change"]
+        self.world.update_generation(generation["id"], package["id"], change)
+        generation.update({"package_id": package["id"], "strategy_change": change})
+        return self._review(run, generation, package)
+
+    def _revised_package(self, run, generation, context, workspace) -> dict:
+        for _ in range(3):
+            try:
+                payload = self.agents.produce(context, workspace)
+                payload["generation_id"] = generation["id"]
+                payload["revision"] = self.repairs[generation["id"]]
+                package = self.world.submit_package(run["project_id"], payload)
+                attempt = self.pending[generation["id"]][0]
+                self.pending[generation["id"]] = (attempt, workspace, context, payload)
+                return package
+            except (InvalidPackage, KeyError, TypeError, ValueError) as error:
+                context["mechanical_feedback"] = str(error)
+        raise InvalidPackage("mechanical review revision limit exceeded")
+
+    def _complete_producer(self, generation_id: str) -> None:
+        state = self.pending.pop(generation_id, None)
+        if state:
+            attempt, workspace, context, payload = state
+            self._complete_attempt(attempt, context, payload, workspace)
 
     def _review_agent(self, run, generation, attempt, context, workspace, label) -> dict:
         for _ in range(3):
@@ -308,15 +357,17 @@ class Orchestrator:
     def _attempt(self, run: dict, generation: dict, actor: str) -> tuple[dict, Path]:
         attempt = self.world.create_attempt(run["id"], generation["id"], run["project_snapshot_id"], actor)
         workspace = self.workspaces / attempt["id"].replace(":", "-")
+        attempt = self.world.bind_attempt_workspace(attempt["id"], workspace)
         self._materialize(run["project_snapshot_id"], workspace)
         token = self.world.issue_task_token(attempt["id"])
-        if actor == "producer" and hasattr(self.agents, "bind_task") and hasattr(self.broker, "broker"):
-            self.agents.bind_task(workspace, token, self.broker.broker.harness_tools(attempt["id"]))
+        if hasattr(self.agents, "bind_task"):
+            self.agents.bind_task(workspace, token, self._agent_tools(actor, attempt["id"]))
         self._event(run, generation, attempt, actor, "attempt_started", "attempt", attempt["id"], {"snapshot_id": attempt["snapshot_id"]})
         return attempt, workspace
 
     def _materialize(self, snapshot_id: str, workspace: Path) -> None:
         project = workspace / "project"
+        project.mkdir(parents=True, exist_ok=True)
         (workspace / "home").mkdir(parents=True, exist_ok=True)
         (workspace / "overlay").mkdir(exist_ok=True)
         for entry in self.world.snapshot_manifest(snapshot_id)["files"]:
@@ -324,12 +375,42 @@ class Orchestrator:
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(self.world.artifacts.read(entry["artifact_id"]))
             target.chmod(0o444)
+        for directory in sorted((path for path in project.rglob("*") if path.is_dir()), reverse=True):
+            directory.chmod(0o555)
+        project.chmod(0o555)
+
+    def _agent_tools(self, actor: str, attempt_id: str) -> list:
+        if actor == "producer" and hasattr(self.broker, "broker"):
+            return ["Glob", "Grep", "Read", *self.broker.broker.harness_tools(attempt_id)]
+        if actor == "reporter":
+            return ["Glob", "Read", "Write", "Edit"]
+        return ["Glob", "Read"]
 
     def _complete_attempt(self, attempt: dict, context: dict, output: dict, workspace: Path) -> None:
         captured = self.agents.capture(workspace) if hasattr(self.agents, "capture") else {}
         wire = {"output": output, "trace": captured.get("trace", [])}
         model_context = {"input": context, "messages": captured.get("messages", [])}
-        self.world.complete_attempt(attempt["id"], json.dumps(wire).encode(), json.dumps(model_context).encode())
+        manifest = {"attempt_id": attempt["id"], "files": self._declared_files(attempt["id"], workspace)}
+        self.world.complete_attempt(attempt["id"], json.dumps(wire).encode(), json.dumps(model_context).encode(), json.dumps(manifest).encode())
+        if hasattr(self.agents, "release"):
+            self.agents.release(workspace)
+        self._remove_workspace(workspace)
+
+    def _remove_workspace(self, workspace: Path) -> None:
+        for path in workspace.rglob("*"):
+            if path.is_dir():
+                path.chmod(0o755)
+        shutil.rmtree(workspace)
+
+    def _declared_files(self, attempt_id: str, workspace: Path) -> list[dict]:
+        roots = [workspace / "overlay", *(workspace / name for name in ("report.md", "report.html"))]
+        paths = [path for root in roots for path in ([root] if root.is_file() else root.rglob("*") if root.exists() else [])]
+        return [self._declared_file(attempt_id, workspace, path) for path in paths if path.is_file()]
+
+    def _declared_file(self, attempt_id: str, workspace: Path, path: Path) -> dict:
+        artifact = self.world.add_artifact(path.read_bytes(), "application/octet-stream")
+        self.world.grant_artifact(attempt_id, artifact["id"], "declared_output")
+        return {"path": path.relative_to(workspace).as_posix(), "artifact_id": artifact["id"], "sha256": artifact["sha256"]}
 
     def _finish(self, run_id: str, status: str) -> dict:
         return self.world.update_run(run_id, status, completed_at=now())

@@ -59,6 +59,12 @@ class ToolBroker:
             raise
 
     def _servers(self, attempt_id: str) -> dict:
+        return self._config(attempt_id)["mcpServers"]
+
+    def research_tools(self, attempt_id: str) -> dict:
+        return self._config(attempt_id)["researchTools"]
+
+    def _config(self, attempt_id: str) -> dict:
         attempt = self.world.attempt(attempt_id)
         content = self.world.snapshot_file(attempt["snapshot_id"], ".mcp.json")
-        return json.loads(content)["mcpServers"]
+        return json.loads(content)

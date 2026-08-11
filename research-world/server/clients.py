@@ -10,6 +10,7 @@ import httpx
 from json_repair import repair_json
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+from mcp.client.streamable_http import streamable_http_client
 from researchharness import create_agent
 
 
@@ -39,16 +40,15 @@ class McpClient:
             return asyncio.run(self._stdio_request(server, method, params))
         if server.get("type") != "http":
             raise ValueError("MCP server type must be http or stdio")
-        return self._http_request(server, method, params)
+        return asyncio.run(self._http_request(server, method, params))
 
-    def _http_request(self, server: dict, method: str, params: dict) -> dict:
-        payload = {"jsonrpc": "2.0", "id": 1, "method": method, "params": params}
-        response = httpx.post(server["url"], headers=self._headers(server), json=payload, timeout=60)
-        response.raise_for_status()
-        body = response.json()
-        if "error" in body:
-            raise RuntimeError(body["error"].get("message", str(body["error"])))
-        return body.get("result", {})
+    async def _http_request(self, server: dict, method: str, params: dict) -> dict:
+        async with httpx.AsyncClient(headers=self._headers(server), timeout=60) as client:
+            async with streamable_http_client(server["url"], http_client=client) as streams:
+                async with ClientSession(streams[0], streams[1]) as session:
+                    await session.initialize()
+                    result = await self._session_call(session, method, params)
+        return result.model_dump(mode="json")
 
     async def _stdio_request(self, server: dict, method: str, params: dict) -> dict:
         environment = {**os.environ, **{key: self._expand(value) for key, value in server.get("env", {}).items()}}
@@ -56,10 +56,10 @@ class McpClient:
         async with stdio_client(config) as (reader, writer):
             async with ClientSession(reader, writer) as session:
                 await session.initialize()
-                result = await self._stdio_call(session, method, params)
+                result = await self._session_call(session, method, params)
         return result.model_dump(mode="json")
 
-    async def _stdio_call(self, session, method: str, params: dict):
+    async def _session_call(self, session, method: str, params: dict):
         if method == "tools/list":
             return await session.list_tools()
         return await session.call_tool(params["name"], params["arguments"])
@@ -86,11 +86,13 @@ class SearchBroker:
         self.broker = broker
 
     def search(self, project: dict, query: str, attempt_id: str) -> list[dict]:
-        result = self.broker.call(attempt_id, "anysearch", "search", {"query": query, "max_results": 5})
+        config = self.broker.research_tools(attempt_id)
+        result = self.broker.call(attempt_id, config["server"], config["search"], {"query": query, "max_results": 5})
         return self._parse(result)[:5]
 
     def extract(self, source: dict, attempt_id: str) -> dict:
-        result = self.broker.call(attempt_id, "anysearch", "extract", {"url": source["url"]})
+        config = self.broker.research_tools(attempt_id)
+        result = self.broker.call(attempt_id, config["server"], config["extract"], {"url": source["url"]})
         content = result if isinstance(result, str) else json.dumps(result, ensure_ascii=False)
         return {**source, "content": content[:50000]}
 
@@ -158,6 +160,10 @@ class HarnessAgents:
         traces = [{"name": path.name, "jsonl": path.read_text()} for path in sorted(trace_dir.glob("trace_*.jsonl"))]
         return {"messages": self.sessions.get(str(workspace), []), "trace": traces}
 
+    def release(self, workspace: Path) -> None:
+        self.sessions.pop(str(workspace), None)
+        self.tasks.pop(str(workspace), None)
+
     def _json_prompt(self, role: str, context: dict, instructions: str) -> str:
         return f"{instructions}\nReturn one JSON object and no prose.\nINPUT:\n{json.dumps(context, ensure_ascii=False)}"
 
@@ -187,18 +193,19 @@ class HarnessAgents:
         return session["result_text"]
 
     def _run_session(self, agent, prompt: str, workspace: Path, key: str, token: str | None):
-        previous = os.environ.get("RW_TASK_TOKEN")
+        names = ("RW_TASK_TOKEN", "RW_TASK_WORKSPACE", "HOME")
+        previous = {name: os.environ.get(name) for name in names}
+        values = {"RW_TASK_WORKSPACE": str(workspace), "HOME": str(workspace / "home")}
         if token:
-            os.environ["RW_TASK_TOKEN"] = token
+            values["RW_TASK_TOKEN"] = token
+        os.environ.update(values)
         try:
             return agent._run_session(prompt, workspace_root=str(workspace), prior_messages=self.sessions.get(key))
         finally:
-            if previous is None:
-                os.environ.pop("RW_TASK_TOKEN", None)
-            else:
-                os.environ["RW_TASK_TOKEN"] = previous
+            for name, value in previous.items():
+                os.environ.pop(name, None) if value is None else os.environ.__setitem__(name, value)
 
 
-PRODUCER_INSTRUCTIONS = """Investigate only the supplied question and evidence. Submit a concise research package with keys strategy, strategy_change, sources, claims, artifacts, code, no_code_reason. Preserve every supplied snapshot_id and artifact_id exactly. Every source must have this exact shape: {"snapshot_id":"source-snapshot:...","artifact_id":"artifact:...","title":"..."}. Include 3 to 5 claims, only when fully supported. State attribution, scope, conditions, and quantitative values exactly as supported by a source snapshot. Do not calculate or extrapolate a value unless an execution receipt supports it. Every claim must have this exact shape: {"text":"...","citations":[{"source_snapshot_id":"source-snapshot:...","artifact_id":"artifact:...","locator":{"line_start":1,"line_end":1}}]}. A newly computed claim must also have kind="computational" and execution_id. Choose the smallest supporting range from the numbered source content. Every artifacts item must have artifact_id and role. Every executed code entry must have execution_id and its output artifact_id. When no verified execution receipt is supplied, return code as [] and explain why in no_code_reason."""
+PRODUCER_INSTRUCTIONS = """Investigate only the supplied question and evidence. Submit a concise research package with keys strategy, strategy_change, sources, claims, artifacts, code, no_code_reason. Preserve every supplied snapshot_id and artifact_id exactly. Every source must have this exact shape: {"snapshot_id":"source-snapshot:...","artifact_id":"artifact:...","title":"..."}. Include 3 to 5 claims, only when fully supported. State attribution, scope, conditions, and quantitative values exactly as supported by a source snapshot. Do not calculate or extrapolate a value unless an execution receipt supports it. Every claim must have kind="evidence" or kind="computational", text, and citations shaped as {"source_snapshot_id":"source-snapshot:...","artifact_id":"artifact:...","locator":{"line_start":1,"line_end":1}}. A computational claim must also have execution_id. Choose the smallest supporting range from the numbered source content. Every artifacts item must have artifact_id and role. Every executed code entry must have execution_id and its output artifact_id. When no verified execution receipt is supplied, return code as [] and explain why in no_code_reason."""
 
 REVIEWER_INSTRUCTIONS = """Independently review the package for scientific correctness, evidence sufficiency, resolvable citations, and reproducibility. Do not infer producer reasoning. Return exactly {"decision":"approve|revise|uncertain","feedback":"one string","category":"none|mechanical|method|evidence"}."""

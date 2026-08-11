@@ -32,7 +32,7 @@ class FakeAgents:
             "strategy": "Separate conservative dynamics from dissipative effects.",
             "strategy_change": "Challenge the parent premise directly." if context["ordinal"] else None,
             "sources": [{"snapshot_id": source["snapshot_id"], "artifact_id": source["artifact_id"], "title": source["title"]}],
-            "claims": [{"text": "Stable ideal orbits conserve energy.", "citations": [{
+            "claims": [{"kind": "evidence", "text": "Stable ideal orbits conserve energy.", "citations": [{
                 "source_snapshot_id": source["snapshot_id"], "artifact_id": source["artifact_id"],
                 "locator": {"line_start": 1, "line_end": 1},
             }]}],
@@ -113,3 +113,27 @@ def test_review_feedback_list_is_normalized():
     review = {"decision": "revise", "feedback": ["first", "second"], "category": "method"}
     Orchestrator(None, None, None, None)._validate_review(review)
     assert review["feedback"] == "first\nsecond"
+
+
+def test_mechanical_reviews_revise_same_generation(world, project, tmp_path):
+    agents = FakeAgents(decisions=["revise", "revise", "approve", "approve", "approve", "approve", "approve", "approve"])
+    original = agents.review
+    calls = {"count": 0}
+    def categorized(context, workspace):
+        value = original(context, workspace)
+        calls["count"] += 1
+        value["category"] = "mechanical" if calls["count"] <= 2 else "none"
+        return value
+    agents.review = categorized
+    run = world.create_run(project["id"], 49, False)
+    Orchestrator(world, agents, FakeBroker(), tmp_path / "workspaces").execute(run["id"])
+    assert len(world.generations(run["id"])) == 2
+    assert agents.productions == 3
+
+
+def test_attempt_workspace_is_archived_then_removed(world, project, tmp_path):
+    run = world.create_run(project["id"], 49, False)
+    root = tmp_path / "workspaces"
+    Orchestrator(world, FakeAgents(), FakeBroker(), root).execute(run["id"])
+    assert not root.exists() or not any(root.iterdir())
+    assert all(attempt["manifest_artifact_id"] for attempt in world.attempts(run["id"]))

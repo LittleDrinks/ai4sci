@@ -87,6 +87,7 @@ class Orchestrator:
         self.world.admit_artifact_node(run["project_id"], generation["id"], page, "final_html")
         self.world.update_run(run["id"], "completed", final_markdown_id=md["id"], final_html_id=page["id"], completed_at=now())
         self._event(run, generation, attempt, "human", "report_admitted", "artifact", page["id"], {"feedback": feedback})
+        self._apply_if_selected(run, generation, attempt)
         return self.world.run(run["id"])
 
     def _continue(self, run: dict, parent: dict) -> dict:
@@ -317,10 +318,13 @@ class Orchestrator:
         self.world.admit_artifact_node(run["project_id"], generation["id"], page, "final_html")
         self.world.update_run(run["id"], "completed", final_markdown_id=md["id"], final_html_id=page["id"], completed_at=now())
         self._event(run, generation, attempt, "system", "report_admitted", "artifact", page["id"], {})
+        self._apply_if_selected(run, generation, attempt)
+        return self.world.run(run["id"])
+
+    def _apply_if_selected(self, run: dict, generation: dict, attempt: dict) -> None:
         if run["apply_selected"]:
             applied = self.world.apply_run(run["project_id"], run["id"])
             self._event(run, generation, attempt, "system", "project_applied", "project", run["project_id"], applied)
-        return self.world.run(run["id"])
 
     def _review_report(self, run: dict, generation: dict, markdown: str, page: dict) -> list[dict]:
         reviews = []

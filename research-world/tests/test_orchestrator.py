@@ -131,6 +131,18 @@ def test_human_approval_admits_conflict_and_continues_run(world, project, tmp_pa
     assert world.package(world.generations(run["id"])[0]["package_id"])["status"] == "admitted"
 
 
+def test_human_report_approval_applies_authorized_run(world, project, tmp_path):
+    decisions = ["approve"] * 4 + ["revise"] * 10
+    run = world.create_run(project["id"], 49, True)
+    engine = Orchestrator(world, FakeAgents(decisions), FakeBroker(), tmp_path / "workspaces", object())
+    assert engine.execute(run["id"])["status"] == "human_conflict"
+    assert engine.approve_conflict(run["id"], "Approve the reviewed report.")["status"] == "completed"
+    events = world.events(run["id"])
+    assert any(event["type"] == "project_applied" for event in events)
+    applied = world.path(project["root"]) / "research-runs" / run["id"].replace(":", "-")
+    assert {path.name for path in applied.iterdir()} == {"report.md", "report.html"}
+
+
 def test_review_feedback_list_is_normalized():
     review = {"decision": "revise", "feedback": ["first", "second"], "category": "method"}
     Orchestrator(None, None, None, None, None)._validate_review(review)

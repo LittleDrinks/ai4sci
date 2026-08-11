@@ -128,6 +128,10 @@ class World:
     def attempt(self, attempt_id: str) -> dict:
         return self._one("SELECT * FROM attempts WHERE id=?", (attempt_id,))
 
+    def attempt_project(self, attempt_id: str) -> dict:
+        attempt = self.attempt(attempt_id)
+        return self.project(self.run(attempt["run_id"])["project_id"])
+
     def attempts(self, run_id: str, actor: str | None = None) -> list[dict]:
         if actor:
             return self._many("SELECT * FROM attempts WHERE run_id=? AND actor=? ORDER BY created_at", (run_id, actor))
@@ -199,6 +203,32 @@ class World:
     def admitted_nodes(self, project_id: str) -> list[dict]:
         return self._many("SELECT * FROM nodes WHERE project_id=? AND status='admitted' ORDER BY created_at", (project_id,))
 
+    def admitted_node(self, node_id: str, project_id: str | None = None) -> dict:
+        sql = "SELECT * FROM nodes WHERE id=? AND status='admitted'"
+        return self._one(sql + (" AND project_id=?" if project_id else ""), (node_id, project_id) if project_id else (node_id,))
+
+    def require_artifact_access(self, attempt_id: str, artifact_id: str) -> dict:
+        if not self._artifact_accessible(attempt_id, artifact_id):
+            raise PermissionError("artifact is outside the task capability")
+        return self.artifact_value(artifact_id)
+
+    def _artifact_accessible(self, attempt_id: str, artifact_id: str) -> bool:
+        attempt = self.attempt(attempt_id)
+        project_id = self.attempt_project(attempt_id)["id"]
+        snapshot_ids = {entry["artifact_id"] for entry in self.snapshot_manifest(attempt["snapshot_id"])["files"]}
+        return artifact_id in snapshot_ids or self._admitted_artifact(project_id, artifact_id) or self._attempt_artifact(attempt, artifact_id)
+
+    def _admitted_artifact(self, project_id: str, artifact_id: str) -> bool:
+        sql = "SELECT 1 FROM nodes WHERE project_id=? AND status='admitted' AND json_extract(payload,'$.artifact_id')=?"
+        return bool(self._rows(sql, (project_id, artifact_id)))
+
+    def _attempt_artifact(self, attempt: dict, artifact_id: str) -> bool:
+        direct = artifact_id in {attempt["wire_artifact_id"], attempt["context_artifact_id"]}
+        sql = "SELECT 1 FROM executions WHERE attempt_id=? AND (input_artifact_id=? OR output_artifact_id=?)"
+        execution = bool(self._rows(sql, (attempt["id"], artifact_id, artifact_id)))
+        event = bool(self._rows("SELECT 1 FROM events WHERE attempt_id=? AND json_extract(entity,'$.id')=?", (attempt["id"], artifact_id)))
+        return direct or execution or event
+
     def project_edges(self, project_id: str) -> list[dict]:
         sql = "SELECT e.source,e.target,e.type FROM edges e JOIN nodes s ON s.id=e.source JOIN nodes t ON t.id=e.target WHERE s.project_id=? AND s.status='admitted' AND t.status='admitted'"
         return self._many(sql, (project_id,))
@@ -241,6 +271,12 @@ class World:
 
     def artifact_value(self, artifact_id: str) -> dict:
         return self.artifacts.get(artifact_id)
+
+    def public_artifact(self, artifact_id: str) -> dict:
+        sql = "SELECT 1 FROM nodes WHERE status='admitted' AND json_extract(payload,'$.artifact_id')=?"
+        if not self._rows(sql, (artifact_id,)):
+            raise PermissionError("artifact is not admitted")
+        return self.artifact_value(artifact_id)
 
     def add_environment(self, project_id: str, attempt_id: str, image_digest: str,
                         lock_artifact_id: str, setup: list[str]) -> dict:
@@ -329,12 +365,45 @@ class World:
             raise InvalidPackage("generation belongs to another project")
         if not payload["code"] and not payload.get("no_code_reason"):
             raise InvalidPackage("an empty code set requires no_code_reason")
+        execution_ids = self._validate_code(project_id, payload["generation_id"], payload["code"])
+        self._validate_computational_claims(payload["claims"], execution_ids)
         for source in payload["sources"]:
             self._validate_source(project_id, source)
         for artifact in payload["artifacts"]:
             self._validate_artifact(artifact)
         for claim in payload["claims"]:
             self._validate_claim(project_id, claim)
+
+    def _validate_code(self, project_id: str, generation_id: str, code: list[dict]) -> set[str]:
+        execution_ids = set()
+        for entry in code:
+            execution = self._validated_execution(project_id, generation_id, entry)
+            execution_ids.add(execution["id"])
+        return execution_ids
+
+    def _validated_execution(self, project_id: str, generation_id: str, entry: dict) -> dict:
+        if {"execution_id", "artifact_id"} - entry.keys():
+            raise InvalidPackage("code entry requires execution_id and artifact_id")
+        try:
+            execution = self.execution(entry["execution_id"])
+            attempt = self.attempt(execution["attempt_id"])
+        except KeyError as error:
+            raise InvalidPackage("code execution does not exist") from error
+        self._check_execution(project_id, generation_id, entry, execution, attempt)
+        return execution
+
+    def _check_execution(self, project_id, generation_id, entry, execution, attempt) -> None:
+        artifact = self.artifact_value(execution["output_artifact_id"])
+        valid = execution["project_id"] == project_id and attempt["generation_id"] == generation_id
+        valid = valid and execution["exit_code"] == 0 and execution["usage"].get("replay_verified") is True
+        valid = valid and entry["artifact_id"] == execution["output_artifact_id"]
+        if not valid or artifact["sha256"] != execution["output_hash"]:
+            raise InvalidPackage("code execution receipt or offline replay is invalid")
+
+    def _validate_computational_claims(self, claims: list[dict], execution_ids: set[str]) -> None:
+        for claim in claims:
+            if claim.get("kind") == "computational" and claim.get("execution_id") not in execution_ids:
+                raise InvalidPackage("computational claim requires a verified execution")
 
     def _validate_package_shape(self, payload: dict) -> None:
         required = {"generation_id", "strategy", "sources", "claims", "artifacts", "code"}
@@ -438,7 +507,7 @@ class World:
     def search(self, project_id: str, query: str, embed: Callable | None = None) -> list[dict]:
         lexical = self._fts_seeds(project_id, query)
         semantic = self._vector_seeds(project_id, query, embed or self.embedding)
-        seeds = self._rrf(lexical, semantic)[:10]
+        seeds = self._rrf(lexical, semantic)
         ids = self._expand([node_id for node_id, _ in seeds], project_id)[:40]
         return [self._one("SELECT * FROM nodes WHERE id=? AND status='admitted'", (node_id,)) for node_id in ids]
 

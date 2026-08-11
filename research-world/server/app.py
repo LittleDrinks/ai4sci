@@ -18,6 +18,15 @@ def create_app(world: World) -> FastAPI:
 
 
 def routes(app: FastAPI, world: World) -> None:
+    project_read_routes(app, world)
+    project_write_routes(app, world)
+    run_routes(app, world)
+    run_view_routes(app, world)
+    graph_routes(app, world)
+    frontend_routes(app)
+
+
+def project_read_routes(app: FastAPI, world: World) -> None:
     @app.get("/api/v1/health")
     def health():
         return {"ok": True}
@@ -32,6 +41,8 @@ def routes(app: FastAPI, world: World) -> None:
         selected = project_id or (projects[0]["id"] if projects else None)
         return bootstrap_data(world, projects, selected)
 
+
+def project_write_routes(app: FastAPI, world: World) -> None:
     @app.post("/api/v1/projects")
     async def create_project(request: Request):
         value = await request.json()
@@ -41,6 +52,8 @@ def routes(app: FastAPI, world: World) -> None:
     def sync_project(name: str):
         return world.sync_project(world.project_by_name(name)["id"])
 
+
+def run_routes(app: FastAPI, world: World) -> None:
     @app.get("/api/v1/runs")
     def runs():
         return world.runs()
@@ -55,6 +68,8 @@ def routes(app: FastAPI, world: World) -> None:
         value["attempts"] = [item for item in world.attempts(run_id) if item["generation_id"] == generation_id]
         return value
 
+
+def run_view_routes(app: FastAPI, world: World) -> None:
     @app.get("/api/v1/runs/{run_id}/wire")
     def wire(run_id: str):
         return attempt_artifacts(world, run_id, "wire_artifact_id")
@@ -72,19 +87,23 @@ def routes(app: FastAPI, world: World) -> None:
         after = int(last_event_id or 0)
         return StreamingResponse(event_stream(world, run_id, after, follow), media_type="text/event-stream")
 
+
+def graph_routes(app: FastAPI, world: World) -> None:
     @app.get("/api/v1/artifacts/{artifact_id}")
     def artifact(artifact_id: str):
-        return world.artifact_value(artifact_id)
+        return admitted_artifact(world, artifact_id)
 
     @app.get("/api/v1/nodes/{node_id}")
     def node(node_id: str):
-        return world._one("SELECT * FROM nodes WHERE id=? AND status='admitted'", (node_id,))
+        return world.admitted_node(node_id)
 
     @app.get("/api/v1/artifacts/{artifact_id}/content")
     def artifact_content(artifact_id: str):
-        value = world.artifact_value(artifact_id)
+        value = admitted_artifact(world, artifact_id)
         return Response(world.artifacts.read(artifact_id), media_type=value["media_type"])
 
+
+def frontend_routes(app: FastAPI) -> None:
     @app.get("/{path:path}", include_in_schema=False)
     def frontend(path: str):
         return frontend_file(path)
@@ -131,6 +150,13 @@ def frontend_file(path: str):
     if (dist / "index.html").is_file():
         return FileResponse(dist / "index.html")
     raise HTTPException(404, "frontend not built")
+
+
+def admitted_artifact(world: World, artifact_id: str) -> dict:
+    try:
+        return world.public_artifact(artifact_id)
+    except PermissionError as error:
+        raise HTTPException(404, "artifact not found") from error
 
 
 settings = load_settings()

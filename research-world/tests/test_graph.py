@@ -56,6 +56,14 @@ def test_submission_rejects_unresolvable_package_sources(world, project):
         world.submit_package(project["id"], value)
 
 
+def test_submission_rejects_code_without_verified_execution(world, project):
+    generation = world.create_generation(project["id"], 0)
+    value = package(world, project, generation["id"])
+    value["code"] = [{"execution_id": "execution:missing", "artifact_id": value["artifacts"][0]["artifact_id"]}]
+    with pytest.raises(InvalidPackage, match="execution"):
+        world.submit_package(project["id"], value)
+
+
 def test_hybrid_search_expands_admitted_neighbors(world, project):
     generation = world.create_generation(project["id"], 0)
     candidate = world.submit_package(project["id"], package(world, project, generation["id"]))

@@ -45,6 +45,13 @@ def test_run_detail_contains_event_history(world, project):
     assert response.json()["events"][0]["type"] == "run_started"
 
 
+def test_api_does_not_publish_unadmitted_artifacts(world):
+    artifact = world.add_artifact(b"pending", "text/plain")
+    with TestClient(create_app(world), raise_server_exceptions=False) as client:
+        response = client.get(f"/api/v1/artifacts/{artifact['id']}")
+    assert response.status_code == 404
+
+
 def test_cli_uses_versioned_envelope_and_reads_structured_stdin(world, tmp_path, monkeypatch):
     root = tmp_path / "cli-project"
     root.mkdir()
@@ -57,6 +64,29 @@ def test_cli_uses_versioned_envelope_and_reads_structured_stdin(world, tmp_path,
     schema = io.StringIO()
     assert main(["schema", "project.create"], world=world, output=schema) == 0
     assert json.loads(schema.getvalue())["data"]["type"] == "object"
+
+
+def test_task_cannot_read_an_unrelated_artifact(world, project, monkeypatch):
+    snapshot = world.sync_project(project["id"])
+    run = world.create_run(project["id"], 49, False)
+    generation = world.create_generation(project["id"], 0, run_id=run["id"])
+    attempt = world.create_attempt(run["id"], generation["id"], snapshot["id"], "producer")
+    monkeypatch.setenv("RW_TASK_TOKEN", world.issue_task_token(attempt["id"]))
+    artifact = world.add_artifact(b"private", "text/plain")
+    error = io.StringIO()
+    code = main(["artifact", "read", artifact["id"], "--attempt", attempt["id"]], world, error=error)
+    assert code == 2
+    assert "outside the task capability" in error.getvalue()
+
+
+def test_watch_emits_one_json_envelope_per_event(world, project):
+    run = world.create_run(project["id"], 49, False)
+    world.record_event(run["id"], None, None, "system", "run_started", {"type": "run", "id": run["id"]}, {})
+    world.update_run(run["id"], "completed")
+    output = io.StringIO()
+    assert main(["run", "watch", run["id"]], world, output=output) == 0
+    lines = [json.loads(line) for line in output.getvalue().splitlines()]
+    assert len(lines) == 1 and lines[0]["data"]["type"] == "run_started"
 
 
 def test_every_public_command_has_a_schema():

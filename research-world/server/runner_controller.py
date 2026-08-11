@@ -4,6 +4,7 @@ import subprocess
 import time
 import base64
 import hashlib
+import secrets
 import tempfile
 from pathlib import Path
 
@@ -42,7 +43,13 @@ def build(spec: dict) -> dict:
         tag = "rw-env-" + hashlib.sha256(dockerfile.encode()).hexdigest()[:16]
         subprocess.run(["docker", "build", "--network", "default", "-t", tag, str(root)], check=True, timeout=900)
         digest = subprocess.run(["docker", "image", "inspect", "--format", "{{.Id}}", tag], capture_output=True, text=True, check=True).stdout.strip()
-    return {"image_digest": digest, "lock": "\n".join(spec["setup"])}
+        lock = lock_image(tag)
+    return {"image_digest": digest, "lock": lock}
+
+
+def lock_image(tag: str) -> str:
+    command = ["docker", "run", "--rm", "--network", "none", tag, "python", "-m", "pip", "freeze", "--all"]
+    return subprocess.run(command, capture_output=True, text=True, check=True, timeout=120).stdout
 
 
 def write_files(root: Path, files: dict[str, str]) -> None:
@@ -53,15 +60,43 @@ def write_files(root: Path, files: dict[str, str]) -> None:
 
 
 def run_container(spec: dict) -> dict:
+    if not spec.get("files"):
+        return invoke_container(spec, None)
+    with tempfile.TemporaryDirectory(prefix="rw-run-") as value:
+        root = Path(value)
+        write_files(root, spec["files"])
+        volume = create_input_volume(root)
+        try:
+            return invoke_container(spec, volume)
+        finally:
+            subprocess.run(["docker", "volume", "rm", "-f", volume], check=False, capture_output=True)
+
+
+def create_input_volume(root: Path) -> str:
+    volume = "rw-input-" + secrets.token_hex(8)
+    subprocess.run(["docker", "volume", "create", volume], check=True, capture_output=True)
+    mount = f"type=volume,src={volume},dst=/workspace"
+    helper = subprocess.run(["docker", "create", "--mount", mount, "busybox:1.36", "true"], capture_output=True, text=True, check=True).stdout.strip()
+    try:
+        subprocess.run(["docker", "cp", f"{root}/.", f"{helper}:/workspace"], check=True)
+    finally:
+        subprocess.run(["docker", "rm", "-f", helper], check=False, capture_output=True)
+    return volume
+
+
+def invoke_container(spec: dict, volume: str | None) -> dict:
     started = time.monotonic()
-    command = docker_command(spec)
+    command = docker_command(spec, volume)
     process = subprocess.run(command, capture_output=True, text=True, timeout=300)
     return {"exit_code": process.returncode, "stdout": process.stdout, "stderr": process.stderr,
             "usage": {"wall_ms": round((time.monotonic() - started) * 1000)}}
 
 
-def docker_command(spec: dict) -> list[str]:
+def docker_command(spec: dict, volume: str | None = None) -> list[str]:
     limits = spec["limits"]
-    return ["docker", "run", "--rm", "--network", "none", "--read-only", "--tmpfs", "/tmp:rw,noexec,nosuid,size=64m",
+    command = ["docker", "run", "--rm", "--network", "none", "--read-only", "--tmpfs", "/tmp:rw,noexec,nosuid,size=64m",
             "--cpus", str(limits["cpus"]), "--memory", f"{limits['memory_mb']}m", "--pids-limit", str(limits["pids"]),
-            "--env", f"RW_RANDOM_SEED={spec.get('seed', 0)}", spec["image"], *spec["command"]]
+            "--env", f"RW_RANDOM_SEED={spec.get('seed', 0)}"]
+    if volume:
+        command.extend(["--mount", f"type=volume,src={volume},dst=/workspace,readonly", "--workdir", "/workspace"])
+    return [*command, spec["image"], *spec["command"]]

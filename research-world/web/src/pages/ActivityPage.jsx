@@ -45,23 +45,61 @@ function ViewTabs({ value, onChange }) {
   return <div className="segmented activity-tabs">{VIEWS.map(([id, Icon, label]) => <button aria-label={label} title={label} className={value === id ? "active" : ""} onClick={() => onChange(id)} key={id}><Icon size={16} /><span>{label}</span></button>)}</div>;
 }
 
-function Timeline({ events, jobs }) {
+function Timeline({ events, jobs, wire, context }) {
   const generations = [...new Set(events.map((event) => event.generation_id).filter(Boolean))];
-  return <div className="timeline-tree">{generations.map((generation, index) => <details open key={generation}><summary><span>Generation {index}</span><code>{shortId(generation)}</code></summary><div>{jobs.filter((job) => job.generation_id === generation).map((job) => <Attempt events={events.filter((event) => event.attempt_id === job.id)} job={job} key={job.id} />)}</div></details>)}</div>;
+  return <div className="timeline-tree">{generations.map((generation, index) => <details open key={generation}><summary><span>Generation {index}</span><code>{shortId(generation)}</code></summary><div>{jobs.filter((job) => job.generation_id === generation).map((job) => <Attempt events={events.filter((event) => event.attempt_id === job.id)} job={job} wire={wire.find((item) => item.attempt_id === job.id)} context={context.find((item) => item.attempt_id === job.id)} key={job.id} />)}</div></details>)}</div>;
 }
 
-function Attempt({ job, events }) {
-  return <details open className="timeline-attempt"><summary><span>{job.actor}</span><code>{shortId(job.id)}</code><i className={`state-dot ${job.status}`} /></summary><ol>{events.map((event) => <li key={event.event_id}><time>{formatTime(event.time, false)}</time><div><b>{displayLabel(event.type)}</b><p>{eventSummary(event)}</p></div></li>)}</ol></details>;
+function Attempt({ job, events, wire, context }) {
+  const metrics = attemptMetrics(job, events, wire, context);
+  return <details open className="timeline-attempt"><summary><span>{job.actor}</span><small>{metrics.duration}</small><code>{shortId(job.id)}</code><i className={`state-dot ${job.status}`} /></summary><details open className="timeline-turn"><summary><b>Turn 1</b><small>{metrics.tokens} tokens · context +{metrics.context} · {metrics.errors} errors · {metrics.truncations} truncations · wait {metrics.wait}</small></summary><ol>{pairedEvents(events).map((event, index) => <li key={event.event_id}><time>Step {index + 1}</time><div><b>{event.pair ? `${displayLabel(event.type)} / ${displayLabel(event.pair.type)}` : displayLabel(event.type)}</b><p>{eventSummary(event)}</p></div></li>)}</ol></details></details>;
+}
+
+function attemptMetrics(job, events, wire, context) {
+  const records = traceRecords(wire);
+  const tokens = records.reduce((sum, item) => sum + (item.payload?.response?.usage?.total_tokens || 0), 0);
+  const errors = events.filter((event) => event.payload.error).length + records.filter((item) => item.error).length;
+  const truncations = records.filter((item) => item.payload?.response?.finish_reason === "length").length;
+  return { tokens, errors, truncations, context: JSON.stringify(context?.content || {}).length,
+    duration: elapsed(job.created_at, job.completed_at), wait: maximumWait(events) };
+}
+
+function traceRecords(wire) {
+  return (wire?.content?.trace || []).flatMap((trace) => trace.jsonl.split("\n").filter(Boolean).map(parseRecord).filter(Boolean));
+}
+
+function parseRecord(line) {
+  try { return JSON.parse(line); } catch { return null; }
+}
+
+function elapsed(start, end) {
+  if (!start || !end) return "running";
+  return `${Math.max(0, new Date(end) - new Date(start))} ms`;
+}
+
+function maximumWait(events) {
+  const gaps = events.slice(1).map((event, index) => new Date(event.time) - new Date(events[index].time));
+  return `${Math.max(0, ...gaps)} ms`;
 }
 
 function eventSummary(event) {
-  return event.payload.message || event.payload.error || Object.values(event.payload).filter((value) => typeof value === "string").join(" · ") || `${event.entity.type} ${shortId(event.entity.id)}`;
+  const result = event.pair?.payload.error || event.pair?.payload.result;
+  return event.payload.message || event.payload.error || readable(result) || Object.values(event.payload).filter((value) => typeof value === "string").join(" · ") || `${event.entity.type} ${shortId(event.entity.id)}`;
+}
+
+function readable(value) {
+  return typeof value === "string" ? value : value ? JSON.stringify(value) : "";
+}
+
+function pairedEvents(events) {
+  const results = new Map(events.filter((event) => event.type === "tool_result").map((event) => [event.entity.id, event]));
+  return events.filter((event) => event.type !== "tool_result").map((event) => event.type === "tool_call" ? { ...event, pair: results.get(event.entity.id) } : event);
 }
 
 function Wire({ events }) {
   const [query, setQuery] = useState("");
-  const visible = useMemo(() => events.filter((event) => JSON.stringify(event).toLowerCase().includes(query.toLowerCase())), [events, query]);
-  return <div><label className="wire-search"><Search size={16} /><input aria-label="Search wire events" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search events" /></label><div className="wire-list">{visible.map((event) => <details key={event.event_id}><summary><time>{formatTime(event.time, false)}</time><b>{event.type}</b><code>{shortId(event.attempt_id || event.entity.id)}</code></summary><pre>{JSON.stringify(event, null, 2)}</pre></details>)}</div></div>;
+  const visible = useMemo(() => pairedEvents(events).filter((event) => JSON.stringify(event).toLowerCase().includes(query.toLowerCase())), [events, query]);
+  return <div><label className="wire-search"><Search size={16} /><input aria-label="Search wire events" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search events" /></label><div className="wire-list">{visible.map((event) => <details key={event.event_id}><summary><time>{formatTime(event.time, false)}</time><b>{event.pair ? "tool_call / tool_result" : event.type}</b><code>{shortId(event.attempt_id || event.entity.id)}</code></summary><pre>{JSON.stringify(event, null, 2)}</pre></details>)}</div></div>;
 }
 
 function Context({ items }) {
@@ -76,7 +114,7 @@ function ActivityView({ view, data }) {
   if (view === "wire") return <Wire events={data.events} items={data.wire} />;
   if (view === "context") return <Context items={data.context} />;
   if (view === "jobs") return <AgentsJobs jobs={data.jobs} />;
-  return <Timeline events={data.events} jobs={data.jobs} />;
+  return <Timeline events={data.events} jobs={data.jobs} wire={data.wire} context={data.context} />;
 }
 
 export function ActivityPage() {

@@ -11,7 +11,7 @@ from typing import TextIO
 import httpx
 
 from .app import app
-from .clients import EmbeddingClient, HarnessAgents, HttpMcpClient, SearchBroker
+from .clients import EmbeddingClient, HarnessAgents, McpClient, SearchBroker
 from .config import load_settings
 from .orchestrator import Orchestrator
 from .runner import EnvironmentBuilder, ExperimentRunner, HttpRunnerController
@@ -32,12 +32,12 @@ SCHEMAS = {
     "doctor": OBJECT,
     "task.show": {**OBJECT, "required": ["attempt"]},
     "task.event": {**OBJECT, "required": ["type", "entity", "payload"]},
-    "graph.search": {**OBJECT, "required": ["project", "query"]},
-    "graph.get": {**OBJECT, "required": ["node_id"]},
-    "artifact.inspect": {**OBJECT, "required": ["artifact_id"]},
-    "artifact.read": {**OBJECT, "required": ["artifact_id"]},
-    "artifact.materialize": {**OBJECT, "required": ["artifact_id", "path"]},
-    "artifact.add": {**OBJECT, "required": ["file", "media_type"]},
+    "graph.search": {**OBJECT, "required": ["attempt", "project", "query"]},
+    "graph.get": {**OBJECT, "required": ["attempt", "node_id"]},
+    "artifact.inspect": {**OBJECT, "required": ["attempt", "artifact_id"]},
+    "artifact.read": {**OBJECT, "required": ["attempt", "artifact_id"]},
+    "artifact.materialize": {**OBJECT, "required": ["attempt", "artifact_id", "path"]},
+    "artifact.add": {**OBJECT, "required": ["attempt", "file", "media_type"]},
     "tools.list": {**OBJECT, "required": ["attempt"]},
     "tools.call": {**OBJECT, "required": ["server", "tool", "arguments"]},
     "source.acquire": {**OBJECT, "required": ["attempt", "url"]},
@@ -99,6 +99,8 @@ def _graph_parser(groups) -> None:
     search.add_argument("--project", required=True)
     get = graph.add_parser("get")
     get.add_argument("node_id")
+    for command in (search, get):
+        command.add_argument("--attempt", required=True)
 
 
 def _artifact_parser(groups) -> None:
@@ -106,9 +108,11 @@ def _artifact_parser(groups) -> None:
     for action in ("inspect", "read", "materialize"):
         command = artifact.add_parser(action)
         command.add_argument("artifact_id")
+        command.add_argument("--attempt", required=True)
         if action == "materialize":
             command.add_argument("path", type=Path)
     add = artifact.add_parser("add")
+    add.add_argument("--attempt", required=True)
     add.add_argument("--file", type=Path, required=True)
     add.add_argument("--media-type", required=True)
 
@@ -162,6 +166,8 @@ def main(argv: list[str] | None = None, world: World | None = None,
     output, error = output or sys.stdout, error or sys.stderr
     world = world or default_world()
     try:
+        if args.group == "run" and args.action == "watch":
+            return watch_run(world, args.run_id, output)
         data = dispatch(args, world)
         print(json.dumps({"schema_version": "1", "ok": True, "data": data}), file=output)
         return 0
@@ -217,28 +223,36 @@ def task_command(args, world: World):
 
 
 def graph_command(args, world: World):
+    attempt = require_task(world, args.attempt)
+    project_id = world.attempt_project(attempt["id"])["id"]
     if args.action == "search":
-        return world.search(world.project_by_name(args.project)["id"], args.query)
-    node = world._one("SELECT * FROM nodes WHERE id=? AND status='admitted'", (args.node_id,))
-    return node
+        if world.project_by_name(args.project)["id"] != project_id:
+            raise PermissionError("task cannot search another project")
+        return world.search(project_id, args.query)
+    return world.admitted_node(args.node_id, project_id)
 
 
 def artifact_command(args, world: World):
+    attempt = require_task(world, args.attempt)
     if args.action == "add":
-        return world.add_artifact(args.file.read_bytes(), args.media_type)
+        artifact = world.add_artifact(task_path(args.file).read_bytes(), args.media_type)
+        world.record_event(attempt["run_id"], attempt["generation_id"], attempt["id"], "agent", "artifact_added", {"type": "artifact", "id": artifact["id"]}, {})
+        return artifact
+    world.require_artifact_access(attempt["id"], args.artifact_id)
     if args.action == "inspect":
         return world.artifacts.get(args.artifact_id)
     content = world.artifacts.read(args.artifact_id)
     if args.action == "materialize":
-        args.path.parent.mkdir(parents=True, exist_ok=True)
-        args.path.write_bytes(content)
-        return {"path": str(args.path), "size": len(content)}
+        path = task_path(args.path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+        return {"path": str(path), "size": len(content)}
     return {"content": content.decode(), "size": len(content)}
 
 
 def tools_command(args, world: World):
     require_task(world, args.attempt)
-    broker = ToolBroker(world, HttpMcpClient())
+    broker = ToolBroker(world, McpClient())
     if args.action == "list":
         return broker.list(args.attempt)
     value = read_json(args.file)
@@ -248,18 +262,22 @@ def tools_command(args, world: World):
 def submit_command(args, world: World):
     attempt = require_task(world, args.attempt)
     value = read_json(args.file)
+    if value.get("generation_id") != attempt["generation_id"]:
+        raise PermissionError("task can submit only its own generation")
     run = world.run(attempt["run_id"])
     return world.submit_package(run["project_id"], value)
 
 
 def source_command(args, world: World):
     attempt = require_task(world, args.attempt)
-    result = ToolBroker(world, HttpMcpClient()).call(args.attempt, "anysearch", "extract", {"url": args.url})
+    result = ToolBroker(world, McpClient()).call(args.attempt, "anysearch", "extract", {"url": args.url})
     content = result if isinstance(result, str) else json.dumps(result)
     artifact = world.add_artifact(content.encode(), "text/markdown")
     project_id = world.run(attempt["run_id"])["project_id"]
     lines = max(1, len(content.splitlines()))
-    return world.add_source_snapshot(project_id, args.url, artifact, {"line_start": 1, "line_end": lines})
+    snapshot = world.add_source_snapshot(project_id, args.url, artifact, {"line_start": 1, "line_end": lines})
+    world.record_event(attempt["run_id"], attempt["generation_id"], attempt["id"], "agent", "source_acquired", {"type": "artifact", "id": artifact["id"]}, {"snapshot_id": snapshot["id"]})
+    return snapshot
 
 
 def environment_command(args, world: World):
@@ -283,8 +301,7 @@ def review_command(args, world: World):
     if value["decision"] == "terminate":
         return world.update_run(args.run, "terminated")
     if value["decision"] == "approve":
-        package = world.generations(args.run)[-1]["package_id"]
-        return world.human_admit_package(package, value.get("feedback", "human approval"))
+        return runtime_orchestrator(world).approve_conflict(args.run, value.get("feedback", "human approval"))
     return runtime_orchestrator(world).resolve_conflict(args.run, value["feedback"])
 
 
@@ -297,7 +314,7 @@ def runtime_orchestrator(world: World) -> Orchestrator:
     if not settings.model_api_base or not settings.model_api_key:
         raise RuntimeError("MODEL_API_BASE and MODEL_API_KEY are required")
     agents = HarnessAgents(settings.model_api_base, settings.model_api_key)
-    broker = SearchBroker(ToolBroker(world, HttpMcpClient()))
+    broker = SearchBroker(ToolBroker(world, McpClient()))
     return Orchestrator(world, agents, broker, settings.artifacts.parent / "workspaces")
 
 
@@ -323,6 +340,17 @@ def run_detail(world: World, run_id: str) -> dict:
             "attempts": world.attempts(run_id), "events": world.events(run_id)}
 
 
+def watch_run(world: World, run_id: str, output: TextIO) -> int:
+    cursor = 0
+    while True:
+        for event in world.events(run_id, cursor):
+            cursor = event["event_id"]
+            print(json.dumps({"schema_version": "1", "ok": True, "data": event}), file=output, flush=True)
+        if world.run(run_id)["status"] in {"completed", "failed", "human_conflict", "terminated"}:
+            return 0
+        time.sleep(1)
+
+
 def apply_project(world: World, project: dict, run_id: str) -> dict:
     run = world.run(run_id)
     if run["project_id"] != project["id"] or run["status"] != "completed" or not run["apply_selected"]:
@@ -336,6 +364,12 @@ def require_task(world: World, attempt_id: str) -> dict:
     if not attempt:
         raise PermissionError("invalid task capability")
     return attempt
+
+
+def task_path(path: Path) -> Path:
+    if path.is_absolute() or ".." in path.parts:
+        raise PermissionError("task paths must stay inside the attempt workspace")
+    return path
 
 
 def doctor(args) -> dict:
@@ -353,7 +387,7 @@ def doctor_check(name: str, settings) -> dict:
     if name == "embedding":
         return {"dimensions": len(EmbeddingClient(settings.model_api_base, settings.model_api_key)("orbit")), "ok": True}
     if name == "mcp":
-        tools = HttpMcpClient().list_tools({"type": "http", "url": "https://api.anysearch.com/mcp"})
+        tools = McpClient().list_tools({"type": "http", "url": "https://api.anysearch.com/mcp"})
         return {"tools": [tool["name"] for tool in tools], "ok": True}
     response = httpx.post(os.getenv("RUNNER_CONTROLLER_URL", "http://127.0.0.1:8096") + "/doctor", timeout=60)
     response.raise_for_status()

@@ -99,6 +99,16 @@ def test_reviewer_disagreement_enters_human_conflict(world, project, tmp_path):
     assert len(world.generations(run["id"])) == 1
 
 
+def test_human_approval_admits_conflict_and_continues_run(world, project, tmp_path):
+    run = world.create_run(project["id"], 49, False)
+    agents = FakeAgents(decisions=["approve", "revise", "approve", "approve", "approve", "approve"])
+    engine = Orchestrator(world, agents, FakeBroker(), tmp_path / "workspaces")
+    assert engine.execute(run["id"])["status"] == "human_conflict"
+    result = engine.approve_conflict(run["id"], "Approve the complete candidate package.")
+    assert result["status"] == "completed"
+    assert world.package(world.generations(run["id"])[0]["package_id"])["status"] == "admitted"
+
+
 def test_review_feedback_list_is_normalized():
     review = {"decision": "revise", "feedback": ["first", "second"], "category": "method"}
     Orchestrator(None, None, None, None)._validate_review(review)

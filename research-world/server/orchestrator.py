@@ -61,6 +61,29 @@ class Orchestrator:
         self._event(run, parent, None, "human", "conflict_resolved", "run", run_id, {"decision": "new_generation", "feedback": feedback})
         return self._continue(self.world.run(run_id), parent)
 
+    def approve_conflict(self, run_id: str, feedback: str) -> dict:
+        run = self.world.run(run_id)
+        if run["status"] != "human_conflict":
+            raise ValueError("run is not awaiting human resolution")
+        generation = self.world.generations(run_id)[-1]
+        package = self.world.package(generation["package_id"])
+        if package["status"] == "admitted":
+            return self._human_admit_report(run, generation, feedback)
+        self.world.human_admit_package(package["id"], feedback)
+        self.world.update_run(run_id, "running", completed_at=None)
+        self._event(run, generation, None, "human", "conflict_resolved", "package", package["id"], {"decision": "approve", "feedback": feedback})
+        return self._report(self.world.run(run_id), generation) if generation["ordinal"] >= 1 else self._continue(self.world.run(run_id), generation)
+
+    def _human_admit_report(self, run: dict, generation: dict, feedback: str) -> dict:
+        attempt = self.world.attempts(run["id"], actor="reporter")[-1]
+        output = json.loads(self.world.artifacts.read(attempt["wire_artifact_id"]))["output"]
+        md, page = (self.world.artifact_value(output[key]) for key in ("markdown", "html"))
+        self.world.admit_artifact_node(run["project_id"], generation["id"], md, "final_markdown")
+        self.world.admit_artifact_node(run["project_id"], generation["id"], page, "final_html")
+        self.world.update_run(run["id"], "completed", final_markdown_id=md["id"], final_html_id=page["id"], completed_at=now())
+        self._event(run, generation, attempt, "human", "report_admitted", "artifact", page["id"], {"feedback": feedback})
+        return self.world.run(run["id"])
+
     def _continue(self, run: dict, parent: dict) -> dict:
         for ordinal in range(parent["ordinal"] + 1, 3):
             generation, package = self._generation(run, ordinal, parent)
@@ -91,6 +114,7 @@ class Orchestrator:
         attempt, workspace = self._attempt(run, generation, "producer")
         sources = self._sources(run, generation, attempt, workspace, parent)
         context = self._producer_context(run, generation, parent, sources)
+        context["attempt_id"] = attempt["id"]
         for revision in range(3):
             try:
                 payload = self.agents.produce(context, workspace)
@@ -120,13 +144,8 @@ class Orchestrator:
         context = {"question": project["question"], "candidates": candidates}
         if parent:
             context["review_feedback"] = self.world.reviews(parent["package_id"])
-        for _ in range(3):
-            try:
-                urls = self.agents.select_sources(context, workspace)
-                return [value for value in candidates if value["url"] in urls]
-            except ValueError as error:
-                context["mechanical_feedback"] = str(error)
-        raise ValueError("source selection mechanical revision limit exceeded")
+        urls = self._retry_value(context, lambda: self.agents.select_sources(context, workspace), "source selection")
+        return [value for value in candidates if value["url"] in urls]
 
     def _acquire_sources(self, sources: list[dict], attempt_id: str) -> list[dict]:
         acquired = []
@@ -143,12 +162,15 @@ class Orchestrator:
         context = {"question": project["question"]}
         if parent:
             context["review_feedback"] = self.world.reviews(parent["package_id"])
+        return self._retry_value(context, lambda: self.agents.plan_search(context, workspace), "producer search plan")
+
+    def _retry_value(self, context: dict, operation, label: str):
         for _ in range(3):
             try:
-                return self.agents.plan_search(context, workspace)
+                return operation()
             except ValueError as error:
                 context["mechanical_feedback"] = str(error)
-        raise ValueError("producer search plan mechanical revision limit exceeded")
+        raise ValueError(f"{label} mechanical revision limit exceeded")
 
     def _snapshot_source(self, project: dict, value: dict) -> dict:
         lines = self._source_lines(value["content"])
@@ -287,7 +309,9 @@ class Orchestrator:
         attempt = self.world.create_attempt(run["id"], generation["id"], run["project_snapshot_id"], actor)
         workspace = self.workspaces / attempt["id"].replace(":", "-")
         self._materialize(run["project_snapshot_id"], workspace)
-        self.world.issue_task_token(attempt["id"])
+        token = self.world.issue_task_token(attempt["id"])
+        if actor == "producer" and hasattr(self.agents, "bind_task") and hasattr(self.broker, "broker"):
+            self.agents.bind_task(workspace, token, self.broker.broker.harness_tools(attempt["id"]))
         self._event(run, generation, attempt, actor, "attempt_started", "attempt", attempt["id"], {"snapshot_id": attempt["snapshot_id"]})
         return attempt, workspace
 

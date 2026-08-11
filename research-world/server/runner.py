@@ -24,8 +24,11 @@ class ExperimentRunner:
             command: list[str], inputs: dict[str, bytes], seed: int) -> dict:
         bundle = self._input_bundle(inputs)
         artifact = self.world.add_artifact(bundle, "application/json")
-        spec = self._spec(environment, command, artifact, seed)
+        spec = self._spec(environment, command, artifact, inputs, seed)
         result = self.controller.run(spec)
+        replay = self.controller.run(spec)
+        self._verify_replay(result, replay)
+        result["usage"] = {**result["usage"], "replay_verified": True, "replay_output_hash": self._output(replay)[1]}
         return self._record(project_id, attempt_id, environment, command, artifact, spec, result, seed)
 
     def replay(self, execution_id: str) -> dict:
@@ -37,12 +40,17 @@ class ExperimentRunner:
         return {**receipt, "output_hash": output_hash, "replayed": True}
 
     def _input_bundle(self, inputs: dict[str, bytes]) -> bytes:
-        values = {path: {"sha256": digest(content), "content": content.decode()} for path, content in sorted(inputs.items())}
+        values = {path: {"sha256": digest(content), "content_base64": base64.b64encode(content).decode()} for path, content in sorted(inputs.items())}
         return json.dumps(values, sort_keys=True).encode()
 
-    def _spec(self, environment, command, artifact, seed) -> dict:
+    def _spec(self, environment, command, artifact, inputs, seed) -> dict:
         return {"image": environment["image_digest"], "command": command, "input_artifact_id": artifact["id"], "seed": seed,
+                "files": {path: base64.b64encode(content).decode() for path, content in inputs.items()},
                 "network": "none", "read_only": True, "limits": {"cpus": 1, "memory_mb": 512, "pids": 128}}
+
+    def _verify_replay(self, result: dict, replay: dict) -> None:
+        if self._output(result)[1] != self._output(replay)[1]:
+            raise RuntimeError("offline replay output differs")
 
     def _record(self, project_id, attempt_id, environment, command, artifact, spec, result, seed):
         output, output_hash = self._output(result)

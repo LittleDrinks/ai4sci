@@ -31,6 +31,8 @@ test("replays a completed run across all desktop views", async ({ page }) => {
   page.on("console", (message) => message.type() === "error" && errors.push(message.text()));
   await openActivity(page, { width: 1440, height: 1000 });
   await expect(page.getByText(/189 events/)).toBeVisible();
+  await expect(page.getByText("Turn 1").first()).toBeVisible();
+  await expect(page.getByText(/tokens · context/).first()).toBeVisible();
   await assertViews(page);
   await assertNoPageOverflow(page);
   expect(errors).toEqual([]);

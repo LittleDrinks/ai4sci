@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 import re
@@ -7,6 +8,8 @@ from pathlib import Path
 
 import httpx
 from json_repair import repair_json
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
 from researchharness import create_agent
 
 
@@ -22,7 +25,7 @@ class EmbeddingClient:
         return response.json()["data"][0]["embedding"]
 
 
-class HttpMcpClient:
+class McpClient:
     def list_tools(self, server: dict) -> list[dict]:
         return self._request(server, "tools/list", {}).get("tools", [])
 
@@ -32,8 +35,13 @@ class HttpMcpClient:
         return self._decode_text("\n".join(texts)) if texts else result
 
     def _request(self, server: dict, method: str, params: dict) -> dict:
+        if server.get("type") == "stdio":
+            return asyncio.run(self._stdio_request(server, method, params))
         if server.get("type") != "http":
-            raise ValueError("HttpMcpClient requires type=http")
+            raise ValueError("MCP server type must be http or stdio")
+        return self._http_request(server, method, params)
+
+    def _http_request(self, server: dict, method: str, params: dict) -> dict:
         payload = {"jsonrpc": "2.0", "id": 1, "method": method, "params": params}
         response = httpx.post(server["url"], headers=self._headers(server), json=payload, timeout=60)
         response.raise_for_status()
@@ -41,6 +49,20 @@ class HttpMcpClient:
         if "error" in body:
             raise RuntimeError(body["error"].get("message", str(body["error"])))
         return body.get("result", {})
+
+    async def _stdio_request(self, server: dict, method: str, params: dict) -> dict:
+        environment = {**os.environ, **{key: self._expand(value) for key, value in server.get("env", {}).items()}}
+        config = StdioServerParameters(command=server["command"], args=server.get("args", []), env=environment)
+        async with stdio_client(config) as (reader, writer):
+            async with ClientSession(reader, writer) as session:
+                await session.initialize()
+                result = await self._stdio_call(session, method, params)
+        return result.model_dump(mode="json")
+
+    async def _stdio_call(self, session, method: str, params: dict):
+        if method == "tools/list":
+            return await session.list_tools()
+        return await session.call_tool(params["name"], params["arguments"])
 
     def _headers(self, server: dict) -> dict:
         headers = {"Content-Type": "application/json"}
@@ -90,6 +112,10 @@ class HarnessAgents:
         self.base_url = base_url
         self.api_key = api_key
         self.sessions = {}
+        self.tasks = {}
+
+    def bind_task(self, workspace: Path, token: str, tools: list) -> None:
+        self.tasks[str(workspace)] = {"token": token, "tools": tools}
 
     def produce(self, context: dict, workspace: Path) -> dict:
         prompt = self._json_prompt("producer", context, PRODUCER_INSTRUCTIONS)
@@ -151,15 +177,28 @@ class HarnessAgents:
     def _agent(self, prompt: str, workspace: Path, role: str) -> str:
         trace = workspace / "traces"
         trace.mkdir(parents=True, exist_ok=True)
-        agent = create_agent(model_name="qwen3.7-flash", api_key=self.api_key, api_base=self.base_url,
+        key = str(workspace)
+        task = self.tasks.get(key, {})
+        agent = create_agent(model_name="qwen3.7-flash", api_key=self.api_key, api_base=self.base_url, tools=task.get("tools"),
                              timeout_seconds=180, max_rounds=6, max_runtime_seconds=600, workspace_root=str(workspace),
                              trace_dir=str(trace), role_prompt=f"You are the independent {role} in a scientific research control plane.", require_env=False)
-        key = str(workspace)
-        session = agent._run_session(prompt, workspace_root=str(workspace), prior_messages=self.sessions.get(key))
+        session = self._run_session(agent, prompt, workspace, key, task.get("token"))
         self.sessions[key] = session["messages"]
         return session["result_text"]
 
+    def _run_session(self, agent, prompt: str, workspace: Path, key: str, token: str | None):
+        previous = os.environ.get("RW_TASK_TOKEN")
+        if token:
+            os.environ["RW_TASK_TOKEN"] = token
+        try:
+            return agent._run_session(prompt, workspace_root=str(workspace), prior_messages=self.sessions.get(key))
+        finally:
+            if previous is None:
+                os.environ.pop("RW_TASK_TOKEN", None)
+            else:
+                os.environ["RW_TASK_TOKEN"] = previous
 
-PRODUCER_INSTRUCTIONS = """Investigate only the supplied question and evidence. Submit a concise research package with keys strategy, strategy_change, sources, claims, artifacts, code, no_code_reason. Preserve every supplied snapshot_id and artifact_id exactly. Every source must have this exact shape: {"snapshot_id":"source-snapshot:...","artifact_id":"artifact:...","title":"..."}. Include 3 to 5 claims, only when fully supported. State attribution, scope, conditions, and quantitative values exactly as supported by a source snapshot. Do not calculate or extrapolate a value unless an execution receipt supports it. Every claim must have this exact shape: {"text":"...","citations":[{"source_snapshot_id":"source-snapshot:...","artifact_id":"artifact:...","locator":{"line_start":1,"line_end":1}}]}. Choose the smallest supporting range from the numbered source content. Every artifacts item must have artifact_id and role. Code must be an array of executed code entries. When no execution receipt is supplied, return code as [] and explain why in no_code_reason."""
+
+PRODUCER_INSTRUCTIONS = """Investigate only the supplied question and evidence. Submit a concise research package with keys strategy, strategy_change, sources, claims, artifacts, code, no_code_reason. Preserve every supplied snapshot_id and artifact_id exactly. Every source must have this exact shape: {"snapshot_id":"source-snapshot:...","artifact_id":"artifact:...","title":"..."}. Include 3 to 5 claims, only when fully supported. State attribution, scope, conditions, and quantitative values exactly as supported by a source snapshot. Do not calculate or extrapolate a value unless an execution receipt supports it. Every claim must have this exact shape: {"text":"...","citations":[{"source_snapshot_id":"source-snapshot:...","artifact_id":"artifact:...","locator":{"line_start":1,"line_end":1}}]}. A newly computed claim must also have kind="computational" and execution_id. Choose the smallest supporting range from the numbered source content. Every artifacts item must have artifact_id and role. Every executed code entry must have execution_id and its output artifact_id. When no verified execution receipt is supplied, return code as [] and explain why in no_code_reason."""
 
 REVIEWER_INSTRUCTIONS = """Independently review the package for scientific correctness, evidence sufficiency, resolvable citations, and reproducibility. Do not infer producer reasoning. Return exactly {"decision":"approve|revise|uncertain","feedback":"one string","category":"none|mechanical|method|evidence"}."""

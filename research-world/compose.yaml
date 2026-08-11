@@ -1,0 +1,63 @@
+services:
+  control:
+    build:
+      context: .
+      target: runtime
+    environment:
+      MODEL_API_BASE: ${MODEL_API_BASE:-}
+      MODEL_API_KEY: ${MODEL_API_KEY:-}
+      RW_PROJECTS_ROOT: /projects
+      RW_DATA_ROOT: /app/data
+      RUNNER_CONTROLLER_URL: http://runner-controller:8096
+    ports:
+      - "8095:8095"
+    volumes:
+      - rw-data:/app/data
+      - ${RW_PROJECTS_ROOT:-./projects}:/projects
+    networks: [control, worker-egress]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8095/api/v1/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  worker:
+    build:
+      context: .
+      target: runtime
+    command: ["python", "-m", "worker"]
+    environment:
+      MODEL_API_BASE: ${MODEL_API_BASE:-}
+      MODEL_API_KEY: ${MODEL_API_KEY:-}
+      RW_PROJECTS_ROOT: /projects
+      RW_DATA_ROOT: /app/data
+      RUNNER_CONTROLLER_URL: http://runner-controller:8096
+    volumes:
+      - rw-data:/app/data
+      - ${RW_PROJECTS_ROOT:-./projects}:/projects:ro
+    networks: [control, worker-egress]
+    depends_on:
+      control:
+        condition: service_healthy
+
+  runner-controller:
+    build:
+      context: .
+      target: runner
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - rw-data:/app/data
+    networks: [control]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8096/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  rw-data:
+
+networks:
+  control:
+    internal: true
+  worker-egress:

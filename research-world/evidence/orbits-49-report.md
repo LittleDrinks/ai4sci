@@ -1,0 +1,39 @@
+# Why Planetary Orbits Do Not Decay and Crash
+
+**The premise that planetary orbits steadily decay and will eventually cause all planets to swirl into the Sun is false.** Modern numerical integrations spanning billions of years show that the Solar System is *not* undergoing monotonic orbital decay. Instead, planetary orbits remain bounded within narrow bands of semi-major axis, with eccentricities and inclinations undergoing small quasiperiodic oscillations. Catastrophic outcomes—collisions or ejections—are dynamically possible but occur only in a small minority of equally plausible futures (approximately 1 % over the next 5 billion years), and the mechanism that suppresses them is the combination of angular-momentum conservation, secular resonance structure, and crucially, general relativistic corrections.
+
+## Semi-Major Axes Do Not Secularly Decay
+
+The first major result establishing orbital stability came from Laplace and Lagrange in the late 18th century. Working to first order in planetary masses, they showed that the semi-major axes of the planets undergo only small oscillations and possess no secular (monotonically growing or decaying) terms under mutual gravitational perturbations [[source](http://www.scholarpedia.org/article/Stability_of_the_solar_system), lines 122–124]. Poisson, Haretu and Poincaré later confirmed that this result persists through second order in the masses, although it breaks down at third order. This finding alone was sufficient to refute the idea that planets steadily spiral inward or outward through Newtonian perturbations alone.
+
+## Eccentricities Oscillate Quasiperiodically
+
+Laplace and Lagrange further demonstrated that the eccentricities and inclinations of the planetary orbits are governed by a system of linear differential equations with constant coefficients. Using conservation of angular momentum—and assuming all planets orbit the Sun in the same direction—they proved that polynomial or exponential solutions cannot exist; the eigenvalues are real and the solutions are quasiperiodic combinations of circular motions with characteristic secular frequencies (the $g_i$ for perihelion precession and $s_i$ for nodal precession). The resulting periods range from tens of thousands to several million years, producing the familiar Milankovitch cycles that drive Earth's paleoclimate. These oscillations keep eccentricities well within safe bounds on short timescales.
+
+## Chaos and Marginal Stability
+
+On longer timescales, the Solar System is not perfectly regular. Higher-order terms in the perturbation series introduce two key secular resonances: $\theta = 2(g_4 - g_3) - (s_4 - s_3)$, involving Mars and Earth, and $\sigma = (g_1 - g_5) - (s_1 - s_2)$, involving Mercury, Venus, and Jupiter. The arguments associated with these resonances alternate between libration and circulation over hundreds of millions of years, producing chaotic diffusion of orbital elements. The Solar System has a Lyapunov time of approximately 5 million years, meaning that tiny uncertainties in initial conditions grow exponentially, rendering precise long-term prediction impossible beyond roughly 100 million years.
+
+Nevertheless, the system is constrained by angular-momentum conservation. The most massive planets are tightly bound to their present orbital zones, while the less massive inner planets exhibit larger possible eccentricity diffusion. The Solar System is therefore in a state of *marginal stability*: catastrophic events are dynamically possible, but the timescale for such events is comparable to the age of the Solar System (~5 billion years) [[source](http://www.scholarpedia.org/article/Stability_of_the_solar_system), lines 339–341, 423–426]. In the vast majority of solutions, planetary orbits merely deform and precess under mutual perturbations without close encounters or collisions.
+
+## General Relativity Is Essential for Stability
+
+A critical stabilizing factor is general relativity (GR). Mercury's perihelion precession speed is increased by GR from 5.15″/yr to 5.58″/yr, which moves it further from Jupiter's perihelion precession speed of 4.25″/yr. This detuning shifts Mercury away from the secular resonance that would otherwise pump its eccentricity to collision-inducing values [[source](http://www.scholarpedia.org/article/Stability_of_the_solar_system), lines 388–392].
+
+The importance of GR can be seen by comparing relativistic and non-relativistic models. In a pure Newtonian world starting from present-day initial conditions, the probability of collisions within 5 billion years grows to approximately 60 % [[source](http://www.scholarpedia.org/article/Stability_of_the_solar_system), lines 441–443]. The fact that the actual Solar System remains largely stable provides indirect confirmation of GR's role in maintaining orbital order.
+
+## Ensemble Simulation Results
+
+The definitive test comes from massive ensemble simulations. Laskar and Gastineau (2009) integrated 2,501 different solutions of the full Solar System equations over 5 billion years using the JADE supercomputer, consuming approximately 7 million CPU-hours [[source](http://www.scholarpedia.org/article/Stability_of_the_solar_system), lines 420–427]. All 2,501 solutions were compatible with current observational knowledge and should be treated as equiprobable futures.
+
+In approximately 99 % of the trajectories, the planetary orbits continue to evolve as they have over the recent millions of years: they deform and precess under mutual perturbations, but without any collisions or ejections. In approximately 1 % of the cases, Mercury's eccentricity increases dramatically, often leading to a collision with Venus or the Sun within 5 billion years, while the Earth's orbit remains largely unaffected. In one particularly dramatic trajectory, the destabilization of Mercury cascades to Mars, triggering a complete internal reconfiguration of the inner Solar System at roughly 3.4 billion years, ultimately producing collisions between Mars and Earth, Venus and Earth, or even Mercury and Earth [[source](http://www.scholarpedia.org/article/Stability_of_the_solar_system), lines 438–442].
+
+## Conclusion
+
+Planetary orbits do not decay because the dominant dynamical mechanisms—conservation of angular momentum, the absence of secular terms in the semi-major axes, and the detuning effect of general relativity—collectively prevent monotonic inward migration. The Solar System is chaotic and marginally stable, meaning that extreme outcomes are theoretically possible but statistically rare (about 1 % over 5 billion years). The claim that planets will inevitably "swirl into the Sun" is contradicted by rigorous numerical integrations: in 99 % of equally plausible futures, the planets simply continue their quasiperiodic dance indefinitely, well within their current orbital zones.
+
+## References
+
+1. Laskar, J. (2024). "Stability of the solar system." *Scholarpedia*, 19(4):5216. doi:10.4249/scholarpedia.5216. Revision #150752. Available at: http://www.scholarpedia.org/article/Stability_of_the_solar_system. Lines 1–631.
+2. Laskar, J. & Gastineau, M. (2009). "Existence of collisional trajectories of Mercury, Mars and Venus with the Earth." *Nature*, 459:817–819. [Referenced in Laskar 2024, lines 420–442.]
+3. Batygin, K. & Laughlin, G. (2008). "On the Dynamical Stability of the Solar System." *ApJ*, 683:1207–1216. [Referenced in Laskar 2024, lines 388–392.]

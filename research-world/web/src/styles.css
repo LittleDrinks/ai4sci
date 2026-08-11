@@ -195,6 +195,32 @@ input::placeholder, textarea::placeholder { color: #8b938c; }
 .lane-corner { left: 0; z-index: 3; color: var(--muted); }
 .lane-head { border-left: 1px solid var(--line); }
 .activity-lanes > time { position: sticky; left: 0; z-index: 1; padding: 14px 12px; border-bottom: 1px solid var(--line); color: var(--muted); background: var(--paper); font-size: 14px; }
+.activity-page { max-width: 1500px; margin: 0 auto; }
+.activity-header, .activity-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.activity-header { margin-bottom: 20px; }
+.activity-header h1 { margin-top: 4px; }
+.run-select { min-width: min(420px, 100%); display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 9px; color: var(--muted); font-size: 14px; }
+.run-select select { width: 100%; min-width: 0; }
+.activity-toolbar { min-height: 54px; margin-bottom: 16px; border-bottom: 1px solid var(--line); }
+.activity-toolbar > span { color: var(--muted); font-size: 14px; }
+.timeline-tree, .context-list, .wire-list { display: grid; gap: 8px; }
+.timeline-tree details, .context-list details, .wire-list details { border: 1px solid var(--line); border-radius: 6px; background: var(--paper); overflow: hidden; }
+.timeline-tree summary, .context-list summary, .wire-list summary { min-height: 46px; display: flex; align-items: center; gap: 10px; padding: 9px 12px; cursor: pointer; }
+.timeline-tree summary code, .context-list summary code, .wire-list summary code { margin-left: auto; color: var(--muted); }
+.timeline-tree > details > div { padding: 0 10px 10px 28px; }
+.timeline-attempt { margin-top: 8px; border-left: 3px solid #8da79a !important; }
+.timeline-attempt ol { margin: 0; padding: 0 12px 8px 42px; list-style: none; }
+.timeline-attempt li { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
+.timeline-attempt li time { color: var(--muted); font-size: 13px; }
+.timeline-attempt li p { margin: 3px 0 0; color: var(--muted); }
+.state-dot { width: 8px; height: 8px; margin-left: 4px; border-radius: 50%; background: var(--amber); }
+.state-dot.completed { background: var(--accent); }
+.wire-search { height: 42px; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding: 0 11px; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); }
+.wire-search input { min-width: 0; flex: 1; border: 0; outline: 0; }
+.wire-list summary time { width: 84px; color: var(--muted); }
+.wire-list pre, .context-list pre { max-height: 520px; margin: 0; padding: 14px; overflow: auto; border-top: 1px solid var(--line); background: #17221e; color: #e7f1ec; white-space: pre-wrap; }
+.jobs-table { overflow: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); }
+.jobs-table table { min-width: 820px; }
 .lane-cell { min-height: 84px; padding: 9px; border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); }
 .lane-event { height: 100%; min-height: 64px; padding: 10px 11px; border-left: 3px solid var(--blue); border-radius: 4px; background: var(--blue-soft); }
 .lane-event > div { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -345,6 +371,9 @@ td small { max-width: 320px; margin-top: 4px; color: var(--muted); font-size: 14
   .inspector { min-height: 320px; border-top: 1px solid var(--line); border-left: 0; overflow: visible; }
   .inspector-scroll { height: auto; overflow: visible; }
   .content-page { padding: 24px 18px 36px; }
+  .activity-header { align-items: stretch; flex-direction: column; }
+  .run-select { min-width: 0; }
+  .timeline-tree > details > div { padding-left: 10px; }
   .page-header { align-items: flex-start; }
   .filter-bar { flex-wrap: wrap; }
   .filter-bar > svg { display: none; }
@@ -366,6 +395,8 @@ td small { max-width: 320px; margin-top: 4px; color: var(--muted); font-size: 14
   .segmented button span { display: none; }
   .react-flow__minimap { display: none; }
   .page-header { display: grid; }
+  .activity-toolbar { align-items: flex-start; flex-direction: column; padding-bottom: 12px; }
+  .timeline-attempt li { grid-template-columns: 1fr; gap: 3px; }
   .page-header > .button { justify-self: start; }
   .form-grid, .data-grid { grid-template-columns: 1fr; }
   .runtime-grid, .agent-grid { grid-template-columns: 1fr; }

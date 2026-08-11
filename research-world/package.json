@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "build": "npm --prefix web run build",
-    "test": "uv run pytest -q && npm --prefix web run build",
-    "start": "uv run research-world serve --port 8095"
+    "test": "uv run pytest -q && npm --prefix web test && npm --prefix web run build",
+    "start": "uv run rw serve --port 8095"
   }
 }

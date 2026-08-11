@@ -1,0 +1,8 @@
+{
+  "schema_version": "1",
+  "checked_at": "2026-08-12T04:48:43+08:00",
+  "model": {"model": "qwen3.7-flash", "ok": true},
+  "embedding": {"model": "qwen3.7-text-embedding", "dimensions": 1024, "ok": true},
+  "mcp": {"server": "anysearch", "tools": ["batch_search", "extract", "get_sub_domains", "search"], "ok": true},
+  "runner": {"ok": true, "network": "none", "read_only": true, "exit_code": 0}
+}

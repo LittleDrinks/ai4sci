@@ -1,30 +1,21 @@
 # Research World
-一个集群围绕单个科学问题积累可审查、可复现、可追溯的研究状态。
+围绕单个科学问题积累可审核、可复现、可追溯的研究状态。
 ## Language
-**节点提交**：
-人类或 Agent 通过同一命令接口提出待入图内容；提交创建待审节点，不使其成为默认可检索事实。
-_Avoid_: 直接入图、人工直写
-**入图**：
-待审节点通过所需审核后成为图谱中的持久研究状态，并可被后续工作依赖。
-_Avoid_: 创建节点、保存对话
-**待审隔离**：
-待审节点可以向审核者与人类显示，但在入图前不进入默认检索、不能成为新依赖或触发执行。
-_Avoid_: 审核前冻结、隐藏待审内容
-**请求**：
-围绕一个已入图节点交给指定 Agent 的工作目标；请求跨执行轮次保持不变。
-_Avoid_: 对话、节点
-**执行轮次**：
-Worker 对请求的一次隔离执行，受租约保护并拥有独立工作目录；技术失败重试会创建新执行轮次。
-_Avoid_: 请求、退修
-**退修**：
-审核者把最小阻断理由返回同一执行轮次，ResearchHarness 延续原消息历史并重写候选；重开则创建新执行轮次且不继承消息历史。
-_Avoid_: 技术重试、重新提交节点
-**端点**：
-一个 OpenAI 兼容模型服务配置（baseurl、apikey、额度状态）；同一模型可注册多个端点，额度耗尽时按优先级切换。演示与提交链路只使用 Qwen 端点。
-_Avoid_: 全局单配置、隐式切换
-**文献节点**：
-经同一提交接口与审核门入图的外部来源，只存标题、URL/DOI、摘要、本地路径与校验值；实际用于推理的原文主张按需展开为独立节点。
-_Avoid_: 全文入图、引用附件字段
-**setup 节点**：
-实验前准备（环境配置、依赖安装、数据集下载、前期调研）的结果节点；经同一审核门入图，可被多个后续执行复用依赖。
-_Avoid_: 免审核入图、一次性环境
+**研究包**：一代 Producer 提交的策略、候选 source/claim 子图、artifact、代码集合与不用代码的理由；整包保持 pending，双审通过后原子准入。
+_Avoid_: 单节点提交、直接入图
+**来源快照**：外部来源在获取时固定的 URL、artifact hash 与行/段/页定位；刷新创建新快照，运行中的 generation 不换 hash。
+_Avoid_: 动态引用、裸 URL
+**执行凭据**：工具或实验执行的命令、参数、输入 hash、环境/image digest、seed、退出码、输出 hash、资源用量与脱敏结果。
+_Avoid_: 日志片段、口头复现
+**Generation**：一个父代固定、策略变化显式的研究包迭代；Generation 0 盲研究，后代只读取 admitted 父代与审核反馈。
+_Avoid_: retry、会话轮次
+**Attempt**：一个 Agent 角色绑定 project snapshot 的隔离执行，拥有独立 workspace、Agent home 与短期 task capability。
+_Avoid_: Generation、机械退修
+**机械退修**：schema、引用、artifact 或 replay 门失败后在同一 Generation、同一 Attempt 原会话修正。
+_Avoid_: 新一代、实质方法修订
+**准入**：两个独立 Reviewer 都 approve 后，研究包的 source、claim、artifact、result 与 edges 在一个事务中变为 admitted。
+_Avoid_: 保存、发布
+**Activity event**：按 `event_id/run_id/generation_id/attempt_id/actor/type/time/entity/payload` 追加的运行事实；Timeline、Wire、Context 与 Agents/Jobs 都是其投影。
+_Avoid_: UI 日志、数据库轮询快照
+**Project snapshot**：`rw project sync` 固定的项目文件、`.agents/skills/` 与 `.mcp.json` 内容清单；目录后续变化不影响已绑定 Attempt。
+_Avoid_: 文件监听、工作目录

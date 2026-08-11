@@ -1,61 +1,87 @@
-import { Activity, Filter } from "lucide-react";
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Activity, Braces, Clock3, MessagesSquare, Network, Search } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { getRun, getRunContext, getRunJobs, getRuns, getRunWire, runEventsUrl } from "../api";
 import { EmptyState } from "../components/EmptyState";
-import { useWorld } from "../context/WorldContext";
-import { dateValue, displayLabel, formatTime, shortId } from "../utils";
+import { displayLabel, formatTime, shortId } from "../utils";
 
-const eventType = (event) => event.type;
-const laneId = (event) => event.actor.id;
+const VIEWS = [["timeline", Clock3, "Timeline"], ["wire", Braces, "Wire"], ["context", MessagesSquare, "Context"], ["jobs", Network, "Agents / Jobs"]];
 
-function eventDetail(event) {
-  const payload = event.payload;
-  const fields = [payload.kind && displayLabel(payload.kind), payload.tool, payload.sdk, payload.decision && displayLabel(payload.decision)].filter(Boolean).join(" · ");
-  return payload.message || payload.summary || payload.title || fields || shortId(event.entity_id);
+function useRunActivity() {
+  const [runs, setRuns] = useState([]);
+  const [runId, setRunId] = useState("");
+  const [data, setData] = useState({ run: null, events: [], wire: [], context: [], jobs: [] });
+  useEffect(() => { getRuns().then((items) => { setRuns(items); setRunId((current) => current || items[0]?.id || ""); }); }, []);
+  useEffect(() => {
+    if (!runId) return undefined;
+    let source;
+    Promise.all([getRun(runId), getRunWire(runId), getRunContext(runId), getRunJobs(runId)]).then(([run, wire, context, jobs]) => {
+      setData({ run, events: run.events, wire, context, jobs });
+      source = new EventSource(runEventsUrl(runId));
+      source.onmessage = ({ data: raw }) => setData((current) => appendEvent(current, JSON.parse(raw)));
+    });
+    return () => source?.close();
+  }, [runId]);
+  return { runs, runId, setRunId, data };
 }
 
-function useFilteredEvents(events, filters) {
-  return useMemo(() => events.filter((event) => (!filters.agent || laneId(event) === filters.agent) && (!filters.type || eventType(event) === filters.type) && (!filters.query || `${eventType(event)} ${eventDetail(event)} ${laneId(event)}`.toLowerCase().includes(filters.query.toLowerCase()))).sort((a, b) => new Date(dateValue(a)) - new Date(dateValue(b))), [events, filters]);
+function appendEvent(data, event) {
+  if (data.events.some((item) => item.event_id === event.event_id)) return data;
+  return { ...data, events: [...data.events, event], jobs: projectJob(data.jobs, event) };
 }
 
-function ActivityFilters({ events, filters, setFilters, agents, runtimes }) {
-  const types = [...new Set(events.map(eventType))].sort();
-  const lanes = [...new Set(events.map(laneId))];
-  return <div className="filter-bar"><Filter size={17} /><select aria-label="按参与者筛选" value={filters.agent} onChange={(event) => setFilters({ ...filters, agent: event.target.value })}><option value="">全部参与者</option>{lanes.map((id) => <option key={id} value={id}>{laneLabel(id, agents, runtimes)}</option>)}</select><select aria-label="按事件类型筛选" value={filters.type} onChange={(event) => setFilters({ ...filters, type: event.target.value })}><option value="">全部事件类型</option>{types.map((type) => <option key={type} value={type}>{displayLabel(type)}</option>)}</select><input aria-label="搜索事件" placeholder="搜索日志" value={filters.query} onChange={(event) => setFilters({ ...filters, query: event.target.value })} /></div>;
+function projectJob(jobs, event) {
+  if (event.type === "attempt_started" && !jobs.some((job) => job.id === event.attempt_id)) {
+    return [...jobs, { id: event.attempt_id, generation_id: event.generation_id, actor: event.actor, status: "created", created_at: event.time }];
+  }
+  if (event.type !== "attempt_completed") return jobs;
+  return jobs.map((job) => job.id === event.attempt_id ? { ...job, status: "completed", completed_at: event.time, ...event.payload } : job);
 }
 
-function laneLabel(id, agents, runtimes) {
-  return agents.find((item) => item.id === id)?.name || runtimes.find((item) => item.id === id)?.name || id;
+function RunSelect({ runs, value, onChange }) {
+  return <label className="run-select"><span>Run</span><select value={value} onChange={(event) => onChange(event.target.value)}>{runs.map((run) => <option value={run.id} key={run.id}>{shortId(run.id)} · {displayLabel(run.status)}</option>)}</select></label>;
 }
 
-function LaneEvent({ event }) {
-  const content = <><div><b>{displayLabel(eventType(event))}</b><code>{shortId(event.entity_id)}</code></div><p>{eventDetail(event)}</p></>;
-  const href = eventHref(event);
-  return href ? <Link className="lane-event" to={href}>{content}</Link> : <article className="lane-event">{content}</article>;
+function ViewTabs({ value, onChange }) {
+  return <div className="segmented activity-tabs">{VIEWS.map(([id, Icon, label]) => <button aria-label={label} title={label} className={value === id ? "active" : ""} onClick={() => onChange(id)} key={id}><Icon size={16} /><span>{label}</span></button>)}</div>;
 }
 
-function eventHref(event) {
-  if (event.entity_type === "node") return `/nodes/${event.entity_id}`;
-  if (event.entity_type === "artifact") return `/reports/${event.entity_id}`;
-  if (event.entity_type === "job") return `/queue?job=${encodeURIComponent(event.entity_id)}`;
-  if (["agent", "runtime"].includes(event.entity_type)) return "/agents";
-  return "";
+function Timeline({ events, jobs }) {
+  const generations = [...new Set(events.map((event) => event.generation_id).filter(Boolean))];
+  return <div className="timeline-tree">{generations.map((generation, index) => <details open key={generation}><summary><span>Generation {index}</span><code>{shortId(generation)}</code></summary><div>{jobs.filter((job) => job.generation_id === generation).map((job) => <Attempt events={events.filter((event) => event.attempt_id === job.id)} job={job} key={job.id} />)}</div></details>)}</div>;
 }
 
-function ActivityLanes({ events, agents, runtimes }) {
-  const lanes = [...new Set(events.map(laneId))];
-  const style = { gridTemplateColumns: `150px repeat(${Math.max(lanes.length, 1)}, minmax(240px, 1fr))`, minWidth: 150 + lanes.length * 240 };
-  return <div className="lanes-scroll"><div className="activity-lanes" style={style}><div className="lane-corner">时间</div>{lanes.map((id) => <div className="lane-head" key={id}>{laneLabel(id, agents, runtimes)}</div>)}{events.map((event) => <ActivityRow key={`${dateValue(event)}-${eventType(event)}-${event.entity_id}`} event={event} lanes={lanes} />)}</div></div>;
+function Attempt({ job, events }) {
+  return <details open className="timeline-attempt"><summary><span>{job.actor}</span><code>{shortId(job.id)}</code><i className={`state-dot ${job.status}`} /></summary><ol>{events.map((event) => <li key={event.event_id}><time>{formatTime(event.time, false)}</time><div><b>{displayLabel(event.type)}</b><p>{eventSummary(event)}</p></div></li>)}</ol></details>;
 }
 
-function ActivityRow({ event, lanes }) {
-  const activeLane = laneId(event);
-  return <><time>{formatTime(dateValue(event))}</time>{lanes.map((id) => <div className="lane-cell" key={id}>{id === activeLane && <LaneEvent event={event} />}</div>)}</>;
+function eventSummary(event) {
+  return event.payload.message || event.payload.error || Object.values(event.payload).filter((value) => typeof value === "string").join(" · ") || `${event.entity.type} ${shortId(event.entity.id)}`;
+}
+
+function Wire({ events }) {
+  const [query, setQuery] = useState("");
+  const visible = useMemo(() => events.filter((event) => JSON.stringify(event).toLowerCase().includes(query.toLowerCase())), [events, query]);
+  return <div><label className="wire-search"><Search size={16} /><input aria-label="Search wire events" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search events" /></label><div className="wire-list">{visible.map((event) => <details key={event.event_id}><summary><time>{formatTime(event.time, false)}</time><b>{event.type}</b><code>{shortId(event.attempt_id || event.entity.id)}</code></summary><pre>{JSON.stringify(event, null, 2)}</pre></details>)}</div></div>;
+}
+
+function Context({ items }) {
+  return <div className="context-list">{items.map((item) => <details key={item.attempt_id}><summary><b>{item.actor}</b><code>{shortId(item.attempt_id)}</code></summary><pre>{JSON.stringify(item.content, null, 2)}</pre></details>)}</div>;
+}
+
+function AgentsJobs({ jobs }) {
+  return <div className="jobs-table"><table><thead><tr><th>Agent</th><th>Attempt</th><th>Generation</th><th>Status</th><th>Started</th></tr></thead><tbody>{jobs.map((job) => <tr key={job.id}><td>{job.actor}</td><td><code>{shortId(job.id)}</code></td><td><code>{shortId(job.generation_id)}</code></td><td>{displayLabel(job.status)}</td><td>{formatTime(job.created_at)}</td></tr>)}</tbody></table></div>;
+}
+
+function ActivityView({ view, data }) {
+  if (view === "wire") return <Wire events={data.events} items={data.wire} />;
+  if (view === "context") return <Context items={data.context} />;
+  if (view === "jobs") return <AgentsJobs jobs={data.jobs} />;
+  return <Timeline events={data.events} jobs={data.jobs} />;
 }
 
 export function ActivityPage() {
-  const { data } = useWorld();
-  const [filters, setFilters] = useState({ agent: "", type: "", query: "" });
-  const events = useFilteredEvents(data.events, filters);
-  return <section className="content-page"><header className="page-header"><div><span className="eyebrow">审计日志</span><h1>活动记录</h1><p>按时间顺序展示命令、智能体执行、工具调用、审核和产物。</p></div><span className="count-label">{events.length} 条事件</span></header><ActivityFilters events={data.events} filters={filters} setFilters={setFilters} agents={data.agents} runtimes={data.runtimes} />{events.length ? <ActivityLanes events={events} agents={data.agents} runtimes={data.runtimes} /> : <EmptyState icon={Activity} title="无匹配活动" detail="用户和智能体处理项目时，事件会显示在这里。" />}</section>;
+  const { runs, runId, setRunId, data } = useRunActivity();
+  const [view, setView] = useState("timeline");
+  if (!runs.length) return <EmptyState icon={Activity} title="No runs" detail="" />;
+  return <section className="content-page activity-page"><header className="activity-header"><div><span className="eyebrow">Activity</span><h1>{data.run ? shortId(data.run.id) : "Run"}</h1></div><RunSelect runs={runs} value={runId} onChange={setRunId} /></header><div className="activity-toolbar"><ViewTabs value={view} onChange={setView} /><span>{data.events.length} events</span></div><ActivityView view={view} data={data} /></section>;
 }

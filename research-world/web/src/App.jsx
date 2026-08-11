@@ -17,7 +17,7 @@ function View({ component: Component }) {
 
 export function App() {
   return <Routes><Route element={<AppShell />}>
-    <Route index element={<Navigate to="/map" replace />} />
+    <Route index element={<Navigate to="/activity" replace />} />
     <Route path="map" element={<View component={MapPage} />} />
     <Route path="review" element={<View component={ReviewPage} />} />
     <Route path="activity" element={<View component={ActivityPage} />} />

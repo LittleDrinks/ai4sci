@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { getBootstrap, postCommand, streamUrl } from "../api";
+import { getBootstrap, postCommand } from "../api";
 
 const EMPTY = { projects: [], nodes: [], review_nodes: [], edges: [], events: [], jobs: [], agents: [], runtimes: [], artifacts: [] };
 const WorldContext = createContext(null);
@@ -27,20 +27,6 @@ function useRefresh(state, desiredProject) {
   }, [state.projectId]);
 }
 
-function useEventStream(projectId, refresh) {
-  const timer = useRef(null);
-  const [streamState, setStreamState] = useState("idle");
-  useEffect(() => {
-    if (!projectId) return undefined;
-    const source = new EventSource(streamUrl(projectId));
-    source.onopen = () => setStreamState("live");
-    source.onerror = () => setStreamState("reconnecting");
-    source.onmessage = () => { clearTimeout(timer.current); timer.current = setTimeout(() => refresh(projectId), 120); };
-    return () => { clearTimeout(timer.current); source.close(); };
-  }, [projectId, refresh]);
-  return streamState;
-}
-
 export function WorldProvider({ children }) {
   const state = useWorldState();
   const desiredProject = useRef("");
@@ -50,7 +36,7 @@ export function WorldProvider({ children }) {
     const timer = setInterval(() => refresh(state.projectId), 5000);
     return () => clearInterval(timer);
   }, [state.projectId, refresh]);
-  const streamState = useEventStream(state.projectId, refresh);
+  const streamState = state.loading ? "syncing" : "live";
   const selectProject = useCallback((id) => { desiredProject.current = id; state.setLoading(true); state.setProjectId(id); return refresh(id); }, [refresh]);
   const command = async (type, payload) => {
     try { const result = await postCommand(type, payload); await refresh(result?.project_id || state.projectId); return result; }

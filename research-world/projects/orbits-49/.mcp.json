@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "anysearch": {
+      "type": "http",
+      "url": "https://api.anysearch.com/mcp"
+    }
+  }
+}

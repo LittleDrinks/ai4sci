@@ -15,11 +15,14 @@ def run_evidence(world, run_id: str) -> dict:
     with world.db.connect() as connection:
         run = dict(connection.execute("SELECT * FROM runs WHERE id=?", (run_id,)).fetchone())
         generations = generation_evidence(connection, run_id)
-        attempts = attempt_evidence(connection, run_id)
+        attempts = attempt_evidence(world, connection, run_id)
         receipts = receipt_evidence(connection, run_id)
         events = event_evidence(connection, run_id)
+        executions = execution_evidence(connection, run_id)
+        embedding_count = embedding_evidence(connection, run_id)
     return {"schema_version": "1", "run": run, "generations": generations,
-            "attempts": attempts, "tool_receipts": receipts, "events": events}
+            "attempts": attempts, "tool_receipts": receipts, "executions": executions,
+            "events": events, "model": trace_summary(attempts), "embedding_node_count": embedding_count}
 
 
 def generation_evidence(connection, run_id: str) -> list[dict]:
@@ -34,21 +37,49 @@ def generation_evidence(connection, run_id: str) -> list[dict]:
 
 
 def package_reviews(connection, package_id: str) -> list[dict]:
-    sql = "SELECT reviewer,decision,feedback,created_at FROM reviews WHERE package_id=? ORDER BY reviewer"
+    sql = "SELECT reviewer,decision,feedback,category,created_at FROM reviews WHERE package_id=? ORDER BY reviewer"
     return [dict(row) for row in connection.execute(sql, (package_id,))]
 
 
-def attempt_evidence(connection, run_id: str) -> list[dict]:
-    sql = """SELECT id,generation_id,actor,status,wire_artifact_id,context_artifact_id,
+def attempt_evidence(world, connection, run_id: str) -> list[dict]:
+    sql = """SELECT id,generation_id,actor,status,wire_artifact_id,context_artifact_id,manifest_artifact_id,
                     created_at,completed_at FROM attempts WHERE run_id=? ORDER BY created_at"""
-    return rows(connection, sql, run_id)
+    attempts = rows(connection, sql, run_id)
+    for attempt in attempts:
+        for name in ("wire", "context", "manifest"):
+            attempt[name] = artifact_json(world, attempt[f"{name}_artifact_id"])
+    return attempts
+
+
+def artifact_json(world, artifact_id: str) -> dict:
+    return json.loads(world.artifacts.read(artifact_id))
 
 
 def receipt_evidence(connection, run_id: str) -> list[dict]:
-    sql = """SELECT t.id,t.server,t.tool,t.error,t.created_at,a.actor,a.generation_id
+    sql = """SELECT t.id,t.server,t.tool,t.arguments,t.result,t.error,t.created_at,a.actor,a.generation_id
              FROM tool_receipts t JOIN attempts a ON a.id=t.attempt_id
              WHERE a.run_id=? ORDER BY t.created_at"""
-    return rows(connection, sql, run_id)
+    receipts = rows(connection, sql, run_id)
+    for receipt in receipts:
+        receipt["arguments"] = json.loads(receipt["arguments"])
+        receipt["result"] = json.loads(receipt["result"])
+    return receipts
+
+
+def execution_evidence(connection, run_id: str) -> list[dict]:
+    sql = """SELECT e.* FROM executions e JOIN attempts a ON a.id=e.attempt_id
+             WHERE a.run_id=? ORDER BY e.created_at"""
+    values = rows(connection, sql, run_id)
+    for value in values:
+        for key in ("command", "spec", "usage"):
+            value[key] = json.loads(value[key])
+    return values
+
+
+def embedding_evidence(connection, run_id: str) -> int:
+    sql = """SELECT count(*) FROM node_embeddings e JOIN nodes n ON n.id=e.node_id
+             JOIN generations g ON g.id=n.generation_id WHERE g.run_id=?"""
+    return connection.execute(sql, (run_id,)).fetchone()[0]
 
 
 def event_evidence(connection, run_id: str) -> list[dict]:
@@ -56,8 +87,18 @@ def event_evidence(connection, run_id: str) -> list[dict]:
              FROM events WHERE run_id=? ORDER BY event_id"""
     evidence = rows(connection, sql, run_id)
     for event in evidence:
+        event["entity"] = json.loads(event["entity"])
         event["payload"] = json.loads(event["payload"])
     return evidence
+
+
+def trace_summary(attempts: list[dict]) -> dict:
+    records = [json.loads(line) for attempt in attempts for trace in attempt["wire"].get("trace", [])
+               for line in trace.get("jsonl", "").splitlines() if line]
+    responses = [record for record in records if record.get("payload", {}).get("response")]
+    return {"models": sorted({record["model_name"] for record in responses if record.get("model_name")}),
+            "request_count": len(responses),
+            "total_tokens": sum(record["payload"]["response"].get("usage", {}).get("total_tokens", 0) for record in responses)}
 
 
 def write_evidence(run_id: str, output: Path, world=None) -> None:

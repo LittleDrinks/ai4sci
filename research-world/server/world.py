@@ -212,6 +212,20 @@ class World:
             connection.execute(f"UPDATE runs SET {','.join(assignments)} WHERE id=?", (status, *values.values(), run_id))
         return self.run(run_id)
 
+    def apply_run(self, project_id: str, run_id: str) -> dict:
+        run = self.run(run_id)
+        if run["project_id"] != project_id or run["status"] != "completed" or not run["apply_selected"]:
+            raise PermissionError("run has no approved apply authorization")
+        project = self.project(project_id)
+        target = Path(project["root"]) / "research-runs" / run_id.replace(":", "-")
+        stage = target.with_name(f".{target.name}.tmp")
+        stage.mkdir(parents=True)
+        (stage / "report.md").write_bytes(self.artifacts.read(run["final_markdown_id"]))
+        (stage / "report.html").write_bytes(self.artifacts.read(run["final_html_id"]))
+        stage.rename(target)
+        files = [path.relative_to(project["root"]).as_posix() for path in sorted(target.iterdir())]
+        return {"project_id": project_id, "run_id": run_id, "files": files}
+
     def admitted_nodes(self, project_id: str) -> list[dict]:
         return self._many("SELECT * FROM nodes WHERE project_id=? AND status='admitted' ORDER BY created_at", (project_id,))
 
@@ -335,6 +349,22 @@ class World:
             self._insert_package_graph(connection, package_id, project_id, payload)
         return self._one("SELECT * FROM packages WHERE id=?", (package_id,))
 
+    def submit_task_package(self, attempt_id: str, payload: dict) -> dict:
+        attempt = self.attempt(attempt_id)
+        if payload.get("generation_id") != attempt["generation_id"]:
+            raise PermissionError("task can submit only its own generation")
+        self._require_package_artifacts(attempt_id, payload)
+        return self.submit_package(self.run(attempt["run_id"])["project_id"], payload)
+
+    def _require_package_artifacts(self, attempt_id: str, payload: dict) -> None:
+        ids = [item["artifact_id"] for item in payload["sources"] + payload["artifacts"]]
+        ids.extend(citation["artifact_id"] for claim in payload["claims"] for citation in claim["citations"])
+        for artifact_id in ids:
+            self.require_artifact_access(attempt_id, artifact_id)
+        for code in payload["code"]:
+            if self.execution(code["execution_id"])["attempt_id"] != attempt_id:
+                raise PermissionError("execution is outside the task capability")
+
     def _insert_package(self, connection, package_id, project_id, payload) -> None:
         values = (package_id, project_id, payload["generation_id"], json.dumps(payload), "pending", now(), None)
         connection.execute("INSERT INTO packages VALUES(?,?,?,?,?,?,?)", values)
@@ -361,14 +391,14 @@ class World:
         return (node_id, project_id, generation_id, package_id, kind, json.dumps(payload), "pending", now(), None)
 
     def _insert_semantic_edges(self, connection, package_id, nodes, payload) -> None:
-        sources = [node[0] for node in nodes if node[4] == "source"]
-        claims = [node[0] for node in nodes if node[4] == "claim"]
+        sources = {json.loads(node[5])["snapshot_id"]: node[0] for node in nodes if node[4] == "source"}
+        claims = [(node[0], json.loads(node[5])) for node in nodes if node[4] == "claim"]
         question = connection.execute("SELECT id FROM nodes WHERE project_id=? AND kind='question'", (nodes[0][1],)).fetchone()[0]
         result = nodes[-1][0]
         connection.execute("INSERT INTO edges VALUES(?,?,?,?)", (result, question, "addresses", package_id))
-        for source in sources:
-            for claim in claims:
-                connection.execute("INSERT INTO edges VALUES(?,?,?,?)", (source, claim, "supports", package_id))
+        for claim_id, claim in claims:
+            for snapshot_id in {citation["source_snapshot_id"] for citation in claim["citations"]}:
+                connection.execute("INSERT INTO edges VALUES(?,?,?,?)", (sources[snapshot_id], claim_id, "supports", package_id))
 
     def _validate_package(self, project_id: str, payload: dict) -> None:
         self._validate_package_shape(payload)

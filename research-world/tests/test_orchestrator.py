@@ -16,17 +16,34 @@ class FakeBroker:
     def extract(self, source, attempt_id):
         return source
 
+    def agent_tools(self, attempt_id):
+        return []
+
 
 class FakeAgents:
     def __init__(self, decisions=None, fail_first=False):
         self.decisions = iter(decisions or ["approve"] * 6)
         self.fail_first = fail_first
         self.productions = 0
+        self.submitters = {}
+
+    def bind_task(self, workspace, token, tools, submitter):
+        self.submitters[str(workspace)] = submitter
+
+    def plan_search(self, context, workspace):
+        return [context["question"]]
 
     def produce(self, context, workspace):
         self.productions += 1
         if self.fail_first and self.productions == 1:
             return {"strategy": "missing graph"}
+        payload = self._payload(context)
+        payload["generation_id"] = context["generation_id"]
+        if context.get("revision"):
+            payload["revision"] = context["revision"]
+        return self.submitters[str(workspace)](payload)
+
+    def _payload(self, context):
         source = context["sources"][0]
         return {
             "strategy": "Separate conservative dynamics from dissipative effects.",
@@ -54,10 +71,13 @@ class FakeAgents:
     def capture(self, workspace):
         return {"messages": [{"role": "user", "content": "captured"}], "trace": [{"type": "model_call"}]}
 
+    def release(self, workspace):
+        self.submitters.pop(str(workspace), None)
+
 
 def test_two_generation_run_keeps_lineage_and_independent_reviews(world, project, tmp_path):
     run = world.create_run(project["id"], 49, True)
-    engine = Orchestrator(world, FakeAgents(), FakeBroker(), tmp_path / "workspaces")
+    engine = Orchestrator(world, FakeAgents(), FakeBroker(), tmp_path / "workspaces", object())
     result = engine.execute(run["id"])
     generations = world.generations(run["id"])
     assert result["status"] == "completed" and len(generations) == 2
@@ -70,6 +90,8 @@ def test_two_generation_run_keeps_lineage_and_independent_reviews(world, project
     assert result["final_html_id"] in report_ids
     assert_attempt_capture(world, run["id"])
     assert any(event["type"] == "project_applied" for event in world.events(run["id"]))
+    applied = world.path(project["root"]) / "research-runs" / run["id"].replace(":", "-")
+    assert {path.name for path in applied.iterdir()} == {"report.md", "report.html"}
 
 
 def assert_attempt_capture(world, run_id):
@@ -83,7 +105,7 @@ def assert_attempt_capture(world, run_id):
 def test_mechanical_failure_revises_in_same_attempt(world, project, tmp_path):
     run = world.create_run(project["id"], 49, False)
     agents = FakeAgents(fail_first=True)
-    engine = Orchestrator(world, agents, FakeBroker(), tmp_path / "workspaces")
+    engine = Orchestrator(world, agents, FakeBroker(), tmp_path / "workspaces", object())
     engine.execute(run["id"])
     attempts = world.attempts(run["id"], actor="producer")
     assert agents.productions == 3
@@ -94,7 +116,7 @@ def test_mechanical_failure_revises_in_same_attempt(world, project, tmp_path):
 def test_reviewer_disagreement_enters_human_conflict(world, project, tmp_path):
     run = world.create_run(project["id"], 49, False)
     agents = FakeAgents(decisions=["approve", "revise"])
-    result = Orchestrator(world, agents, FakeBroker(), tmp_path / "workspaces").execute(run["id"])
+    result = Orchestrator(world, agents, FakeBroker(), tmp_path / "workspaces", object()).execute(run["id"])
     assert result["status"] == "human_conflict"
     assert len(world.generations(run["id"])) == 1
 
@@ -102,7 +124,7 @@ def test_reviewer_disagreement_enters_human_conflict(world, project, tmp_path):
 def test_human_approval_admits_conflict_and_continues_run(world, project, tmp_path):
     run = world.create_run(project["id"], 49, False)
     agents = FakeAgents(decisions=["approve", "revise", "approve", "approve", "approve", "approve"])
-    engine = Orchestrator(world, agents, FakeBroker(), tmp_path / "workspaces")
+    engine = Orchestrator(world, agents, FakeBroker(), tmp_path / "workspaces", object())
     assert engine.execute(run["id"])["status"] == "human_conflict"
     result = engine.approve_conflict(run["id"], "Approve the complete candidate package.")
     assert result["status"] == "completed"
@@ -111,7 +133,7 @@ def test_human_approval_admits_conflict_and_continues_run(world, project, tmp_pa
 
 def test_review_feedback_list_is_normalized():
     review = {"decision": "revise", "feedback": ["first", "second"], "category": "method"}
-    Orchestrator(None, None, None, None)._validate_review(review)
+    Orchestrator(None, None, None, None, None)._validate_review(review)
     assert review["feedback"] == "first\nsecond"
 
 
@@ -126,7 +148,7 @@ def test_mechanical_reviews_revise_same_generation(world, project, tmp_path):
         return value
     agents.review = categorized
     run = world.create_run(project["id"], 49, False)
-    Orchestrator(world, agents, FakeBroker(), tmp_path / "workspaces").execute(run["id"])
+    Orchestrator(world, agents, FakeBroker(), tmp_path / "workspaces", object()).execute(run["id"])
     assert len(world.generations(run["id"])) == 2
     assert agents.productions == 3
 
@@ -134,6 +156,6 @@ def test_mechanical_reviews_revise_same_generation(world, project, tmp_path):
 def test_attempt_workspace_is_archived_then_removed(world, project, tmp_path):
     run = world.create_run(project["id"], 49, False)
     root = tmp_path / "workspaces"
-    Orchestrator(world, FakeAgents(), FakeBroker(), root).execute(run["id"])
+    Orchestrator(world, FakeAgents(), FakeBroker(), root, object()).execute(run["id"])
     assert not root.exists() or not any(root.iterdir())
     assert all(attempt["manifest_artifact_id"] for attempt in world.attempts(run["id"]))

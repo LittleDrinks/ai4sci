@@ -87,3 +87,17 @@ def test_hybrid_search_does_not_expand_pending_neighbors(world, project):
     world.submit_package(project["id"], package(world, project, generation["id"]))
     results = world.search(project["id"], "planetary orbits")
     assert all(node["status"] == "admitted" for node in results)
+
+
+def test_support_edges_follow_claim_citations(world, project):
+    generation = world.create_generation(project["id"], 0)
+    value = package(world, project, generation["id"])
+    artifact = world.add_artifact(b"Other evidence.\n", "text/plain")
+    snapshot = world.add_source_snapshot(project["id"], "https://example.test/other", artifact, {"line_start": 1, "line_end": 1})
+    value["sources"].append({"snapshot_id": snapshot["id"], "artifact_id": artifact["id"], "title": "Other"})
+    value["claims"].append({"kind": "evidence", "text": "A separate claim.", "citations": [{"source_snapshot_id": snapshot["id"], "artifact_id": artifact["id"], "locator": {"line_start": 1, "line_end": 1}}]})
+    candidate = world.submit_package(project["id"], value)
+    world.review_package(candidate["id"], "a", "approve", "ok")
+    world.review_package(candidate["id"], "b", "approve", "ok")
+    supports = [edge for edge in world.project_edges(project["id"]) if edge["type"] == "supports"]
+    assert len(supports) == 2

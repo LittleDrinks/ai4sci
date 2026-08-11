@@ -90,6 +90,9 @@ class SearchBroker:
         result = self.broker.call(attempt_id, config["server"], config["search"], {"query": query, "max_results": 5})
         return self._parse(result)[:5]
 
+    def agent_tools(self, attempt_id: str) -> list:
+        return self.broker.harness_tools(attempt_id)
+
     def extract(self, source: dict, attempt_id: str) -> dict:
         config = self.broker.research_tools(attempt_id)
         result = self.broker.call(attempt_id, config["server"], config["extract"], {"url": source["url"]})
@@ -116,12 +119,16 @@ class HarnessAgents:
         self.sessions = {}
         self.tasks = {}
 
-    def bind_task(self, workspace: Path, token: str, tools: list) -> None:
-        self.tasks[str(workspace)] = {"token": token, "tools": tools}
+    def bind_task(self, workspace: Path, token: str, tools: list, submitter) -> None:
+        self.tasks[str(workspace)] = {"token": token, "tools": tools, "submit": submitter}
 
     def produce(self, context: dict, workspace: Path) -> dict:
         prompt = self._json_prompt("producer", context, PRODUCER_INSTRUCTIONS)
-        return self._json_agent(prompt, workspace, "producer")
+        payload = self._json_agent(prompt, workspace, "producer")
+        payload["generation_id"] = context["generation_id"]
+        if context.get("revision"):
+            payload["revision"] = context["revision"]
+        return self.tasks[str(workspace)]["submit"](payload)
 
     def plan_search(self, context: dict, workspace: Path) -> list[str]:
         instructions = "Formulate two distinct web queries that seek authoritative primary scientific or institutional evidence for the supplied question. Use parent reviewer feedback when present. Do not answer the question."

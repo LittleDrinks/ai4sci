@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "checked_at": "2026-08-12T05:35:05+08:00",
+  "checked_at": "2026-08-12T05:46:58+08:00",
   "model": {"model": "qwen3.7-flash", "ok": true},
   "embedding": {"model": "qwen3.7-text-embedding", "dimensions": 1024, "ok": true},
   "mcp": {"servers": {"anysearch": ["batch_search", "extract", "get_sub_domains", "search"]}, "transport": "mcp-sdk-streamable-http", "ok": true},

@@ -262,11 +262,7 @@ def tools_command(args, world: World):
 def submit_command(args, world: World):
     attempt = require_task(world, args.attempt)
     value = read_task_json(attempt, args.file)
-    if value.get("generation_id") != attempt["generation_id"]:
-        raise PermissionError("task can submit only its own generation")
-    require_package_artifacts(world, attempt["id"], value)
-    run = world.run(attempt["run_id"])
-    return world.submit_package(run["project_id"], value)
+    return world.submit_task_package(attempt["id"], value)
 
 
 def source_command(args, world: World):
@@ -319,7 +315,7 @@ def runtime_orchestrator(world: World) -> Orchestrator:
         raise RuntimeError("MODEL_API_BASE and MODEL_API_KEY are required")
     agents = HarnessAgents(settings.model_api_base, settings.model_api_key)
     broker = SearchBroker(ToolBroker(world, McpClient()))
-    return Orchestrator(world, agents, broker, settings.artifacts.parent / "workspaces")
+    return Orchestrator(world, agents, broker, settings.artifacts.parent / "workspaces", runner_controller())
 
 
 def wait_or_execute(world: World, run: dict) -> dict:
@@ -356,10 +352,7 @@ def watch_run(world: World, run_id: str, output: TextIO) -> int:
 
 
 def apply_project(world: World, project: dict, run_id: str) -> dict:
-    run = world.run(run_id)
-    if run["project_id"] != project["id"] or run["status"] != "completed" or not run["apply_selected"]:
-        raise PermissionError("run has no approved apply authorization")
-    return {"project_id": project["id"], "run_id": run_id, "files": []}
+    return world.apply_run(project["id"], run_id)
 
 
 def require_task(world: World, attempt_id: str) -> dict:
@@ -385,16 +378,6 @@ def task_path(attempt: dict, path: Path, writable: bool = False) -> Path:
 
 def read_task_json(attempt: dict, path: Path | None) -> dict:
     return json.loads(task_path(attempt, path).read_text(encoding="utf-8")) if path else json.load(sys.stdin)
-
-
-def require_package_artifacts(world: World, attempt_id: str, payload: dict) -> None:
-    ids = [item["artifact_id"] for item in payload["sources"] + payload["artifacts"]]
-    ids.extend(citation["artifact_id"] for claim in payload["claims"] for citation in claim["citations"])
-    for artifact_id in ids:
-        world.require_artifact_access(attempt_id, artifact_id)
-    for code in payload["code"]:
-        if world.execution(code["execution_id"])["attempt_id"] != attempt_id:
-            raise PermissionError("execution is outside the task capability")
 
 
 def doctor(args) -> dict:

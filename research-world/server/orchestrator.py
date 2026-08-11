@@ -8,15 +8,17 @@ from pathlib import Path
 import markdown as markdown_renderer
 
 from .artifacts import now
+from .task_gateway import TaskGateway
 from .world import InvalidPackage, World
 
 
 class Orchestrator:
-    def __init__(self, world: World, agents, broker, workspaces: Path):
+    def __init__(self, world: World, agents, broker, workspaces: Path, controller):
         self.world = world
         self.agents = agents
         self.broker = broker
         self.workspaces = workspaces
+        self.controller = controller
         self.pending = {}
         self.repairs = {}
 
@@ -118,11 +120,11 @@ class Orchestrator:
         sources = self._sources(run, generation, attempt, workspace, parent)
         context = self._producer_context(run, generation, parent, sources)
         context["attempt_id"] = attempt["id"]
+        context["generation_id"] = generation["id"]
         for revision in range(3):
             try:
-                payload = self.agents.produce(context, workspace)
-                payload["generation_id"] = generation["id"]
-                package = self.world.submit_package(run["project_id"], payload)
+                package = self.agents.produce(context, workspace)
+                payload = package["payload"]
                 self.pending[generation["id"]] = (attempt, workspace, context, payload)
                 return package
             except (InvalidPackage, KeyError, TypeError, ValueError) as error:
@@ -142,8 +144,6 @@ class Orchestrator:
         return [self._snapshot_source(project, value, attempt["id"]) for value in acquired]
 
     def _select_sources(self, project, parent, candidates, workspace) -> list[dict]:
-        if not hasattr(self.agents, "select_sources"):
-            return candidates[:6]
         context = {"question": project["question"], "candidates": candidates}
         if parent:
             context["review_feedback"] = self.world.reviews(parent["package_id"])
@@ -160,8 +160,6 @@ class Orchestrator:
         return acquired
 
     def _search_queries(self, project: dict, parent: dict | None, workspace: Path) -> list[str]:
-        if not hasattr(self.agents, "plan_search"):
-            return [project["question"]]
         context = {"question": project["question"]}
         if parent:
             context["review_feedback"] = self.world.reviews(parent["package_id"])
@@ -232,6 +230,7 @@ class Orchestrator:
             return "conflict"
         attempt, workspace, context, _ = self.pending[generation["id"]]
         context["review_feedback"] = reviews
+        context["revision"] = count
         self._event(run, generation, attempt, "system", "mechanical_revision", "attempt", attempt["id"], {"reviews": reviews})
         package = self._revised_package(run, generation, context, workspace)
         change = package["payload"].get("strategy_change") or generation["strategy_change"]
@@ -242,10 +241,8 @@ class Orchestrator:
     def _revised_package(self, run, generation, context, workspace) -> dict:
         for _ in range(3):
             try:
-                payload = self.agents.produce(context, workspace)
-                payload["generation_id"] = generation["id"]
-                payload["revision"] = self.repairs[generation["id"]]
-                package = self.world.submit_package(run["project_id"], payload)
+                package = self.agents.produce(context, workspace)
+                payload = package["payload"]
                 attempt = self.pending[generation["id"]][0]
                 self.pending[generation["id"]] = (attempt, workspace, context, payload)
                 return package
@@ -321,7 +318,8 @@ class Orchestrator:
         self.world.update_run(run["id"], "completed", final_markdown_id=md["id"], final_html_id=page["id"], completed_at=now())
         self._event(run, generation, attempt, "system", "report_admitted", "artifact", page["id"], {})
         if run["apply_selected"]:
-            self._event(run, generation, attempt, "system", "project_applied", "project", run["project_id"], {"files": []})
+            applied = self.world.apply_run(run["project_id"], run["id"])
+            self._event(run, generation, attempt, "system", "project_applied", "project", run["project_id"], applied)
         return self.world.run(run["id"])
 
     def _review_report(self, run: dict, generation: dict, markdown: str, page: dict) -> list[dict]:
@@ -360,8 +358,8 @@ class Orchestrator:
         attempt = self.world.bind_attempt_workspace(attempt["id"], workspace)
         self._materialize(run["project_snapshot_id"], workspace)
         token = self.world.issue_task_token(attempt["id"])
-        if hasattr(self.agents, "bind_task"):
-            self.agents.bind_task(workspace, token, self._agent_tools(actor, attempt["id"]))
+        gateway = TaskGateway(self.world, attempt["id"], self.controller)
+        self.agents.bind_task(workspace, token, self._agent_tools(actor, attempt["id"], gateway), gateway.submit)
         self._event(run, generation, attempt, actor, "attempt_started", "attempt", attempt["id"], {"snapshot_id": attempt["snapshot_id"]})
         return attempt, workspace
 
@@ -379,21 +377,20 @@ class Orchestrator:
             directory.chmod(0o555)
         project.chmod(0o555)
 
-    def _agent_tools(self, actor: str, attempt_id: str) -> list:
-        if actor == "producer" and hasattr(self.broker, "broker"):
-            return ["Glob", "Grep", "Read", *self.broker.broker.harness_tools(attempt_id)]
+    def _agent_tools(self, actor: str, attempt_id: str, gateway: TaskGateway) -> list:
+        if actor == "producer":
+            return ["Glob", "Grep", "Read", *self.broker.agent_tools(attempt_id), *gateway.harness_tools()]
         if actor == "reporter":
             return ["Glob", "Read", "Write", "Edit"]
         return ["Glob", "Read"]
 
     def _complete_attempt(self, attempt: dict, context: dict, output: dict, workspace: Path) -> None:
-        captured = self.agents.capture(workspace) if hasattr(self.agents, "capture") else {}
+        captured = self.agents.capture(workspace)
         wire = {"output": output, "trace": captured.get("trace", [])}
         model_context = {"input": context, "messages": captured.get("messages", [])}
         manifest = {"attempt_id": attempt["id"], "files": self._declared_files(attempt["id"], workspace)}
         self.world.complete_attempt(attempt["id"], json.dumps(wire).encode(), json.dumps(model_context).encode(), json.dumps(manifest).encode())
-        if hasattr(self.agents, "release"):
-            self.agents.release(workspace)
+        self.agents.release(workspace)
         self._remove_workspace(workspace)
 
     def _remove_workspace(self, workspace: Path) -> None:

@@ -1,0 +1,1117 @@
+{
+  "project": {
+    "id": "project:d475f86808f0a40816bbc0e8b6d347ead4c179638295758080d792f1addba807",
+    "name": "Q001 · What makes prime numbers so special?",
+    "question": "There are infinite prime numbers—numbers that are only divisible by one and the number itself. Their existence and properties are extremely interesting to mathematicians, computer scientists, and other experts. While the entire number line—essentially every number—can be expressed as the product of prime numbers, there is great difficulty in factoring large numbers into primes. And since prime numbers have these unique properties associated with factorization, they are very useful in the field of cryptography. Imagine a computer encryption that relies on an extremely large number, such as a number with many factors of tens or even hundreds and hundreds of digits; even supercomputers will have a huge challenge in identifying its prime factors, making prime numbers especially appealing for encryption.",
+    "created_at": "2026-08-13T18:49:15.887182+00:00"
+  },
+  "direction": {
+    "id": "node:c6d7012648fdfb0b4f207a4a6a799ce9",
+    "project_id": "project:d475f86808f0a40816bbc0e8b6d347ead4c179638295758080d792f1addba807",
+    "generation_id": null,
+    "package_id": null,
+    "kind": "direction",
+    "payload": {
+      "title": "Computational asymmetry between primality testing and integer factorization",
+      "rationale": "Synthesize theoretical computer science literature to clarify why deterministic primality verification resides in P while exact factorization remains computationally intractable.",
+      "workflow": "evidence_synthesis",
+      "completion_test": "A structured review explicitly maps algorithmic classes, cites peer-reviewed complexity proofs, and distinguishes worst-case from average-case hardness.",
+      "remaining": "Engineering teams must choose which hardness assumptions align with current hardware capabilities and threat models for deployment.",
+      "position": 2
+    },
+    "status": "completed",
+    "created_at": "2026-08-13T18:50:12.367025+00:00",
+    "admitted_at": "2026-08-13T19:49:36.717004+00:00"
+  },
+  "cycle": {
+    "id": "cycle:fcfc2981fafa11d48fda2483",
+    "project_id": "project:d475f86808f0a40816bbc0e8b6d347ead4c179638295758080d792f1addba807",
+    "direction_id": "node:c6d7012648fdfb0b4f207a4a6a799ce9",
+    "run_id": "run:97ed3951048c20bb760ec065",
+    "status": "completed",
+    "brief": {
+      "title": "Computational asymmetry between primality testing and integer factorization",
+      "learned": [
+        "Deterministic primality verification resides in P, as proven by the AKS algorithm, without relying on unproven conjectures like the generalized Riemann hypothesis.",
+        "AKS operates via polynomial congruence relations in quotient rings, where strategic parameter selection and modular arithmetic reduce naive exponential expansion to polynomial time.",
+        "Theoretical tractability in P does not translate to practical efficiency; AKS is outperformed by probabilistic tests (Baillie–PSW) and certificate-generating methods (ECPP, APR).",
+        "Worst-case complexity class membership is fundamentally distinct from the average-case hardness assumptions that govern cryptographic security."
+      ],
+      "evidence": [
+        "The available dataset exclusively substantiates the theoretical properties, mathematical foundations, and comparative performance metrics of the AKS primality test.",
+        "It confirms that primality proving can be achieved deterministically in polynomial time and accurately describes the algorithmic optimizations required to avoid exponential overhead.",
+        "It validates that asymptotic solvability guarantees do not equate to practical cryptographic utility or factorization capability."
+      ],
+      "limitations": [
+        "The evidence base contains zero substantive data on integer factorization algorithms, their time complexity, or formal hardness assumptions.",
+        "Three of four source retrievals failed due to upstream extraction errors, network issues, or unsupported content types.",
+        "The synthesis cannot establish the required computational asymmetry between primality testing and factorization.",
+        "It cannot validate distinctions between worst-case complexity boundaries and the average-case hardness assumptions critical for cryptographic deployment."
+      ],
+      "open_questions": [
+        "How do sub-exponential factorization algorithms formally scale relative to polynomial primality tests across varying input sizes?",
+        "Which specific average-case hardness assumptions currently underpin cryptographic systems, and how do they diverge from worst-case complexity proofs?",
+        "How will evolving hardware capabilities and algorithmic refinements shift the practical thresholds for cryptographic key security?"
+      ],
+      "next_moves": [
+        "Integrate peer-reviewed literature on integer factorization, specifically focusing on the General Number Field Sieve and sub-exponential time complexity.",
+        "Explicitly map algorithmic classes for both primality testing and factorization to construct a valid comparative synthesis.",
+        "Distinguish rigorously between worst-case complexity classifications and the average-case hardness assumptions required for cryptographic threat modeling.",
+        "Evaluate which hardness assumptions align with contemporary hardware capabilities and deployment requirements for engineering teams."
+      ],
+      "review": {
+        "findings": [
+          {
+            "check_id": "ARGUMENT-CHAIN-BREAK",
+            "severity": "major",
+            "evidence": [
+              {
+                "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+                "locator": "1-2",
+                "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+              },
+              {
+                "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+                "locator": "1-341",
+                "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+              },
+              {
+                "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+                "locator": "1-8",
+                "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+              },
+              {
+                "id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+                "locator": "1-2",
+                "sha256": "5b76592e66de71aaf6613906161aa862e8ecdb21efe5035d6df5b"
+              }
+            ],
+            "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible."
+          }
+        ],
+        "summary": "The evidence base fails to support the direction's core objective due to a severe asymmetry in source availability. Three of four sources are inaccessible or contain extraction errors, and the sole functional source details only the AKS primality test. Crucially, there is zero substantive evidence regarding integer factorization's complexity class or hardness assumptions. Consequently, the required comparative synthesis mapping algorithmic classes and distinguishing worst-case from average-case hardness cannot be validated, necessitating major repair before the direction result can be admitted."
+      }
+    },
+    "created_at": "2026-08-13T19:49:36.736012+00:00",
+    "completed_at": "2026-08-13T19:53:50.313351+00:00"
+  },
+  "work_items": [
+    {
+      "id": "work:7d8804da8b5c9e913ec0a38b",
+      "cycle_id": "cycle:fcfc2981fafa11d48fda2483",
+      "project_id": "project:d475f86808f0a40816bbc0e8b6d347ead4c179638295758080d792f1addba807",
+      "direction_id": "node:c6d7012648fdfb0b4f207a4a6a799ce9",
+      "generation_id": "generation:ca2222c096205b075dd26a02524b5bbe65fcf6051b2fcaaa9b063bddded74b38",
+      "kind": "source",
+      "status": "completed",
+      "input": {
+        "direction": {
+          "title": "Computational asymmetry between primality testing and integer factorization",
+          "rationale": "Synthesize theoretical computer science literature to clarify why deterministic primality verification resides in P while exact factorization remains computationally intractable.",
+          "workflow": "evidence_synthesis",
+          "completion_test": "A structured review explicitly maps algorithmic classes, cites peer-reviewed complexity proofs, and distinguishes worst-case from average-case hardness.",
+          "remaining": "Engineering teams must choose which hardness assumptions align with current hardware capabilities and threat models for deployment.",
+          "position": 2
+        }
+      },
+      "output": {
+        "sources": [
+          {
+            "source_id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+            "artifact_id": "artifact:af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6",
+            "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6",
+            "title": "Why is not known whether integer factorization can be done in polynomial time knowing how to do primality tests efficiently?",
+            "url": "https://cs.stackexchange.com/questions/50767/why-is-not-known-whether-integer-factorization-can-be-done-in-polynomial-time-kn",
+            "locator": {
+              "line_start": 1,
+              "line_end": 2
+            },
+            "content": "extract_upstream_error\nTarget returned an unsupported response."
+          },
+          {
+            "source_id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+            "artifact_id": "artifact:1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06",
+            "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06",
+            "title": "AKS primality test",
+            "url": "https://en.wikipedia.org/wiki/AKS_primality_test",
+            "locator": {
+              "line_start": 1,
+              "line_end": 341
+            },
+            "content": "## AKS primality test - Wikipedia\n\n**Source**: https://en.wikipedia.org/wiki/AKS_primality_test\n\n---\n\n[Jump to content](https://en.wikipedia.org/wiki/AKS_primality_test#bodyContent)\n\nFrom Wikipedia, the free encyclopedia\n\nAlgorithm checking for prime numbers\n\nThe**AKS primality test**(also known as the**Agrawal–Kayal–Saxena primality test**and the**cyclotomic AKS test**) is\na[deterministic](https://en.wikipedia.org/wiki/Deterministic_algorithm)[primality-\nproving](https://en.wikipedia.org/wiki/Primality_test)[algorithm](https://en.wikipedia.org/wiki/Algorithm)created and published by[Manindra\nAgrawal](https://en.wikipedia.org/wiki/Manindra_Agrawal),[Neeraj Kayal](https://en.wikipedia.org/wiki/Neeraj_Kayal), and[Nitin\nSaxena](https://en.wikipedia.org/wiki/Nitin_Saxena), computer scientists at the[Indian Institute of Technology\nKanpur](https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Kanpur), on August 6, 2002, in an article titled \"PRIMES is in\nP\".[[1]](https://en.wikipedia.org/wiki/AKS_primality_test#cite_note-AKS-1)The algorithm was the first one which is able to determine in[polynomial\ntime](https://en.wikipedia.org/wiki/Polynomial_time), whether a given number\nis[prime](https://en.wikipedia.org/wiki/Prime_number)or[composite](https://en.wikipedia.org/wiki/Composite_number)without relying on[mathematical\nconjectures](https://en.wikipedia.org/wiki/Mathematical_conjecture)such as the[generalized Riemann\nhypothesis](https://en.wikipedia.org/wiki/Generalized_Riemann_hypothesis). The proof is also notable for not relying on the field\nof[analysis](https://en.wikipedia.org/wiki/Analysis_(mathematics)).[[2]](https://en.wikipedia.org/wiki/AKS_primality_test#cite_note-2)In 2006 the authors\nreceived both the[Gödel Prize](https://en.wikipedia.org/wiki/G%C3%B6del_Prize)and[Fulkerson Prize](https://en.wikipedia.org/wiki/Fulkerson_Prize)for their work.\n\n## Importance[[edit](https://en.wikipedia.org/w/index.php?title=AKS_primality_test&action=edit&section=1)]\n\nAKS is the first primality-proving algorithm to be simultaneously*general*,*polynomial-time*,*deterministic*, and*unconditionally correct*. Previous algorithms\nhad been developed for centuries and achieved three of these properties at most, but not all four.\n- The AKS algorithm can be used to verify the primality of any**general**number given. Many fast primality tests are known that work only for numbers with\ncertain properties. For example, the[Lucas–Lehmer test](https://en.wikipedia.org/wiki/Lucas%E2%80%93Lehmer_primality_test)works only for[Mersenne\nnumbers](https://en.wikipedia.org/wiki/Mersenne_number), while[Pépin's test](https://en.wikipedia.org/wiki/P%C3%A9pin%27s_test)can be applied to[Fermat\nnumbers](https://en.wikipedia.org/wiki/Fermat_number)only.\n- The maximum running time of the algorithm can be bounded by a**[polynomial](https://en.wikipedia.org/wiki/Polynomial_time#Polynomial_time)**over the number of\ndigits in the target number.[ECPP](https://en.wikipedia.org/wiki/Elliptic_curve_primality_proving)and[APR](https://en.wikipedia.org/wiki/Adleman%E2%80%93Pomeran\nce%E2%80%93Rumely_primality_test)conclusively prove or disprove that a given number is prime, but are not known to have polynomial time bounds for all inputs.\n- The algorithm is guaranteed to distinguish**[deterministically](https://en.wikipedia.org/wiki/Deterministic_algorithm)**whether the target number is prime or\ncomposite. Randomized tests, such as[Miller–Rabin](https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test)and[Baillie–PSW](https://en.wikipedia.org/w\niki/Baillie%E2%80%93PSW_primality_test), can test any given number for primality in polynomial time, but are known to produce only a probabilistic result.\n- The correctness of AKS is**not conditional**on any subsidiary unproved[hypothesis](https://en.wikipedia.org/wiki/Hypothesis). In contrast, Miller's version of\nthe[Miller–Rabin test](https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test#Deterministic_variants)is fully deterministic and runs in polynomial\ntime over all inputs, but its correctness depends on the truth of the yet-unproved[generalized Riemann\nhypothesis](https://en.wikipedia.org/wiki/Generalized_Riemann_hypothesis).\n\nWhile the algorithm is of immense theoretical importance, it is not used in practice, rendering it a[galactic\nalgorithm](https://en.wikipedia.org/wiki/Galactic_algorithm). For 64-bit inputs, the[Baillie–PSW\ntest](https://en.wikipedia.org/wiki/Baillie%E2%80%93PSW_primality_test)is deterministic and runs many orders of magnitude faster. For larger inputs, the\nperformance of the (also unconditionally correct) ECPP and APR tests is*far*superior to AKS. Additionally, ECPP can output a[primality\ncertificate](https://en.wikipedia.org/wiki/Primality_certificate)that allows independent and rapid verification of the results, which is not possible with the\nAKS algorithm.\n\n## Concepts[[edit](https://en.wikipedia.org/w/index.php?title=AKS_primality_test&action=edit&section=2)]\n\nThe AKS primality test is based upon the following theorem: Given an integern≥2{\\displaystyle n\\geq 2}and integera{\\displaystyle\na}[coprime](https://en.wikipedia.org/wiki/Coprime)ton{\\displaystyle n},n{\\displaystyle n}is prime if and only if\nthe[polynomial](https://en.wikipedia.org/wiki/Polynomial_ring)[congruence\nrelation](https://en.wikipedia.org/wiki/Congruence_relation#Modular_arithmetic)(X+a)n≡Xn+a(modn){\\displaystyle (X+a)^{n}\\equiv X^{n}+a{\\pmod {n}}}1\n\nholds within the polynomial ring(Z/nZ)[X]{\\displaystyle (\\mathbb {Z} /n\\mathbb {Z} )[X]}.[[1]](https://en.wikipedia.org/wiki/AKS_primality_test#cite_note-\nAKS-1)Note thatX{\\displaystyle X}denotes the[indeterminate](https://en.wikipedia.org/wiki/Polynomial_ring#Definition_(univariate_case))which generates this\npolynomial ring.\n\nThis theorem is a generalization to polynomials of[Fermat's little theorem](https://en.wikipedia.org/wiki/Fermat's_little_theorem). In one direction it can\neasily be proved using the[binomial theorem](https://en.wikipedia.org/wiki/Binomial_theorem)together with the following property of the[binomial\ncoefficient](https://en.wikipedia.org/wiki/Binomial_coefficient):(nk)≡0(modn){\\displaystyle {n \\choose k}\\equiv 0{\\pmod {n}}}for all0<k<n{\\displaystyle\n0<k<n}ifn{\\displaystyle n}is prime.\n\nWhile the relation (**[1](https://en.wikipedia.org/wiki/AKS_primality_test#math_1)**) constitutes a primality test in itself, verifying it takes[exponential\ntime](https://en.wikipedia.org/wiki/Exponential_time): the[brute force](https://en.wikipedia.org/wiki/Brute_force_method)approach would require the expansion of\nthe(X+a)n{\\displaystyle (X+a)^{n}}polynomial and a reduction(modn){\\displaystyle {\\pmod {n}}}of the resultingn+1{\\displaystyle n+1}coefficients.\n\nThe congruence is an equality in the[polynomial ring](https://en.wikipedia.org/wiki/Polynomial_ring)(Z/nZ)[X]{\\displaystyle (\\mathbb {Z} /n\\mathbb {Z} )[X]}.\nEvaluating in a quotient ring of(Z/nZ)[X]{\\displaystyle (\\mathbb {Z} /n\\mathbb {Z} )[X]}creates an upper bound for the degree of the polynomials involved. The\nAKS evaluates the equality in(Z/nZ)[X]/(Xr−1){\\displaystyle (\\mathbb {Z} /n\\mathbb {Z} )[X]/(X^{r}-1)}, making the[computational\ncomplexity](https://en.wikipedia.org/wiki/Computational_complexity_theory)dependent on the size ofr{\\displaystyle r}. For\nclarity,[[1]](https://en.wikipedia.org/wiki/AKS_primality_test#cite_note-AKS-1)this is expressed as the congruence(X+a)n≡(Xn+a)(modXr−1,n){\\displaystyle\n(X+a)^{n}\\equiv (X^{n}+a){\\pmod {X^{r}-1,n}}}2\n\nwhich is the same as:(X+a)n−(Xn+a)=(Xr−1)g+nf{\\displaystyle (X+a)^{n}-(X^{n}+a)=(X^{r}-1)g+nf}3"
+          },
+          {
+            "source_id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+            "artifact_id": "artifact:e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f",
+            "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f",
+            "title": "Primality Testing in Polynomial Time: From Randomized Algorithms to \"PRIMES Is in P\" | Springer Nature Link",
+            "url": "https://link.springer.com/book/10.1007/b12334",
+            "locator": {
+              "line_start": 1,
+              "line_end": 8
+            },
+            "content": "## Client Challenge\n\n**Source**: https://link.springer.com/book/10.1007/b12334\n\n---\n\nA required part of this site couldn’t load. This may be due to a browser extension, network issues, or browser settings. Please check your connection, disable\nany ad blockers, or try using a different browser."
+          },
+          {
+            "source_id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+            "artifact_id": "artifact:5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b",
+            "sha256": "5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b",
+            "title": "Identifying primes in polynomial time: the AKS algorithm",
+            "url": "https://academicweb.nd.edu/~andyp/notes/AKS.pdf",
+            "locator": {
+              "line_start": 1,
+              "line_end": 2
+            },
+            "content": "extract_unsupported_content\nResponse content type is not supported."
+          }
+        ],
+        "summaries": {
+          "summaries": [
+            {
+              "source_id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+              "summary": "The source fails to provide substantive content due to an upstream extraction error, returning only an unsupported response notification.",
+              "limits": "Content unavailable; scope restricted to error notification regarding upstream retrieval failure."
+            },
+            {
+              "source_id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+              "summary": "The AKS primality test, introduced in 2002 by Agrawal, Kayal, and Saxena, is the first algorithm to deterministically verify primality in polynomial time without relying on unproven conjectures like the generalized Riemann hypothesis. It operates by checking a polynomial congruence relation over a quotient ring. Despite its theoretical significance as a general, unconditional, and polynomial-time proof, it is considered a galactic algorithm for practical use due to slower performance compared to probabilistic tests like Baillie–PSW or other deterministic methods like ECPP and APR.",
+              "limits": "Scope limited to the provided Wikipedia excerpt detailing algorithmic properties, historical context, mathematical foundation, and practical computational comparisons."
+            },
+            {
+              "source_id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+              "summary": "The source returns a client-side loading failure, indicating that the requested Springer book chapter could not render due to potential browser extensions, network issues, or settings.",
+              "limits": "Content inaccessible; scope restricted to technical error messaging regarding site rendering failure."
+            },
+            {
+              "source_id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+              "summary": "The source fails to extract content, reporting that the PDF document's content type is unsupported by the extraction tool.",
+              "limits": "Content unavailable; scope restricted to system notification regarding unsupported file format processing."
+            }
+          ]
+        },
+        "review": {
+          "findings": [
+            {
+              "check_id": "ARGUMENT-CHAIN-BREAK",
+              "severity": "major",
+              "evidence": [
+                {
+                  "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+                  "locator": "1-2",
+                  "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+                },
+                {
+                  "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+                  "locator": "1-341",
+                  "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+                },
+                {
+                  "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+                  "locator": "1-8",
+                  "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+                },
+                {
+                  "id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+                  "locator": "1-2",
+                  "sha256": "5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b"
+                }
+              ],
+              "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible."
+            }
+          ],
+          "summary": "The evidence base fails to support the direction's core objective due to a severe asymmetry in source availability. Three of four sources are inaccessible or contain extraction errors, and the sole functional source details only the AKS primality test. Crucially, there is zero substantive evidence regarding integer factorization's complexity class or hardness assumptions. Consequently, the required comparative synthesis mapping algorithmic classes and distinguishing worst-case from average-case hardness cannot be validated, necessitating major repair before the direction result can be admitted."
+        }
+      },
+      "created_at": "2026-08-13T19:49:36.765046+00:00",
+      "completed_at": "2026-08-13T19:51:53.026190+00:00",
+      "steps": [
+        {
+          "id": "step:2f3890555a6c24f275a0c931031982de866545db8031e0084d15ea9ee0694952",
+          "work_item_id": "work:7d8804da8b5c9e913ec0a38b",
+          "ordinal": 0,
+          "role": "acquire",
+          "status": "completed",
+          "attempt_id": "attempt:23e1183b540167a2b55dd9ff",
+          "output": {
+            "sources": [
+              {
+                "source_id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+                "artifact_id": "artifact:af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6",
+                "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6",
+                "title": "Why is not known whether integer factorization can be done in polynomial time knowing how to do primality tests efficiently?",
+                "url": "https://cs.stackexchange.com/questions/50767/why-is-not-known-whether-integer-factorization-can-be-done-in-polynomial-time-kn",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 2
+                },
+                "content": "extract_upstream_error\nTarget returned an unsupported response."
+              },
+              {
+                "source_id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+                "artifact_id": "artifact:1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06",
+                "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06",
+                "title": "AKS primality test",
+                "url": "https://en.wikipedia.org/wiki/AKS_primality_test",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 341
+                },
+                "content": "## AKS primality test - Wikipedia\n\n**Source**: https://en.wikipedia.org/wiki/AKS_primality_test\n\n---\n\n[Jump to content](https://en.wikipedia.org/wiki/AKS_primality_test#bodyContent)\n\nFrom Wikipedia, the free encyclopedia\n\nAlgorithm checking for prime numbers\n\nThe**AKS primality test**(also known as the**Agrawal–Kayal–Saxena primality test**and the**cyclotomic AKS test**) is\na[deterministic](https://en.wikipedia.org/wiki/Deterministic_algorithm)[primality-\nproving](https://en.wikipedia.org/wiki/Primality_test)[algorithm](https://en.wikipedia.org/wiki/Algorithm)created and published by[Manindra\nAgrawal](https://en.wikipedia.org/wiki/Manindra_Agrawal),[Neeraj Kayal](https://en.wikipedia.org/wiki/Neeraj_Kayal), and[Nitin\nSaxena](https://en.wikipedia.org/wiki/Nitin_Saxena), computer scientists at the[Indian Institute of Technology\nKanpur](https://en.wikipedia.org/wiki/Indian_Institute_of_Technology_Kanpur), on August 6, 2002, in an article titled \"PRIMES is in\nP\".[[1]](https://en.wikipedia.org/wiki/AKS_primality_test#cite_note-AKS-1)The algorithm was the first one which is able to determine in[polynomial\ntime](https://en.wikipedia.org/wiki/Polynomial_time), whether a given number\nis[prime](https://en.wikipedia.org/wiki/Prime_number)or[composite](https://en.wikipedia.org/wiki/Composite_number)without relying on[mathematical\nconjectures](https://en.wikipedia.org/wiki/Mathematical_conjecture)such as the[generalized Riemann\nhypothesis](https://en.wikipedia.org/wiki/Generalized_Riemann_hypothesis). The proof is also notable for not relying on the field\nof[analysis](https://en.wikipedia.org/wiki/Analysis_(mathematics)).[[2]](https://en.wikipedia.org/wiki/AKS_primality_test#cite_note-2)In 2006 the authors\nreceived both the[Gödel Prize](https://en.wikipedia.org/wiki/G%C3%B6del_Prize)and[Fulkerson Prize](https://en.wikipedia.org/wiki/Fulkerson_Prize)for their work.\n\n## Importance[[edit](https://en.wikipedia.org/w/index.php?title=AKS_primality_test&action=edit&section=1)]\n\nAKS is the first primality-proving algorithm to be simultaneously*general*,*polynomial-time*,*deterministic*, and*unconditionally correct*. Previous algorithms\nhad been developed for centuries and achieved three of these properties at most, but not all four.\n- The AKS algorithm can be used to verify the primality of any**general**number given. Many fast primality tests are known that work only for numbers with\ncertain properties. For example, the[Lucas–Lehmer test](https://en.wikipedia.org/wiki/Lucas%E2%80%93Lehmer_primality_test)works only for[Mersenne\nnumbers](https://en.wikipedia.org/wiki/Mersenne_number), while[Pépin's test](https://en.wikipedia.org/wiki/P%C3%A9pin%27s_test)can be applied to[Fermat\nnumbers](https://en.wikipedia.org/wiki/Fermat_number)only.\n- The maximum running time of the algorithm can be bounded by a**[polynomial](https://en.wikipedia.org/wiki/Polynomial_time#Polynomial_time)**over the number of\ndigits in the target number.[ECPP](https://en.wikipedia.org/wiki/Elliptic_curve_primality_proving)and[APR](https://en.wikipedia.org/wiki/Adleman%E2%80%93Pomeran\nce%E2%80%93Rumely_primality_test)conclusively prove or disprove that a given number is prime, but are not known to have polynomial time bounds for all inputs.\n- The algorithm is guaranteed to distinguish**[deterministically](https://en.wikipedia.org/wiki/Deterministic_algorithm)**whether the target number is prime or\ncomposite. Randomized tests, such as[Miller–Rabin](https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test)and[Baillie–PSW](https://en.wikipedia.org/w\niki/Baillie%E2%80%93PSW_primality_test), can test any given number for primality in polynomial time, but are known to produce only a probabilistic result.\n- The correctness of AKS is**not conditional**on any subsidiary unproved[hypothesis](https://en.wikipedia.org/wiki/Hypothesis). In contrast, Miller's version of\nthe[Miller–Rabin test](https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test#Deterministic_variants)is fully deterministic and runs in polynomial\ntime over all inputs, but its correctness depends on the truth of the yet-unproved[generalized Riemann\nhypothesis](https://en.wikipedia.org/wiki/Generalized_Riemann_hypothesis).\n\nWhile the algorithm is of immense theoretical importance, it is not used in practice, rendering it a[galactic\nalgorithm](https://en.wikipedia.org/wiki/Galactic_algorithm). For 64-bit inputs, the[Baillie–PSW\ntest](https://en.wikipedia.org/wiki/Baillie%E2%80%93PSW_primality_test)is deterministic and runs many orders of magnitude faster. For larger inputs, the\nperformance of the (also unconditionally correct) ECPP and APR tests is*far*superior to AKS. Additionally, ECPP can output a[primality\ncertificate](https://en.wikipedia.org/wiki/Primality_certificate)that allows independent and rapid verification of the results, which is not possible with the\nAKS algorithm.\n\n## Concepts[[edit](https://en.wikipedia.org/w/index.php?title=AKS_primality_test&action=edit&section=2)]\n\nThe AKS primality test is based upon the following theorem: Given an integern≥2{\\displaystyle n\\geq 2}and integera{\\displaystyle\na}[coprime](https://en.wikipedia.org/wiki/Coprime)ton{\\displaystyle n},n{\\displaystyle n}is prime if and only if\nthe[polynomial](https://en.wikipedia.org/wiki/Polynomial_ring)[congruence\nrelation](https://en.wikipedia.org/wiki/Congruence_relation#Modular_arithmetic)(X+a)n≡Xn+a(modn){\\displaystyle (X+a)^{n}\\equiv X^{n}+a{\\pmod {n}}}1\n\nholds within the polynomial ring(Z/nZ)[X]{\\displaystyle (\\mathbb {Z} /n\\mathbb {Z} )[X]}.[[1]](https://en.wikipedia.org/wiki/AKS_primality_test#cite_note-\nAKS-1)Note thatX{\\displaystyle X}denotes the[indeterminate](https://en.wikipedia.org/wiki/Polynomial_ring#Definition_(univariate_case))which generates this\npolynomial ring.\n\nThis theorem is a generalization to polynomials of[Fermat's little theorem](https://en.wikipedia.org/wiki/Fermat's_little_theorem). In one direction it can\neasily be proved using the[binomial theorem](https://en.wikipedia.org/wiki/Binomial_theorem)together with the following property of the[binomial\ncoefficient](https://en.wikipedia.org/wiki/Binomial_coefficient):(nk)≡0(modn){\\displaystyle {n \\choose k}\\equiv 0{\\pmod {n}}}for all0<k<n{\\displaystyle\n0<k<n}ifn{\\displaystyle n}is prime.\n\nWhile the relation (**[1](https://en.wikipedia.org/wiki/AKS_primality_test#math_1)**) constitutes a primality test in itself, verifying it takes[exponential\ntime](https://en.wikipedia.org/wiki/Exponential_time): the[brute force](https://en.wikipedia.org/wiki/Brute_force_method)approach would require the expansion of\nthe(X+a)n{\\displaystyle (X+a)^{n}}polynomial and a reduction(modn){\\displaystyle {\\pmod {n}}}of the resultingn+1{\\displaystyle n+1}coefficients.\n\nThe congruence is an equality in the[polynomial ring](https://en.wikipedia.org/wiki/Polynomial_ring)(Z/nZ)[X]{\\displaystyle (\\mathbb {Z} /n\\mathbb {Z} )[X]}.\nEvaluating in a quotient ring of(Z/nZ)[X]{\\displaystyle (\\mathbb {Z} /n\\mathbb {Z} )[X]}creates an upper bound for the degree of the polynomials involved. The\nAKS evaluates the equality in(Z/nZ)[X]/(Xr−1){\\displaystyle (\\mathbb {Z} /n\\mathbb {Z} )[X]/(X^{r}-1)}, making the[computational\ncomplexity](https://en.wikipedia.org/wiki/Computational_complexity_theory)dependent on the size ofr{\\displaystyle r}. For\nclarity,[[1]](https://en.wikipedia.org/wiki/AKS_primality_test#cite_note-AKS-1)this is expressed as the congruence(X+a)n≡(Xn+a)(modXr−1,n){\\displaystyle\n(X+a)^{n}\\equiv (X^{n}+a){\\pmod {X^{r}-1,n}}}2\n\nwhich is the same as:(X+a)n−(Xn+a)=(Xr−1)g+nf{\\displaystyle (X+a)^{n}-(X^{n}+a)=(X^{r}-1)g+nf}3"
+              },
+              {
+                "source_id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+                "artifact_id": "artifact:e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f",
+                "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f",
+                "title": "Primality Testing in Polynomial Time: From Randomized Algorithms to \"PRIMES Is in P\" | Springer Nature Link",
+                "url": "https://link.springer.com/book/10.1007/b12334",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 8
+                },
+                "content": "## Client Challenge\n\n**Source**: https://link.springer.com/book/10.1007/b12334\n\n---\n\nA required part of this site couldn’t load. This may be due to a browser extension, network issues, or browser settings. Please check your connection, disable\nany ad blockers, or try using a different browser."
+              },
+              {
+                "source_id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+                "artifact_id": "artifact:5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b",
+                "sha256": "5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b",
+                "title": "Identifying primes in polynomial time: the AKS algorithm",
+                "url": "https://academicweb.nd.edu/~andyp/notes/AKS.pdf",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 2
+                },
+                "content": "extract_unsupported_content\nResponse content type is not supported."
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:49:36.810842+00:00",
+          "completed_at": "2026-08-13T19:50:39.210933+00:00"
+        },
+        {
+          "id": "step:0f8878361c12e807a86b4b060a089200def2e9c28f61041848d5d395d17fd307",
+          "work_item_id": "work:7d8804da8b5c9e913ec0a38b",
+          "ordinal": 1,
+          "role": "summarize",
+          "status": "completed",
+          "attempt_id": "attempt:4f630ce9c09bff3b082f9f6f",
+          "output": {
+            "summaries": [
+              {
+                "source_id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+                "summary": "The source fails to provide substantive content due to an upstream extraction error, returning only an unsupported response notification.",
+                "limits": "Content unavailable; scope restricted to error notification regarding upstream retrieval failure."
+              },
+              {
+                "source_id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+                "summary": "The AKS primality test, introduced in 2002 by Agrawal, Kayal, and Saxena, is the first algorithm to deterministically verify primality in polynomial time without relying on unproven conjectures like the generalized Riemann hypothesis. It operates by checking a polynomial congruence relation over a quotient ring. Despite its theoretical significance as a general, unconditional, and polynomial-time proof, it is considered a galactic algorithm for practical use due to slower performance compared to probabilistic tests like Baillie–PSW or other deterministic methods like ECPP and APR.",
+                "limits": "Scope limited to the provided Wikipedia excerpt detailing algorithmic properties, historical context, mathematical foundation, and practical computational comparisons."
+              },
+              {
+                "source_id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+                "summary": "The source returns a client-side loading failure, indicating that the requested Springer book chapter could not render due to potential browser extensions, network issues, or settings.",
+                "limits": "Content inaccessible; scope restricted to technical error messaging regarding site rendering failure."
+              },
+              {
+                "source_id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+                "summary": "The source fails to extract content, reporting that the PDF document's content type is unsupported by the extraction tool.",
+                "limits": "Content unavailable; scope restricted to system notification regarding unsupported file format processing."
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:50:39.227543+00:00",
+          "completed_at": "2026-08-13T19:51:13.972212+00:00"
+        },
+        {
+          "id": "step:452f3535e31b2ff042416c895d72c1e4354b09b53037f7caf8d94697ca489248",
+          "work_item_id": "work:7d8804da8b5c9e913ec0a38b",
+          "ordinal": 2,
+          "role": "review",
+          "status": "completed",
+          "attempt_id": "attempt:afd1c777836a532c5a0f9e89",
+          "output": {
+            "findings": [
+              {
+                "check_id": "ARGUMENT-CHAIN-BREAK",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+                    "locator": "1-2",
+                    "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+                  },
+                  {
+                    "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+                    "locator": "1-341",
+                    "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+                  },
+                  {
+                    "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+                    "locator": "1-8",
+                    "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+                  },
+                  {
+                    "id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+                    "locator": "1-2",
+                    "sha256": "5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b"
+                  }
+                ],
+                "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible."
+              }
+            ],
+            "summary": "The evidence base fails to support the direction's core objective due to a severe asymmetry in source availability. Three of four sources are inaccessible or contain extraction errors, and the sole functional source details only the AKS primality test. Crucially, there is zero substantive evidence regarding integer factorization's complexity class or hardness assumptions. Consequently, the required comparative synthesis mapping algorithmic classes and distinguishing worst-case from average-case hardness cannot be validated, necessitating major repair before the direction result can be admitted."
+          },
+          "started_at": "2026-08-13T19:51:13.989544+00:00",
+          "completed_at": "2026-08-13T19:51:53.014776+00:00"
+        }
+      ],
+      "findings": [
+        {
+          "id": "finding:2871d439a1c84e88fe0a345e",
+          "work_item_id": "work:7d8804da8b5c9e913ec0a38b",
+          "step_id": "step:452f3535e31b2ff042416c895d72c1e4354b09b53037f7caf8d94697ca489248",
+          "reviewer": "source-reviewer",
+          "check_id": "ARGUMENT-CHAIN-BREAK",
+          "severity": "major",
+          "evidence": [
+            {
+              "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+              "locator": "1-2",
+              "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+            },
+            {
+              "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+              "locator": "1-341",
+              "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+            },
+            {
+              "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+              "locator": "1-8",
+              "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+            },
+            {
+              "id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+              "locator": "1-2",
+              "sha256": "5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b"
+            }
+          ],
+          "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:51:53.020837+00:00"
+        }
+      ]
+    },
+    {
+      "id": "work:0119aa996024e9964d19d718",
+      "cycle_id": "cycle:fcfc2981fafa11d48fda2483",
+      "project_id": "project:d475f86808f0a40816bbc0e8b6d347ead4c179638295758080d792f1addba807",
+      "direction_id": "node:c6d7012648fdfb0b4f207a4a6a799ce9",
+      "generation_id": "generation:08238d9eeffd114ee43615e5f2173f1b9af50afe4c5aad24a19f41becdd51c45",
+      "kind": "claim",
+      "status": "completed",
+      "input": {
+        "direction": {
+          "title": "Computational asymmetry between primality testing and integer factorization",
+          "rationale": "Synthesize theoretical computer science literature to clarify why deterministic primality verification resides in P while exact factorization remains computationally intractable.",
+          "workflow": "evidence_synthesis",
+          "completion_test": "A structured review explicitly maps algorithmic classes, cites peer-reviewed complexity proofs, and distinguishes worst-case from average-case hardness.",
+          "remaining": "Engineering teams must choose which hardness assumptions align with current hardware capabilities and threat models for deployment.",
+          "position": 2
+        }
+      },
+      "output": {
+        "claims": [
+          {
+            "node_id": "node:9a533c0c178cbb9e7abc96c4c667d5a0",
+            "text": "The AKS primality test establishes a deterministic polynomial-time upper bound for verifying the primality of any general integer without relying on unproven conjectures such as the generalized Riemann hypothesis.",
+            "kind": "evidence",
+            "source_ids": [
+              "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6"
+            ],
+            "scope": "Computational complexity classes of deterministic primality proving algorithms",
+            "rebuttal": {
+              "claim_index": 0,
+              "challenge": "Missing observation: The claim conflates worst-case complexity class membership (P) with cryptographic hardness. While AKS proves primality testing is theoretically tractable, it does not explain why factorization remains intractable, as cryptographic security relies on average-case difficulty rather than worst-case class boundaries.",
+              "repair": "Clarify that P-class membership guarantees asymptotic solvability but does not imply practical equivalence to factoring; explicitly distinguish between worst-case complexity proofs and the average-case hardness assumptions required for cryptographic deployment."
+            }
+          },
+          {
+            "node_id": "node:5d09e2ed53432f9810e4408afd6e4ff5",
+            "text": "Practical utility of the AKS algorithm is computationally bounded by its high operational overhead, categorizing it as a galactic algorithm where probabilistic tests like Baillie–PSW and deterministic methods like ECPP and APR demonstrate significantly faster execution times for standard input sizes.",
+            "kind": "bound",
+            "source_ids": [
+              "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6"
+            ],
+            "scope": "Algorithmic efficiency thresholds and comparative performance metrics in cryptographic hardware deployments",
+            "rebuttal": {
+              "claim_index": 1,
+              "challenge": "Scope limit: The term 'galactic algorithm' is misapplied here. In computational theory, it denotes problems requiring inputs so large they exceed universal resource limits, whereas AKS is merely inefficient due to high polynomial degrees and constant factors. The claim also ignores that hardware evolution and algorithmic refinements continuously shift practical performance thresholds.",
+              "repair": "Replace the informal classification with precise asymptotic bounds and constant-factor analysis; contextualize the performance comparison within classical threat models while noting that cryptographic teams prioritize provable certificates (ECPP/APR) over raw speed for critical infrastructure."
+            }
+          },
+          {
+            "node_id": "node:d63d3c73ceb56ec0fce2b1b42c3e1d28",
+            "text": "The core verification mechanism of the AKS test requires evaluating a polynomial congruence relation within a quotient ring, where naive brute-force expansion of the polynomial terms inherently demands exponential time prior to optimization via modular arithmetic reductions.",
+            "kind": "evidence",
+            "source_ids": [
+              "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6"
+            ],
+            "scope": "Mathematical foundations and computational complexity of polynomial ring operations in primality testing",
+            "rebuttal": {
+              "claim_index": 2,
+              "challenge": "Alternative explanation: The claim incorrectly implies the polynomial congruence evaluation is inherently exponential. The exponential cost applies only to naive binomial expansion; the algorithm circumvents this through strategic parameter selection (finding optimal r) and fast modular exponentiation in the quotient ring, which reduces the operation to polynomial time.",
+              "repair": "Detail the critical optimization steps—specifically the bound on r, the use of binary exponentiation for polynomial powers, and coefficient reduction modulo n—that transform the naive exponential expansion into the proven polynomial-time complexity."
+            }
+          }
+        ],
+        "rebuttal": {
+          "rebuttals": [
+            {
+              "claim_index": 0,
+              "challenge": "Missing observation: The claim conflates worst-case complexity class membership (P) with cryptographic hardness. While AKS proves primality testing is theoretically tractable, it does not explain why factorization remains intractable, as cryptographic security relies on average-case difficulty rather than worst-case class boundaries.",
+              "repair": "Clarify that P-class membership guarantees asymptotic solvability but does not imply practical equivalence to factoring; explicitly distinguish between worst-case complexity proofs and the average-case hardness assumptions required for cryptographic deployment."
+            },
+            {
+              "claim_index": 1,
+              "challenge": "Scope limit: The term 'galactic algorithm' is misapplied here. In computational theory, it denotes problems requiring inputs so large they exceed universal resource limits, whereas AKS is merely inefficient due to high polynomial degrees and constant factors. The claim also ignores that hardware evolution and algorithmic refinements continuously shift practical performance thresholds.",
+              "repair": "Replace the informal classification with precise asymptotic bounds and constant-factor analysis; contextualize the performance comparison within classical threat models while noting that cryptographic teams prioritize provable certificates (ECPP/APR) over raw speed for critical infrastructure."
+            },
+            {
+              "claim_index": 2,
+              "challenge": "Alternative explanation: The claim incorrectly implies the polynomial congruence evaluation is inherently exponential. The exponential cost applies only to naive binomial expansion; the algorithm circumvents this through strategic parameter selection (finding optimal r) and fast modular exponentiation in the quotient ring, which reduces the operation to polynomial time.",
+              "repair": "Detail the critical optimization steps—specifically the bound on r, the use of binary exponentiation for polynomial powers, and coefficient reduction modulo n—that transform the naive exponential expansion into the proven polynomial-time complexity."
+            }
+          ]
+        },
+        "review": {
+          "findings": [
+            {
+              "check_id": "ARGUMENT-CHAIN-BREAK",
+              "severity": "major",
+              "evidence": [
+                {
+                  "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+                  "locator": "1-2",
+                  "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+                },
+                {
+                  "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+                  "locator": "1-341",
+                  "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+                },
+                {
+                  "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+                  "locator": "1-8",
+                  "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+                },
+                {
+                  "id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+                  "locator": "1-2",
+                  "sha256": "5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b"
+                }
+              ],
+              "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible."
+            }
+          ],
+          "summary": "The evidence base fails to support the direction's core objective due to a severe asymmetry in source availability. Three of four sources are inaccessible or contain extraction errors, and the sole functional source details only the AKS primality test. Crucially, there is zero substantive evidence regarding integer factorization's complexity class or hardness assumptions. Consequently, the required comparative synthesis mapping algorithmic classes and distinguishing worst-case from average-case hardness cannot be validated, necessitating major repair before the direction result can be admitted."
+        }
+      },
+      "created_at": "2026-08-13T19:51:53.047141+00:00",
+      "completed_at": "2026-08-13T19:52:59.895678+00:00",
+      "steps": [
+        {
+          "id": "step:21beb42e7185ef486df5a97de061b042d0c2565a9335170c5d5bcd5ca7e55d53",
+          "work_item_id": "work:0119aa996024e9964d19d718",
+          "ordinal": 0,
+          "role": "propose",
+          "status": "completed",
+          "attempt_id": "attempt:630d689f4f1a00f4e3d138d0",
+          "output": {
+            "claims": [
+              {
+                "text": "The AKS primality test establishes a deterministic polynomial-time upper bound for verifying the primality of any general integer without relying on unproven conjectures such as the generalized Riemann hypothesis.",
+                "kind": "evidence",
+                "source_ids": [
+                  "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6"
+                ],
+                "scope": "Computational complexity classes of deterministic primality proving algorithms"
+              },
+              {
+                "text": "Practical utility of the AKS algorithm is computationally bounded by its high operational overhead, categorizing it as a galactic algorithm where probabilistic tests like Baillie–PSW and deterministic methods like ECPP and APR demonstrate significantly faster execution times for standard input sizes.",
+                "kind": "bound",
+                "source_ids": [
+                  "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6"
+                ],
+                "scope": "Algorithmic efficiency thresholds and comparative performance metrics in cryptographic hardware deployments"
+              },
+              {
+                "text": "The core verification mechanism of the AKS test requires evaluating a polynomial congruence relation within a quotient ring, where naive brute-force expansion of the polynomial terms inherently demands exponential time prior to optimization via modular arithmetic reductions.",
+                "kind": "evidence",
+                "source_ids": [
+                  "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6"
+                ],
+                "scope": "Mathematical foundations and computational complexity of polynomial ring operations in primality testing"
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:51:53.068830+00:00",
+          "completed_at": "2026-08-13T19:52:09.785642+00:00"
+        },
+        {
+          "id": "step:bd7dca4eaeee0d2816c4bbfe072a59d2a3b40302d2c01f65745f47f66699fd39",
+          "work_item_id": "work:0119aa996024e9964d19d718",
+          "ordinal": 1,
+          "role": "rebut",
+          "status": "completed",
+          "attempt_id": "attempt:e6e16b19020a91a7b85e4759",
+          "output": {
+            "rebuttals": [
+              {
+                "claim_index": 0,
+                "challenge": "Missing observation: The claim conflates worst-case complexity class membership (P) with cryptographic hardness. While AKS proves primality testing is theoretically tractable, it does not explain why factorization remains intractable, as cryptographic security relies on average-case difficulty rather than worst-case class boundaries.",
+                "repair": "Clarify that P-class membership guarantees asymptotic solvability but does not imply practical equivalence to factoring; explicitly distinguish between worst-case complexity proofs and the average-case hardness assumptions required for cryptographic deployment."
+              },
+              {
+                "claim_index": 1,
+                "challenge": "Scope limit: The term 'galactic algorithm' is misapplied here. In computational theory, it denotes problems requiring inputs so large they exceed universal resource limits, whereas AKS is merely inefficient due to high polynomial degrees and constant factors. The claim also ignores that hardware evolution and algorithmic refinements continuously shift practical performance thresholds.",
+                "repair": "Replace the informal classification with precise asymptotic bounds and constant-factor analysis; contextualize the performance comparison within classical threat models while noting that cryptographic teams prioritize provable certificates (ECPP/APR) over raw speed for critical infrastructure."
+              },
+              {
+                "claim_index": 2,
+                "challenge": "Alternative explanation: The claim incorrectly implies the polynomial congruence evaluation is inherently exponential. The exponential cost applies only to naive binomial expansion; the algorithm circumvents this through strategic parameter selection (finding optimal r) and fast modular exponentiation in the quotient ring, which reduces the operation to polynomial time.",
+                "repair": "Detail the critical optimization steps—specifically the bound on r, the use of binary exponentiation for polynomial powers, and coefficient reduction modulo n—that transform the naive exponential expansion into the proven polynomial-time complexity."
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:52:09.803157+00:00",
+          "completed_at": "2026-08-13T19:52:33.499028+00:00"
+        },
+        {
+          "id": "step:e95655e4382c98d652445b28ec42ea8c8f576d6e8509467f05142d7e14dcce7f",
+          "work_item_id": "work:0119aa996024e9964d19d718",
+          "ordinal": 2,
+          "role": "review",
+          "status": "completed",
+          "attempt_id": "attempt:cc97143c38b6fea6325aa8bb",
+          "output": {
+            "findings": [
+              {
+                "check_id": "ARGUMENT-CHAIN-BREAK",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+                    "locator": "1-2",
+                    "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+                  },
+                  {
+                    "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+                    "locator": "1-341",
+                    "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+                  },
+                  {
+                    "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+                    "locator": "1-8",
+                    "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+                  },
+                  {
+                    "id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+                    "locator": "1-2",
+                    "sha256": "5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b"
+                  }
+                ],
+                "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible."
+              }
+            ],
+            "summary": "The evidence base fails to support the direction's core objective due to a severe asymmetry in source availability. Three of four sources are inaccessible or contain extraction errors, and the sole functional source details only the AKS primality test. Crucially, there is zero substantive evidence regarding integer factorization's complexity class or hardness assumptions. Consequently, the required comparative synthesis mapping algorithmic classes and distinguishing worst-case from average-case hardness cannot be validated, necessitating major repair before the direction result can be admitted."
+          },
+          "started_at": "2026-08-13T19:52:33.515523+00:00",
+          "completed_at": "2026-08-13T19:52:59.658731+00:00"
+        }
+      ],
+      "findings": [
+        {
+          "id": "finding:ffea4d2e693cf899acfb5ad7",
+          "work_item_id": "work:0119aa996024e9964d19d718",
+          "step_id": "step:e95655e4382c98d652445b28ec42ea8c8f576d6e8509467f05142d7e14dcce7f",
+          "reviewer": "claim-reviewer",
+          "check_id": "ARGUMENT-CHAIN-BREAK",
+          "severity": "major",
+          "evidence": [
+            {
+              "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+              "locator": "1-2",
+              "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+            },
+            {
+              "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+              "locator": "1-341",
+              "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+            },
+            {
+              "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+              "locator": "1-8",
+              "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+            },
+            {
+              "id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+              "locator": "1-2",
+              "sha256": "5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b"
+            }
+          ],
+          "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:52:59.670406+00:00"
+        }
+      ]
+    },
+    {
+      "id": "work:f08bcc7328f604fd7b0d50b1",
+      "cycle_id": "cycle:fcfc2981fafa11d48fda2483",
+      "project_id": "project:d475f86808f0a40816bbc0e8b6d347ead4c179638295758080d792f1addba807",
+      "direction_id": "node:c6d7012648fdfb0b4f207a4a6a799ce9",
+      "generation_id": "generation:b9e485134154280ecc1df57d1799b2bd2496adffad3cdbe1cc05328829845d67",
+      "kind": "report",
+      "status": "completed",
+      "input": {
+        "direction": {
+          "title": "Computational asymmetry between primality testing and integer factorization",
+          "rationale": "Synthesize theoretical computer science literature to clarify why deterministic primality verification resides in P while exact factorization remains computationally intractable.",
+          "workflow": "evidence_synthesis",
+          "completion_test": "A structured review explicitly maps algorithmic classes, cites peer-reviewed complexity proofs, and distinguishes worst-case from average-case hardness.",
+          "remaining": "Engineering teams must choose which hardness assumptions align with current hardware capabilities and threat models for deployment.",
+          "position": 2
+        }
+      },
+      "output": {
+        "title": "Computational asymmetry between primality testing and integer factorization",
+        "learned": [
+          "Deterministic primality verification resides in P, as proven by the AKS algorithm, without relying on unproven conjectures like the generalized Riemann hypothesis.",
+          "AKS operates via polynomial congruence relations in quotient rings, where strategic parameter selection and modular arithmetic reduce naive exponential expansion to polynomial time.",
+          "Theoretical tractability in P does not translate to practical efficiency; AKS is outperformed by probabilistic tests (Baillie–PSW) and certificate-generating methods (ECPP, APR).",
+          "Worst-case complexity class membership is fundamentally distinct from the average-case hardness assumptions that govern cryptographic security."
+        ],
+        "evidence": [
+          "The available dataset exclusively substantiates the theoretical properties, mathematical foundations, and comparative performance metrics of the AKS primality test.",
+          "It confirms that primality proving can be achieved deterministically in polynomial time and accurately describes the algorithmic optimizations required to avoid exponential overhead.",
+          "It validates that asymptotic solvability guarantees do not equate to practical cryptographic utility or factorization capability."
+        ],
+        "limitations": [
+          "The evidence base contains zero substantive data on integer factorization algorithms, their time complexity, or formal hardness assumptions.",
+          "Three of four source retrievals failed due to upstream extraction errors, network issues, or unsupported content types.",
+          "The synthesis cannot establish the required computational asymmetry between primality testing and factorization.",
+          "It cannot validate distinctions between worst-case complexity boundaries and the average-case hardness assumptions critical for cryptographic deployment."
+        ],
+        "open_questions": [
+          "How do sub-exponential factorization algorithms formally scale relative to polynomial primality tests across varying input sizes?",
+          "Which specific average-case hardness assumptions currently underpin cryptographic systems, and how do they diverge from worst-case complexity proofs?",
+          "How will evolving hardware capabilities and algorithmic refinements shift the practical thresholds for cryptographic key security?"
+        ],
+        "next_moves": [
+          "Integrate peer-reviewed literature on integer factorization, specifically focusing on the General Number Field Sieve and sub-exponential time complexity.",
+          "Explicitly map algorithmic classes for both primality testing and factorization to construct a valid comparative synthesis.",
+          "Distinguish rigorously between worst-case complexity classifications and the average-case hardness assumptions required for cryptographic threat modeling.",
+          "Evaluate which hardness assumptions align with contemporary hardware capabilities and deployment requirements for engineering teams."
+        ],
+        "review": {
+          "findings": [
+            {
+              "check_id": "ARGUMENT-CHAIN-BREAK",
+              "severity": "major",
+              "evidence": [
+                {
+                  "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+                  "locator": "1-2",
+                  "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+                },
+                {
+                  "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+                  "locator": "1-341",
+                  "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+                },
+                {
+                  "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+                  "locator": "1-8",
+                  "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+                },
+                {
+                  "id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+                  "locator": "1-2",
+                  "sha256": "5b76592e66de71aaf6613906161aa862e8ecdb21efe5035d6df5b"
+                }
+              ],
+              "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible."
+            }
+          ],
+          "summary": "The evidence base fails to support the direction's core objective due to a severe asymmetry in source availability. Three of four sources are inaccessible or contain extraction errors, and the sole functional source details only the AKS primality test. Crucially, there is zero substantive evidence regarding integer factorization's complexity class or hardness assumptions. Consequently, the required comparative synthesis mapping algorithmic classes and distinguishing worst-case from average-case hardness cannot be validated, necessitating major repair before the direction result can be admitted."
+        }
+      },
+      "created_at": "2026-08-13T19:52:59.957856+00:00",
+      "completed_at": "2026-08-13T19:53:50.301448+00:00",
+      "steps": [
+        {
+          "id": "step:62fa3267d27a21e00707b136fea343ae00f44822a15913617401d1f6b11e627e",
+          "work_item_id": "work:f08bcc7328f604fd7b0d50b1",
+          "ordinal": 0,
+          "role": "synthesize",
+          "status": "completed",
+          "attempt_id": "attempt:cbaf823178fdd867fe611d6e",
+          "output": {
+            "title": "Computational asymmetry between primality testing and integer factorization",
+            "learned": [
+              "Deterministic primality verification resides in P, as proven by the AKS algorithm, without relying on unproven conjectures like the generalized Riemann hypothesis.",
+              "AKS operates via polynomial congruence relations in quotient rings, where strategic parameter selection and modular arithmetic reduce naive exponential expansion to polynomial time.",
+              "Theoretical tractability in P does not translate to practical efficiency; AKS is outperformed by probabilistic tests (Baillie–PSW) and certificate-generating methods (ECPP, APR).",
+              "Worst-case complexity class membership is fundamentally distinct from the average-case hardness assumptions that govern cryptographic security."
+            ],
+            "evidence": [
+              "The available dataset exclusively substantiates the theoretical properties, mathematical foundations, and comparative performance metrics of the AKS primality test.",
+              "It confirms that primality proving can be achieved deterministically in polynomial time and accurately describes the algorithmic optimizations required to avoid exponential overhead.",
+              "It validates that asymptotic solvability guarantees do not equate to practical cryptographic utility or factorization capability."
+            ],
+            "limitations": [
+              "The evidence base contains zero substantive data on integer factorization algorithms, their time complexity, or formal hardness assumptions.",
+              "Three of four source retrievals failed due to upstream extraction errors, network issues, or unsupported content types.",
+              "The synthesis cannot establish the required computational asymmetry between primality testing and factorization.",
+              "It cannot validate distinctions between worst-case complexity boundaries and the average-case hardness assumptions critical for cryptographic deployment."
+            ],
+            "open_questions": [
+              "How do sub-exponential factorization algorithms formally scale relative to polynomial primality tests across varying input sizes?",
+              "Which specific average-case hardness assumptions currently underpin cryptographic systems, and how do they diverge from worst-case complexity proofs?",
+              "How will evolving hardware capabilities and algorithmic refinements shift the practical thresholds for cryptographic key security?"
+            ],
+            "next_moves": [
+              "Integrate peer-reviewed literature on integer factorization, specifically focusing on the General Number Field Sieve and sub-exponential time complexity.",
+              "Explicitly map algorithmic classes for both primality testing and factorization to construct a valid comparative synthesis.",
+              "Distinguish rigorously between worst-case complexity classifications and the average-case hardness assumptions required for cryptographic threat modeling.",
+              "Evaluate which hardness assumptions align with contemporary hardware capabilities and deployment requirements for engineering teams."
+            ]
+          },
+          "started_at": "2026-08-13T19:53:00.114760+00:00",
+          "completed_at": "2026-08-13T19:53:23.946204+00:00"
+        },
+        {
+          "id": "step:fce714d7559a2e5aaab3a9a319e3539111eb31cb5225127efe6195b5c13003d4",
+          "work_item_id": "work:f08bcc7328f604fd7b0d50b1",
+          "ordinal": 1,
+          "role": "review",
+          "status": "completed",
+          "attempt_id": "attempt:e2f7228b2cf229f5eb7d6667",
+          "output": {
+            "findings": [
+              {
+                "check_id": "ARGUMENT-CHAIN-BREAK",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+                    "locator": "1-2",
+                    "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+                  },
+                  {
+                    "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+                    "locator": "1-341",
+                    "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+                  },
+                  {
+                    "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+                    "locator": "1-8",
+                    "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+                  },
+                  {
+                    "id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+                    "locator": "1-2",
+                    "sha256": "5b76592e66de71aaf6613906161aa862e8ecdb21efe5035d6df5b"
+                  }
+                ],
+                "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible."
+              }
+            ],
+            "summary": "The evidence base fails to support the direction's core objective due to a severe asymmetry in source availability. Three of four sources are inaccessible or contain extraction errors, and the sole functional source details only the AKS primality test. Crucially, there is zero substantive evidence regarding integer factorization's complexity class or hardness assumptions. Consequently, the required comparative synthesis mapping algorithmic classes and distinguishing worst-case from average-case hardness cannot be validated, necessitating major repair before the direction result can be admitted."
+          },
+          "started_at": "2026-08-13T19:53:23.962038+00:00",
+          "completed_at": "2026-08-13T19:53:50.279062+00:00"
+        },
+        {
+          "id": "step:b1985e4361040ae4dd8e910617ba2ea5194cae4eb3598fc62cf01d6c72f3d1e2",
+          "work_item_id": "work:f08bcc7328f604fd7b0d50b1",
+          "ordinal": 2,
+          "role": "publish",
+          "status": "completed",
+          "attempt_id": null,
+          "output": {
+            "published": true
+          },
+          "started_at": null,
+          "completed_at": "2026-08-13T19:53:50.295344+00:00"
+        }
+      ],
+      "findings": [
+        {
+          "id": "finding:a4b4a2c7c63bbac47b8038c0",
+          "work_item_id": "work:f08bcc7328f604fd7b0d50b1",
+          "step_id": "step:fce714d7559a2e5aaab3a9a319e3539111eb31cb5225127efe6195b5c13003d4",
+          "reviewer": "report-reviewer",
+          "check_id": "ARGUMENT-CHAIN-BREAK",
+          "severity": "major",
+          "evidence": [
+            {
+              "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+              "locator": "1-2",
+              "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+            },
+            {
+              "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+              "locator": "1-341",
+              "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+            },
+            {
+              "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+              "locator": "1-8",
+              "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+            }
+          ],
+          "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:53:50.289161+00:00"
+        }
+      ]
+    }
+  ],
+  "attempts": [
+    {
+      "id": "attempt:23e1183b540167a2b55dd9ff",
+      "run_id": "run:97ed3951048c20bb760ec065",
+      "generation_id": "generation:ca2222c096205b075dd26a02524b5bbe65fcf6051b2fcaaa9b063bddded74b38",
+      "snapshot_id": "project-snapshot:5b2af64488e01771c5c76dddeab704525701802bc8865d36f405c9971bb7ead6",
+      "actor": "source-acquirer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:1b6425f8faa31c971864707591758a603a8b031ceaece35b314a17210f7e542a",
+      "context_artifact_id": "artifact:ae0df07158534d6b619abc67dc0740a8bbd2c2177ac64b8837c604e55b21285f",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:49:36.792245+00:00",
+      "completed_at": "2026-08-13T19:50:39.199508+00:00",
+      "work_item_id": "work:7d8804da8b5c9e913ec0a38b",
+      "log_artifact_id": "artifact:25b3f75615ef5652f4dd6a2c7a49db7384c874c7705c6e1dfd4a36e1eaae7636"
+    },
+    {
+      "id": "attempt:4f630ce9c09bff3b082f9f6f",
+      "run_id": "run:97ed3951048c20bb760ec065",
+      "generation_id": "generation:ca2222c096205b075dd26a02524b5bbe65fcf6051b2fcaaa9b063bddded74b38",
+      "snapshot_id": "project-snapshot:5b2af64488e01771c5c76dddeab704525701802bc8865d36f405c9971bb7ead6",
+      "actor": "source-summarizer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:e02c5de35c1fbbc871607bb248b5916258ac005007603aecc3baef7a37e65775",
+      "context_artifact_id": "artifact:7f2c332973365184f9a067fbc26dc4c1c9fb438459301f9e72eed6a949114a56",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:50:39.217530+00:00",
+      "completed_at": "2026-08-13T19:51:13.963450+00:00",
+      "work_item_id": "work:7d8804da8b5c9e913ec0a38b",
+      "log_artifact_id": "artifact:e26d420d746c9f31657f3d6762d9c6197be08acd8e2a463932c39b56cc2eaca4"
+    },
+    {
+      "id": "attempt:afd1c777836a532c5a0f9e89",
+      "run_id": "run:97ed3951048c20bb760ec065",
+      "generation_id": "generation:ca2222c096205b075dd26a02524b5bbe65fcf6051b2fcaaa9b063bddded74b38",
+      "snapshot_id": "project-snapshot:5b2af64488e01771c5c76dddeab704525701802bc8865d36f405c9971bb7ead6",
+      "actor": "source-reviewer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:9899234c94a6bdfb4d49dc66b8faf7bec5c2203fdb43762eccfe20e809e9d41c",
+      "context_artifact_id": "artifact:0650b66cfa92d71900d70d489221344bc47a26004e7ec2331f23122ff122d275",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:51:13.978796+00:00",
+      "completed_at": "2026-08-13T19:51:53.004053+00:00",
+      "work_item_id": "work:7d8804da8b5c9e913ec0a38b",
+      "log_artifact_id": "artifact:cd0915f510fbab0a4fa38a0f9db6a7849465f4d6a5745e547412d8a29d3e9a9a"
+    },
+    {
+      "id": "attempt:630d689f4f1a00f4e3d138d0",
+      "run_id": "run:97ed3951048c20bb760ec065",
+      "generation_id": "generation:08238d9eeffd114ee43615e5f2173f1b9af50afe4c5aad24a19f41becdd51c45",
+      "snapshot_id": "project-snapshot:5b2af64488e01771c5c76dddeab704525701802bc8865d36f405c9971bb7ead6",
+      "actor": "claim-worker",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:834e4721848d9874e827a9d3f21e5345bbb269a1e3d9d1e602b53b00ba84962b",
+      "context_artifact_id": "artifact:fbe6be798626f7d28ee9c8db9c762562bc811d00f9fa0b06ac48ebe20d512517",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:51:53.059244+00:00",
+      "completed_at": "2026-08-13T19:52:09.772049+00:00",
+      "work_item_id": "work:0119aa996024e9964d19d718",
+      "log_artifact_id": "artifact:4a494433a2cb2dd1f491a07d898b315357e6ce1d2716a1cf49049982b2f44efe"
+    },
+    {
+      "id": "attempt:e6e16b19020a91a7b85e4759",
+      "run_id": "run:97ed3951048c20bb760ec065",
+      "generation_id": "generation:08238d9eeffd114ee43615e5f2173f1b9af50afe4c5aad24a19f41becdd51c45",
+      "snapshot_id": "project-snapshot:5b2af64488e01771c5c76dddeab704525701802bc8865d36f405c9971bb7ead6",
+      "actor": "claim-rebuttal",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:9efa49abe9acbfe3e4a52d48ea9e0e52ca6ff75031f11566fa5b38ba1ac550c0",
+      "context_artifact_id": "artifact:68f682dc56063c834b95e2e48170ed3e60a40e28a536c2d77b810151b0c3c817",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:52:09.793822+00:00",
+      "completed_at": "2026-08-13T19:52:33.489679+00:00",
+      "work_item_id": "work:0119aa996024e9964d19d718",
+      "log_artifact_id": "artifact:4ec1ccc125585bccf49c5cbe68d8d0b4bca447293ccefa5edcfa25d14aba043e"
+    },
+    {
+      "id": "attempt:cc97143c38b6fea6325aa8bb",
+      "run_id": "run:97ed3951048c20bb760ec065",
+      "generation_id": "generation:08238d9eeffd114ee43615e5f2173f1b9af50afe4c5aad24a19f41becdd51c45",
+      "snapshot_id": "project-snapshot:5b2af64488e01771c5c76dddeab704525701802bc8865d36f405c9971bb7ead6",
+      "actor": "claim-reviewer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:9899234c94a6bdfb4d49dc66b8faf7bec5c2203fdb43762eccfe20e809e9d41c",
+      "context_artifact_id": "artifact:39220ac4fa8df1dbcdb9f0fe50b548e684ea147f17d98791fd50da856412a11b",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:52:33.504376+00:00",
+      "completed_at": "2026-08-13T19:52:59.643682+00:00",
+      "work_item_id": "work:0119aa996024e9964d19d718",
+      "log_artifact_id": "artifact:935b9a3920354837d714481cb2deb6f9537872db69960f3b26c2a73f3f290b91"
+    },
+    {
+      "id": "attempt:cbaf823178fdd867fe611d6e",
+      "run_id": "run:97ed3951048c20bb760ec065",
+      "generation_id": "generation:b9e485134154280ecc1df57d1799b2bd2496adffad3cdbe1cc05328829845d67",
+      "snapshot_id": "project-snapshot:5b2af64488e01771c5c76dddeab704525701802bc8865d36f405c9971bb7ead6",
+      "actor": "synthesizer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:c681ce13b641c0036c94b86f82893b84e5d276040b453e9ab3a3f1179d11afe7",
+      "context_artifact_id": "artifact:ad53a9ad7903fa73ba0843a2cf04aec02267f85dd5e80469020a8e9b1f38c1b2",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:53:00.041772+00:00",
+      "completed_at": "2026-08-13T19:53:23.932968+00:00",
+      "work_item_id": "work:f08bcc7328f604fd7b0d50b1",
+      "log_artifact_id": "artifact:e498a2a7be377bbadd8f4e2bd687e69e544da8717ec0f49f0dbb6fb48dc68228"
+    },
+    {
+      "id": "attempt:e2f7228b2cf229f5eb7d6667",
+      "run_id": "run:97ed3951048c20bb760ec065",
+      "generation_id": "generation:b9e485134154280ecc1df57d1799b2bd2496adffad3cdbe1cc05328829845d67",
+      "snapshot_id": "project-snapshot:5b2af64488e01771c5c76dddeab704525701802bc8865d36f405c9971bb7ead6",
+      "actor": "report-reviewer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:cf3ac408591604cb468d7be2abbbb50d967c3bfb1aa0e2c532b263d02d950961",
+      "context_artifact_id": "artifact:816cab9678d8d2100193d0a26bb29077d81ad26d2a90996d46ca1925bd2925aa",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:53:23.952825+00:00",
+      "completed_at": "2026-08-13T19:53:50.265901+00:00",
+      "work_item_id": "work:f08bcc7328f604fd7b0d50b1",
+      "log_artifact_id": "artifact:0b6143bb98dca6caa417e9397e31302bda0e1f1d7e6e4ed1b2bc96b71873c0ca"
+    }
+  ],
+  "findings": [
+    {
+      "id": "finding:2871d439a1c84e88fe0a345e",
+      "work_item_id": "work:7d8804da8b5c9e913ec0a38b",
+      "step_id": "step:452f3535e31b2ff042416c895d72c1e4354b09b53037f7caf8d94697ca489248",
+      "reviewer": "source-reviewer",
+      "check_id": "ARGUMENT-CHAIN-BREAK",
+      "severity": "major",
+      "evidence": [
+        {
+          "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+          "locator": "1-2",
+          "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+        },
+        {
+          "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+          "locator": "1-341",
+          "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+        },
+        {
+          "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+          "locator": "1-8",
+          "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+        },
+        {
+          "id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+          "locator": "1-2",
+          "sha256": "5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b"
+        }
+      ],
+      "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:51:53.020837+00:00"
+    },
+    {
+      "id": "finding:ffea4d2e693cf899acfb5ad7",
+      "work_item_id": "work:0119aa996024e9964d19d718",
+      "step_id": "step:e95655e4382c98d652445b28ec42ea8c8f576d6e8509467f05142d7e14dcce7f",
+      "reviewer": "claim-reviewer",
+      "check_id": "ARGUMENT-CHAIN-BREAK",
+      "severity": "major",
+      "evidence": [
+        {
+          "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+          "locator": "1-2",
+          "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+        },
+        {
+          "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+          "locator": "1-341",
+          "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+        },
+        {
+          "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+          "locator": "1-8",
+          "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+        },
+        {
+          "id": "source-snapshot:a4961ccca36b97c4722a89f5ee273d468a89d9f74e225a8a67cd42e1526ea03a",
+          "locator": "1-2",
+          "sha256": "5b76592e66de71aaf6613906161aa86db5bd641a862e8ecdb21efe5035d6df5b"
+        }
+      ],
+      "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:52:59.670406+00:00"
+    },
+    {
+      "id": "finding:a4b4a2c7c63bbac47b8038c0",
+      "work_item_id": "work:f08bcc7328f604fd7b0d50b1",
+      "step_id": "step:fce714d7559a2e5aaab3a9a319e3539111eb31cb5225127efe6195b5c13003d4",
+      "reviewer": "report-reviewer",
+      "check_id": "ARGUMENT-CHAIN-BREAK",
+      "severity": "major",
+      "evidence": [
+        {
+          "id": "source-snapshot:8bc5295a2d4242bcc2624f816ea29b0d3f7d56401a62167c588ee6bc5ddaafd6",
+          "locator": "1-2",
+          "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6"
+        },
+        {
+          "id": "source-snapshot:1c996ca287c8403a9c5e68f103999611dd6f5829546e45255636a3f087f180e6",
+          "locator": "1-341",
+          "sha256": "1403795b45a08ab6e3a7983ba5c5b5bd4a8ffdb6026d6583a760b19a7d8a9c06"
+        },
+        {
+          "id": "source-snapshot:0f69af372ba3c221eed6e469885a0b96b8901ba513c8935cd11bd6b72d8b6c4e",
+          "locator": "1-8",
+          "sha256": "e6d74098c2706366bcc343ac26fee7cbaa111844e0642556bc42327d03189e7f"
+        }
+      ],
+      "recommendation": "Repair the evidentiary gap by integrating peer-reviewed literature or authoritative computational complexity resources that explicitly address integer factorization algorithms (e.g., General Number Field Sieve), their sub-exponential time complexity, and formal hardness assumptions. The current dataset exclusively covers primality testing (AKS), making the required synthesis of computational asymmetry impossible.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:53:50.289161+00:00"
+    }
+  ],
+  "log_files": [
+    "logs/attempt-23e1183b540167a2b55dd9ff.log",
+    "logs/attempt-4f630ce9c09bff3b082f9f6f.log",
+    "logs/attempt-afd1c777836a532c5a0f9e89.log",
+    "logs/attempt-630d689f4f1a00f4e3d138d0.log",
+    "logs/attempt-e6e16b19020a91a7b85e4759.log",
+    "logs/attempt-cc97143c38b6fea6325aa8bb.log",
+    "logs/attempt-cbaf823178fdd867fe611d6e.log",
+    "logs/attempt-e2f7228b2cf229f5eb7d6667.log"
+  ],
+  "code_files": []
+}

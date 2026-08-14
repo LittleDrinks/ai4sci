@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Activity, Bot, CheckCheck, ChevronDown, FileText, GitFork, ListTodo, Menu, Plus, X } from "lucide-react";
+import { ChevronDown, GitBranch, Map, Menu, Plus, X } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useWorld } from "../context/WorldContext";
 import { displayError } from "../utils";
 import { NewProjectDialog } from "./NewProjectDialog";
 
-const LINKS = [["/map", "地图", GitFork], ["/review", "审核", CheckCheck], ["/activity", "活动", Activity], ["/queue", "队列", ListTodo], ["/agents", "智能体", Bot], ["/reports", "报告", FileText]];
+const LINKS = [["/leader", "项目负责人", GitBranch], ["/roadmap", "研究路线图", Map]];
 
 function Sidebar({ open, close }) {
-  return <aside className={`sidebar ${open ? "sidebar-open" : ""}`}><div className="brand"><div className="brand-mark">研</div><div><b>研究世界</b><span>本地控制平面</span></div><button className="icon-button sidebar-close" onClick={close} title="关闭导航"><X size={20} /></button></div>
+  return <aside className={`sidebar ${open ? "sidebar-open" : ""}`}><div className="brand"><div className="brand-mark">RW</div><div><b>Research World</b><span>科学研究控制台</span></div><button className="icon-button sidebar-close" onClick={close} title="关闭导航"><X size={20} /></button></div>
     <nav>{LINKS.map(([to, label, Icon]) => <NavLink key={to} to={to} onClick={close}><Icon size={19} /><span>{label}</span></NavLink>)}</nav>
     <div className="sidebar-foot"><span className="local-dot" />本地工作区</div>
   </aside>;

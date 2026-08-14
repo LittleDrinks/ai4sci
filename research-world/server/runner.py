@@ -98,6 +98,9 @@ class HttpRunnerController:
     def build(self, spec: dict) -> dict:
         return self._post("build", spec)
 
+    def agent(self, spec: dict) -> dict:
+        return self._post("agent", spec)
+
     def _post(self, path: str, spec: dict) -> dict:
         response = httpx.post(f"{self.url}/{path}", json=spec, timeout=600)
         response.raise_for_status()

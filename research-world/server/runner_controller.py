@@ -6,6 +6,7 @@ import base64
 import hashlib
 import secrets
 import tempfile
+import json
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -47,6 +48,38 @@ def build(spec: dict) -> dict:
     return {"image_digest": digest, "lock": lock}
 
 
+@app.post("/agent")
+def agent(spec: dict) -> dict:
+    with tempfile.NamedTemporaryFile(mode="w", prefix="rw-agent-env-", delete=True) as environment:
+        environment.write(f"MODEL_API_BASE={spec['base_url']}\nMODEL_API_KEY={spec['api_key']}\n")
+        environment.flush()
+        command = agent_command(spec, environment.name)
+        process = subprocess.run(command, input=json.dumps(spec["request"]), capture_output=True, text=True, timeout=spec.get("timeout", 300))
+    if process.returncode:
+        raise RuntimeError(process.stderr[-4000:])
+    return json.loads(process.stdout)
+
+
+def agent_command(spec: dict, env_file: str) -> list[str]:
+    limits = spec.get("limits", {"cpus": 1, "memory_mb": 768, "pids": 128})
+    return ["docker", "run", "--rm", "-i", "--network", "bridge", "--read-only", "--tmpfs", "/tmp:rw,noexec,nosuid,size=64m",
+            "--cpus", str(limits["cpus"]), "--memory", f"{limits['memory_mb']}m", "--pids-limit", str(limits["pids"]),
+            "--env-file", env_file,
+            "python:3.12-slim", "python", "-c", AGENT_PROGRAM]
+
+
+AGENT_PROGRAM = r'''import json, os, sys, urllib.request
+request = json.load(sys.stdin)
+url = os.environ["MODEL_API_BASE"].rstrip("/") + "/chat/completions"
+body = json.dumps(request).encode()
+http = urllib.request.Request(url, data=body, headers={"Authorization": "Bearer " + os.environ["MODEL_API_KEY"], "Content-Type": "application/json"})
+with urllib.request.urlopen(http, timeout=240) as response:
+    raw = json.load(response)
+choice = raw["choices"][0]["message"]
+print(json.dumps({"text": choice.get("content") or "", "tool_calls": choice.get("tool_calls", []), "usage": raw.get("usage", {}), "model": raw.get("model", request["model"])}))
+'''
+
+
 def lock_image(tag: str) -> str:
     command = ["docker", "run", "--rm", "--network", "none", tag, "python", "-m", "pip", "freeze", "--all"]
     return subprocess.run(command, capture_output=True, text=True, check=True, timeout=120).stdout
@@ -54,9 +87,18 @@ def lock_image(tag: str) -> str:
 
 def write_files(root: Path, files: dict[str, str]) -> None:
     for name, content in files.items():
-        target = root / name
+        target = safe_target(root, name)
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(base64.b64decode(content))
+
+
+def safe_target(root: Path, name: str) -> Path:
+    target = (root / name).resolve()
+    try:
+        target.relative_to(root.resolve())
+    except ValueError as error:
+        raise ValueError("input file escapes the execution root") from error
+    return target
 
 
 def run_container(spec: dict) -> dict:

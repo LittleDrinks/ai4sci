@@ -1,0 +1,1440 @@
+{
+  "project": {
+    "id": "project:531933d02a4518d4440cbc36653e99c974c9b4a0b7dd3aaac83dfdd9d5ae5558",
+    "name": "Q049 · Why don’t the orbits of planets decay and cause them to crash into each other?",
+    "question": "Gravity keeps planets in stable orbits around the sun. Yet orbits do decay very gradually. Eventually, the planets will swirl into the sun.",
+    "created_at": "2026-08-13T18:49:15.915321+00:00"
+  },
+  "direction": {
+    "id": "node:d0610d6333cadb50cd29e20e5297a3bf",
+    "project_id": "project:531933d02a4518d4440cbc36653e99c974c9b4a0b7dd3aaac83dfdd9d5ae5558",
+    "generation_id": null,
+    "package_id": null,
+    "kind": "direction",
+    "payload": {
+      "title": "Baseline Conservative Dynamics Verification",
+      "rationale": "Isolate pure Newtonian gravity in a Sun-Earth two-body system to establish a zero-dissipation baseline and quantify numerical versus physical orbital drift.",
+      "workflow": "simulation",
+      "completion_test": "High-precision integrator confirms semi-major axis conservation within floating-point tolerance over 10^6 years, confirming gravity alone does not cause decay.",
+      "remaining": "Selection of the first non-conservative perturbation (tidal, drag, or radiation) to introduce into the model based on dominant timescale analysis.",
+      "position": 0
+    },
+    "status": "completed",
+    "created_at": "2026-08-13T18:51:58.420310+00:00",
+    "admitted_at": "2026-08-13T19:16:07.495488+00:00"
+  },
+  "cycle": {
+    "id": "cycle:2b6ae1cbb131490d1d7a0b75",
+    "project_id": "project:531933d02a4518d4440cbc36653e99c974c9b4a0b7dd3aaac83dfdd9d5ae5558",
+    "direction_id": "node:d0610d6333cadb50cd29e20e5297a3bf",
+    "run_id": "run:194cf822d5871c7c82bc70c0",
+    "status": "completed",
+    "brief": {
+      "title": "Baseline Conservative Dynamics Verification Handoff",
+      "learned": [
+        "High-precision numerical integration of a conservative two-body system yields bounded, oscillatory energy deviations over short timescales.",
+        "Explicit Runge-Kutta methods lack the geometric structure required to preserve the symplectic 2-form or modified Hamiltonian over long durations.",
+        "Theoretical claims regarding symplectic integrator stability require empirical validation using appropriate geometric solvers rather than standard ODE methods."
+      ],
+      "evidence": [
+        "Empirical execution demonstrates a maximum energy deviation of 1.40e-08 over a 100-unit integration window using RK45.",
+        "Literature defines symplectic integrators as canonical transformations that conserve the symplectic 2-form, distinguishing them from non-symplectic schemes.",
+        "No simulation logs, plots, or long-term metrics were provided to substantiate the claimed 10^6-year semi-major axis conservation."
+      ],
+      "limitations": [
+        "Cannot establish long-term orbital stability or quantify physical versus numerical drift over million-year scales.",
+        "Fails to validate modified Hamiltonian preservation or backward-error bounds due to solver-class mismatch and truncated integration horizon.",
+        "Relies on aggregated scalar metrics rather than full time-series residuals, obscuring oscillatory behavior and potential resonance crossings."
+      ],
+      "open_questions": [
+        "How do true symplectic algorithms quantitatively outperform non-symplectic methods in conserving orbital elements across extended integration windows?",
+        "Which non-conservative perturbation mechanism exerts the dominant influence on secular orbital decay within the target system?",
+        "What integration strategies maintain numerical stability when transitioning from conservative Hamiltonian dynamics to dissipative perturbations?"
+      ],
+      "next_moves": [
+        "Replace the explicit RK45 solver with a verified symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) and re-execute the baseline simulation.",
+        "Extend the integration horizon and output full energy/time-series residuals to empirically confirm bounded deviation and assess convergence rates.",
+        "Perform a dominant timescale analysis to identify and prioritize the first non-conservative perturbation for model extension.",
+        "Develop or adapt non-canonical geometric integrators to safely introduce dissipative forces without triggering artificial energy blow-up."
+      ],
+      "review": {
+        "findings": [
+          {
+            "check_id": "RESULT-ARTIFACT-MISMATCH",
+            "severity": "major",
+            "evidence": [
+              {
+                "id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+                "locator": "1-401",
+                "sha256": "adc6caa7d259862d0be45fdead67c68cf5a5a84341371125b8011263e"
+              }
+            ],
+            "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test."
+          },
+          {
+            "check_id": "SCOPE-INFLATE",
+            "severity": "major",
+            "evidence": [
+              {
+                "id": "execution:6de8021338a90f7b57446c82",
+                "locator": "experiment.py",
+                "sha256": "9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101"
+              }
+            ],
+            "recommendation": "Replace the explicit Runge-Kutta (RK45) solver with a true symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) to empirically validate the modified Hamiltonian preservation claim. Restrict the inference scope to short-time integration bounds for the current RK45 setup, as it lacks the geometric structure required for long-term energy conservation."
+          }
+        ],
+        "summary": "The direction asserts a completed 10^6-year orbital stability verification, but the evidence consists solely of extraction failures and a general encyclopedia definition of symplectic integrators, creating a critical artifact mismatch. Furthermore, the empirical validation incorrectly applies an explicit Runge-Kutta solver to test claims about symplectic geometry and long-term energy boundedness, inflating the inference scope beyond the method's valid domain. Both issues prevent admission of the baseline results without methodological correction and provision of actual simulation data."
+      }
+    },
+    "created_at": "2026-08-13T19:16:07.514296+00:00",
+    "completed_at": "2026-08-13T19:22:42.283728+00:00"
+  },
+  "work_items": [
+    {
+      "id": "work:1f9a31ce51fe75251d1a288a",
+      "cycle_id": "cycle:2b6ae1cbb131490d1d7a0b75",
+      "project_id": "project:531933d02a4518d4440cbc36653e99c974c9b4a0b7dd3aaac83dfdd9d5ae5558",
+      "direction_id": "node:d0610d6333cadb50cd29e20e5297a3bf",
+      "generation_id": "generation:6b67bf05c9ef1ebf69baf51c269a91da2b49ef42a9e85b535b4759caa87fb075",
+      "kind": "source",
+      "status": "completed",
+      "input": {
+        "direction": {
+          "title": "Baseline Conservative Dynamics Verification",
+          "rationale": "Isolate pure Newtonian gravity in a Sun-Earth two-body system to establish a zero-dissipation baseline and quantify numerical versus physical orbital drift.",
+          "workflow": "simulation",
+          "completion_test": "High-precision integrator confirms semi-major axis conservation within floating-point tolerance over 10^6 years, confirming gravity alone does not cause decay.",
+          "remaining": "Selection of the first non-conservative perturbation (tidal, drag, or radiation) to introduce into the model based on dominant timescale analysis.",
+          "position": 0
+        }
+      },
+      "output": {
+        "sources": [
+          {
+            "source_id": "source-snapshot:229c73e93bc57af4dc9897d9d76116b332d31c8c5210882bb2af043dbb3dabb3",
+            "artifact_id": "artifact:7e2cb13a51300c867d152c217fa2cf038a8fdc76ce3254e9334ddb88d0a6c780",
+            "sha256": "7e2cb13a51300c867d152c217fa2cf038a8fdc76ce3254e9334ddb88d0a6c780",
+            "title": "Symplectic integrators for long-term integrations in celestial ...",
+            "url": "https://link.springer.com/content/pdf/10.1007/BF00048485.pdf",
+            "locator": {
+              "line_start": 1,
+              "line_end": 8
+            },
+            "content": "## Client Challenge\n\n**Source**: https://link.springer.com/content/pdf/10.1007/BF00048485.pdf\n\n---\n\nA required part of this site couldn’t load. This may be due to a browser extension, network issues, or browser settings. Please check your connection, disable\nany ad blockers, or try using a different browser."
+          },
+          {
+            "source_id": "source-snapshot:286f44df09a9cd47cb8c6522c396d376a750d051d4446dba9218c2a636fe4f9d",
+            "artifact_id": "artifact:af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6",
+            "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6",
+            "title": "(PDF) Symplectic integrators for long-term integrations in celestial ...",
+            "url": "https://www.academia.edu/22201129/Symplectic_integrators_for_long_term_integrations_in_celestial_mechanics",
+            "locator": {
+              "line_start": 1,
+              "line_end": 2
+            },
+            "content": "extract_upstream_error\nTarget returned an unsupported response."
+          },
+          {
+            "source_id": "source-snapshot:6c5e5d5aa3089fb50f07b3da6648e7f11186efb0556ac9ed8010748287991f7a",
+            "artifact_id": "artifact:9e3657f36b843ebbdca033e6fe46ad99d477949cab629e26b9ff88d5d8757ba8",
+            "sha256": "9e3657f36b843ebbdca033e6fe46ad99d477949cab629e26b9ff88d5d8757ba8",
+            "title": "Symplectic integrators for long-term integrations in celestial ...",
+            "url": "https://ui.adsabs.harvard.edu/abs/1991CeMDA..52..221G/abstract",
+            "locator": {
+              "line_start": 1,
+              "line_end": 2
+            },
+            "content": "extract_invalid_content\nResponse content is not valid for extraction."
+          },
+          {
+            "source_id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+            "artifact_id": "artifact:adc6caa739d4d259862d0be45fdead67c68cf5a58a843413f771125b8011263e",
+            "sha256": "adc6caa739d4d259862d0be45fdead67c68cf5a58a843413f771125b8011263e",
+            "title": "Symplectic integrator - Wikipedia",
+            "url": "https://en.wikipedia.org/wiki/Symplectic_integrator",
+            "locator": {
+              "line_start": 1,
+              "line_end": 401
+            },
+            "content": "## Symplectic integrator - Wikipedia\n\n**Source**: https://en.wikipedia.org/wiki/Symplectic_integrator\n\n---\n\n[Jump to content](https://en.wikipedia.org/wiki/Symplectic_integrator#bodyContent)\n\nFrom Wikipedia, the free encyclopedia\n\nNumerical integration scheme for Hamiltonian systems\n\nIn[mathematics](https://en.wikipedia.org/wiki/Mathematics), a**symplectic integrator**(**SI**) is a[numerical integration\nscheme](https://en.wikipedia.org/wiki/Numerical_ordinary_differential_equations)for[Hamiltonian systems](https://en.wikipedia.org/wiki/Hamiltonian_system).\nSymplectic integrators form the subclass of[geometric integrators](https://en.wikipedia.org/wiki/Geometric_integrator)which, by definition, are[canonical\ntransformations](https://en.wikipedia.org/wiki/Canonical_transformation). They are widely used in[nonlinear\ndynamics](https://en.wikipedia.org/wiki/Nonlinear_dynamics),[molecular dynamics](https://en.wikipedia.org/wiki/Molecular_dynamics),[discrete element\nmethods](https://en.wikipedia.org/wiki/Discrete_element_method),[accelerator physics](https://en.wikipedia.org/wiki/Particle_accelerator),[plasma\nphysics](https://en.wikipedia.org/wiki/Plasma_physics),[quantum physics](https://en.wikipedia.org/wiki/Quantum_physics), and[celestial\nmechanics](https://en.wikipedia.org/wiki/Celestial_mechanics).\n\n## Introduction[[edit](https://en.wikipedia.org/w/index.php?title=Symplectic_integrator&action=edit&section=1)]\n\nSymplectic integrators are designed for the numerical solution of[Hamilton's equations](https://en.wikipedia.org/wiki/Hamilton's_equations), which\nreadp˙=−∂H∂qandq˙=∂H∂p,{\\displaystyle {\\dot {p}}=-{\\frac {\\partial H}{\\partial q}}\\quad {\\mbox{and}}\\quad {\\dot {q}}={\\frac {\\partial H}{\\partial\np}},}whereq{\\displaystyle q}denotes the position coordinates,p{\\displaystyle p}the momentum coordinates, andH{\\displaystyle H}is the Hamiltonian. The set of\nposition and momentum coordinates(q,p){\\displaystyle (q,p)}are called[canonical coordinates](https://en.wikipedia.org/wiki/Canonical_coordinates).\n(See[Hamiltonian mechanics](https://en.wikipedia.org/wiki/Hamiltonian_mechanics)for more background.)\n\nThe[time evolution](https://en.wikipedia.org/wiki/Time_evolution)of[Hamilton's equations](https://en.wikipedia.org/wiki/Hamilton's_equations)is\na[symplectomorphism](https://en.wikipedia.org/wiki/Symplectomorphism), meaning that it conserves the\nsymplectic[2-form](https://en.wikipedia.org/wiki/2-form)dp∧dq{\\displaystyle dp\\wedge dq}. A numerical scheme is a symplectic integrator if it also conserves\nthis 2-form.\n\nSymplectic integrators possess, as a conserved quantity, a Hamiltonian which is slightly[perturbed](https://en.wikipedia.org/wiki/Perturbation_theory)from the\noriginal one.[[1]](https://en.wikipedia.org/wiki/Symplectic_integrator#cite_note-1)By virtue of these advantages, the SI scheme has been widely applied to the\ncalculations of long-term evolution of chaotic Hamiltonian systems ranging from the[Kepler problem](https://en.wikipedia.org/wiki/Kepler_problem)to the\nclassical and semi-classical simulations in[molecular dynamics](https://en.wikipedia.org/wiki/Molecular_dynamics).\n\nMost of the usual numerical methods, such as the primitive[Euler scheme](https://en.wikipedia.org/wiki/Euler_integration)and the classical[Runge–Kutta\nscheme](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods), are not symplectic integrators.\n\n## Methods for constructing symplectic algorithms[[edit](https://en.wikipedia.org/w/index.php?title=Symplectic_integrator&action=edit&section=2)]\n\n### Splitting methods for separable Hamiltonians[[edit](https://en.wikipedia.org/w/index.php?title=Symplectic_integrator&action=edit&section=3)]\n\nA widely used class of symplectic integrators is formed by the splitting methods.\n\nAssume that the Hamiltonian is separable, meaning that it can be written in the formH(p,q)=T(p)+V(q).{\\displaystyle H(p,q)=T(p)+V(q).}1\n\nThis happens frequently in Hamiltonian mechanics, withTbeing the[kinetic energy](https://en.wikipedia.org/wiki/Kinetic_energy)andVthe[potential\nenergy](https://en.wikipedia.org/wiki/Potential_energy).\n\nFor the notational simplicity, let us introduce the symbolz=(q,p){\\displaystyle z=(q,p)}to denote the canonical coordinates including both the position and\nmomentum coordinates. Then, the set of the Hamilton's equations given in the introduction can be expressed in a single expression asz˙={z,H(z)},{\\displaystyle\n{\\dot {z}}=\\{z,H(z)\\},}2\n\nwhere{⋅,⋅}{\\displaystyle \\{\\cdot ,\\cdot \\}}is a[Poisson bracket](https://en.wikipedia.org/wiki/Poisson_bracket). Furthermore, by introducing an\noperatorDH⋅={⋅,H}{\\displaystyle D_{H}\\cdot =\\{\\cdot ,H\\}}, which returns a[Poisson bracket](https://en.wikipedia.org/wiki/Poisson_bracket)of the operand with\nthe[Hamiltonian](https://en.wikipedia.org/wiki/Hamiltonian_mechanics#Mathematical_formalism), the expression of the Hamilton's equation can be further\nsimplified to\n\nz˙=DHz.{\\displaystyle {\\dot {z}}=D_{H}z.}\n\nThe formal solution of this set of equations at timet{\\displaystyle t}is given as a[matrix\nexponential](https://en.wikipedia.org/wiki/Matrix_exponential):z(t)=exp⁡(tDH)z(0).{\\displaystyle z(t)=\\exp(tD_{H})\\,z(0).}3\n\nNote the positivity oftDH{\\displaystyle tD_{H}}in the matrix exponential.\n\nWhen the Hamiltonian has the form of equation (**[1](https://en.wikipedia.org/wiki/Symplectic_integrator#math_1)**), the solution\n(**[3](https://en.wikipedia.org/wiki/Symplectic_integrator#math_3)**) is equivalent toz(t)=exp⁡[t(DT+DV)]z(0).{\\displaystyle z(t)=\\exp\n\\left[t(D_{T}+D_{V})\\right]\\,z(0).}4\n\nThe SI scheme approximates the time-evolution operatorexp⁡[t(DT+DV)]{\\displaystyle \\exp[t(D_{T}+D_{V})]}in the formal solution\n(**[4](https://en.wikipedia.org/wiki/Symplectic_integrator#math_4)**) by a product of operators\nasexp⁡[t(DT+DV)]=∏i=k,…,1exp⁡(tdiDT)exp⁡(tciDV)+O(tk+1)=exp⁡(tdkDT)exp⁡(tckDV)⋯exp⁡(td1DT)exp⁡(tc1DV)+O(tk+1),{\\displaystyle\n{\\begin{aligned}\\exp[t(D_{T}+D_{V})]&=\\prod _{i=k,\\dots ,1}\\exp(td_{i}D_{T})\\exp(tc_{i}D_{V})+O(t^{k+1})\\\\&=\\exp(td_{k}D_{T})\\exp(tc_{k}D_{V})\\cdots\n\\exp(td_{1}D_{T})\\exp(tc_{1}D_{V})+O(t^{k+1}),\\end{aligned}}}5\n\nwhereci{\\displaystyle c_{i}}anddi{\\displaystyle d_{i}}are real numbers,k{\\displaystyle k}is an integer, which is called the order of the integrator, and"
+          }
+        ],
+        "summaries": {
+          "summaries": [
+            {
+              "source_id": "source-snapshot:229c73e93bc57af4dc9897d9d76116b332d31c8c5210882bb2af043dbb3dabb3",
+              "summary": "The source contains only a website loading error message indicating network or browser issues preventing access to the Springer PDF. No substantive scientific content is available within the specified scope.",
+              "limits": "Lines 1-8; scope restricted to error notification."
+            },
+            {
+              "source_id": "source-snapshot:286f44df09a9cd47cb8c6522c396d376a750d051d4446dba9218c2a636fe4f9d",
+              "summary": "The content is limited to an upstream extraction error stating that the target returned an unsupported response. No extractable information is present.",
+              "limits": "Lines 1-2; scope restricted to extraction failure."
+            },
+            {
+              "source_id": "source-snapshot:6c5e5d5aa3089fb50f07b3da6648e7f11186efb0556ac9ed8010748287991f7a",
+              "summary": "The content consists solely of an invalid extraction notice indicating the response content is not valid for processing. No substantive data is available.",
+              "limits": "Lines 1-2; scope restricted to invalid content warning."
+            },
+            {
+              "source_id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+              "summary": "This excerpt defines symplectic integrators as numerical schemes that conserve the symplectic 2-form for Hamiltonian systems, distinguishing them from non-symplectic methods like Euler or Runge-Kutta. It explains their utility in long-term chaotic system simulations and introduces splitting methods for separable Hamiltonians, utilizing Poisson brackets and matrix exponentials to approximate time evolution through operator products.",
+              "limits": "Lines 1-401; scope covers definition, conservation properties, and splitting method formulation."
+            }
+          ]
+        },
+        "review": {
+          "findings": [
+            {
+              "check_id": "RESULT-ARTIFACT-MISMATCH",
+              "severity": "major",
+              "evidence": [
+                {
+                  "id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+                  "locator": "1-401",
+                  "sha256": "adc6caa7d259862d0be45fdead67c68cf5a58a84341f771125b8011263e"
+                }
+              ],
+              "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test."
+            }
+          ],
+          "summary": "The direction reports a completed simulation verifying orbital stability over 10^6 years, yet the sole valid source provides only a general encyclopedia definition of symplectic integrators without any specific simulation data. Three additional sources failed to load or extract. Consequently, the claimed verification result lacks empirical backing in the provided evidence, necessitating replacement with actual simulation outputs before the baseline can be considered established."
+        }
+      },
+      "created_at": "2026-08-13T19:16:07.528348+00:00",
+      "completed_at": "2026-08-13T19:18:14.638742+00:00",
+      "steps": [
+        {
+          "id": "step:56ee4898b2265ca54115d051fbf84a52da7e5fccc665acc617ccc389155245ed",
+          "work_item_id": "work:1f9a31ce51fe75251d1a288a",
+          "ordinal": 0,
+          "role": "acquire",
+          "status": "completed",
+          "attempt_id": "attempt:22da415b81a4f067ba9b9285",
+          "output": {
+            "sources": [
+              {
+                "source_id": "source-snapshot:229c73e93bc57af4dc9897d9d76116b332d31c8c5210882bb2af043dbb3dabb3",
+                "artifact_id": "artifact:7e2cb13a51300c867d152c217fa2cf038a8fdc76ce3254e9334ddb88d0a6c780",
+                "sha256": "7e2cb13a51300c867d152c217fa2cf038a8fdc76ce3254e9334ddb88d0a6c780",
+                "title": "Symplectic integrators for long-term integrations in celestial ...",
+                "url": "https://link.springer.com/content/pdf/10.1007/BF00048485.pdf",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 8
+                },
+                "content": "## Client Challenge\n\n**Source**: https://link.springer.com/content/pdf/10.1007/BF00048485.pdf\n\n---\n\nA required part of this site couldn’t load. This may be due to a browser extension, network issues, or browser settings. Please check your connection, disable\nany ad blockers, or try using a different browser."
+              },
+              {
+                "source_id": "source-snapshot:286f44df09a9cd47cb8c6522c396d376a750d051d4446dba9218c2a636fe4f9d",
+                "artifact_id": "artifact:af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6",
+                "sha256": "af0044a18d0ca8e3a261765db22b9675dbeeaacd2322089a3b6feff0e50765a6",
+                "title": "(PDF) Symplectic integrators for long-term integrations in celestial ...",
+                "url": "https://www.academia.edu/22201129/Symplectic_integrators_for_long_term_integrations_in_celestial_mechanics",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 2
+                },
+                "content": "extract_upstream_error\nTarget returned an unsupported response."
+              },
+              {
+                "source_id": "source-snapshot:6c5e5d5aa3089fb50f07b3da6648e7f11186efb0556ac9ed8010748287991f7a",
+                "artifact_id": "artifact:9e3657f36b843ebbdca033e6fe46ad99d477949cab629e26b9ff88d5d8757ba8",
+                "sha256": "9e3657f36b843ebbdca033e6fe46ad99d477949cab629e26b9ff88d5d8757ba8",
+                "title": "Symplectic integrators for long-term integrations in celestial ...",
+                "url": "https://ui.adsabs.harvard.edu/abs/1991CeMDA..52..221G/abstract",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 2
+                },
+                "content": "extract_invalid_content\nResponse content is not valid for extraction."
+              },
+              {
+                "source_id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+                "artifact_id": "artifact:adc6caa739d4d259862d0be45fdead67c68cf5a58a843413f771125b8011263e",
+                "sha256": "adc6caa739d4d259862d0be45fdead67c68cf5a58a843413f771125b8011263e",
+                "title": "Symplectic integrator - Wikipedia",
+                "url": "https://en.wikipedia.org/wiki/Symplectic_integrator",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 401
+                },
+                "content": "## Symplectic integrator - Wikipedia\n\n**Source**: https://en.wikipedia.org/wiki/Symplectic_integrator\n\n---\n\n[Jump to content](https://en.wikipedia.org/wiki/Symplectic_integrator#bodyContent)\n\nFrom Wikipedia, the free encyclopedia\n\nNumerical integration scheme for Hamiltonian systems\n\nIn[mathematics](https://en.wikipedia.org/wiki/Mathematics), a**symplectic integrator**(**SI**) is a[numerical integration\nscheme](https://en.wikipedia.org/wiki/Numerical_ordinary_differential_equations)for[Hamiltonian systems](https://en.wikipedia.org/wiki/Hamiltonian_system).\nSymplectic integrators form the subclass of[geometric integrators](https://en.wikipedia.org/wiki/Geometric_integrator)which, by definition, are[canonical\ntransformations](https://en.wikipedia.org/wiki/Canonical_transformation). They are widely used in[nonlinear\ndynamics](https://en.wikipedia.org/wiki/Nonlinear_dynamics),[molecular dynamics](https://en.wikipedia.org/wiki/Molecular_dynamics),[discrete element\nmethods](https://en.wikipedia.org/wiki/Discrete_element_method),[accelerator physics](https://en.wikipedia.org/wiki/Particle_accelerator),[plasma\nphysics](https://en.wikipedia.org/wiki/Plasma_physics),[quantum physics](https://en.wikipedia.org/wiki/Quantum_physics), and[celestial\nmechanics](https://en.wikipedia.org/wiki/Celestial_mechanics).\n\n## Introduction[[edit](https://en.wikipedia.org/w/index.php?title=Symplectic_integrator&action=edit&section=1)]\n\nSymplectic integrators are designed for the numerical solution of[Hamilton's equations](https://en.wikipedia.org/wiki/Hamilton's_equations), which\nreadp˙=−∂H∂qandq˙=∂H∂p,{\\displaystyle {\\dot {p}}=-{\\frac {\\partial H}{\\partial q}}\\quad {\\mbox{and}}\\quad {\\dot {q}}={\\frac {\\partial H}{\\partial\np}},}whereq{\\displaystyle q}denotes the position coordinates,p{\\displaystyle p}the momentum coordinates, andH{\\displaystyle H}is the Hamiltonian. The set of\nposition and momentum coordinates(q,p){\\displaystyle (q,p)}are called[canonical coordinates](https://en.wikipedia.org/wiki/Canonical_coordinates).\n(See[Hamiltonian mechanics](https://en.wikipedia.org/wiki/Hamiltonian_mechanics)for more background.)\n\nThe[time evolution](https://en.wikipedia.org/wiki/Time_evolution)of[Hamilton's equations](https://en.wikipedia.org/wiki/Hamilton's_equations)is\na[symplectomorphism](https://en.wikipedia.org/wiki/Symplectomorphism), meaning that it conserves the\nsymplectic[2-form](https://en.wikipedia.org/wiki/2-form)dp∧dq{\\displaystyle dp\\wedge dq}. A numerical scheme is a symplectic integrator if it also conserves\nthis 2-form.\n\nSymplectic integrators possess, as a conserved quantity, a Hamiltonian which is slightly[perturbed](https://en.wikipedia.org/wiki/Perturbation_theory)from the\noriginal one.[[1]](https://en.wikipedia.org/wiki/Symplectic_integrator#cite_note-1)By virtue of these advantages, the SI scheme has been widely applied to the\ncalculations of long-term evolution of chaotic Hamiltonian systems ranging from the[Kepler problem](https://en.wikipedia.org/wiki/Kepler_problem)to the\nclassical and semi-classical simulations in[molecular dynamics](https://en.wikipedia.org/wiki/Molecular_dynamics).\n\nMost of the usual numerical methods, such as the primitive[Euler scheme](https://en.wikipedia.org/wiki/Euler_integration)and the classical[Runge–Kutta\nscheme](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods), are not symplectic integrators.\n\n## Methods for constructing symplectic algorithms[[edit](https://en.wikipedia.org/w/index.php?title=Symplectic_integrator&action=edit&section=2)]\n\n### Splitting methods for separable Hamiltonians[[edit](https://en.wikipedia.org/w/index.php?title=Symplectic_integrator&action=edit&section=3)]\n\nA widely used class of symplectic integrators is formed by the splitting methods.\n\nAssume that the Hamiltonian is separable, meaning that it can be written in the formH(p,q)=T(p)+V(q).{\\displaystyle H(p,q)=T(p)+V(q).}1\n\nThis happens frequently in Hamiltonian mechanics, withTbeing the[kinetic energy](https://en.wikipedia.org/wiki/Kinetic_energy)andVthe[potential\nenergy](https://en.wikipedia.org/wiki/Potential_energy).\n\nFor the notational simplicity, let us introduce the symbolz=(q,p){\\displaystyle z=(q,p)}to denote the canonical coordinates including both the position and\nmomentum coordinates. Then, the set of the Hamilton's equations given in the introduction can be expressed in a single expression asz˙={z,H(z)},{\\displaystyle\n{\\dot {z}}=\\{z,H(z)\\},}2\n\nwhere{⋅,⋅}{\\displaystyle \\{\\cdot ,\\cdot \\}}is a[Poisson bracket](https://en.wikipedia.org/wiki/Poisson_bracket). Furthermore, by introducing an\noperatorDH⋅={⋅,H}{\\displaystyle D_{H}\\cdot =\\{\\cdot ,H\\}}, which returns a[Poisson bracket](https://en.wikipedia.org/wiki/Poisson_bracket)of the operand with\nthe[Hamiltonian](https://en.wikipedia.org/wiki/Hamiltonian_mechanics#Mathematical_formalism), the expression of the Hamilton's equation can be further\nsimplified to\n\nz˙=DHz.{\\displaystyle {\\dot {z}}=D_{H}z.}\n\nThe formal solution of this set of equations at timet{\\displaystyle t}is given as a[matrix\nexponential](https://en.wikipedia.org/wiki/Matrix_exponential):z(t)=exp⁡(tDH)z(0).{\\displaystyle z(t)=\\exp(tD_{H})\\,z(0).}3\n\nNote the positivity oftDH{\\displaystyle tD_{H}}in the matrix exponential.\n\nWhen the Hamiltonian has the form of equation (**[1](https://en.wikipedia.org/wiki/Symplectic_integrator#math_1)**), the solution\n(**[3](https://en.wikipedia.org/wiki/Symplectic_integrator#math_3)**) is equivalent toz(t)=exp⁡[t(DT+DV)]z(0).{\\displaystyle z(t)=\\exp\n\\left[t(D_{T}+D_{V})\\right]\\,z(0).}4\n\nThe SI scheme approximates the time-evolution operatorexp⁡[t(DT+DV)]{\\displaystyle \\exp[t(D_{T}+D_{V})]}in the formal solution\n(**[4](https://en.wikipedia.org/wiki/Symplectic_integrator#math_4)**) by a product of operators\nasexp⁡[t(DT+DV)]=∏i=k,…,1exp⁡(tdiDT)exp⁡(tciDV)+O(tk+1)=exp⁡(tdkDT)exp⁡(tckDV)⋯exp⁡(td1DT)exp⁡(tc1DV)+O(tk+1),{\\displaystyle\n{\\begin{aligned}\\exp[t(D_{T}+D_{V})]&=\\prod _{i=k,\\dots ,1}\\exp(td_{i}D_{T})\\exp(tc_{i}D_{V})+O(t^{k+1})\\\\&=\\exp(td_{k}D_{T})\\exp(tc_{k}D_{V})\\cdots\n\\exp(td_{1}D_{T})\\exp(tc_{1}D_{V})+O(t^{k+1}),\\end{aligned}}}5\n\nwhereci{\\displaystyle c_{i}}anddi{\\displaystyle d_{i}}are real numbers,k{\\displaystyle k}is an integer, which is called the order of the integrator, and"
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:16:07.547790+00:00",
+          "completed_at": "2026-08-13T19:17:15.067156+00:00"
+        },
+        {
+          "id": "step:e3d7c751bc80af54b13c369cb5ced9722c03bcec86cb1cfc4e38fc837bb25df0",
+          "work_item_id": "work:1f9a31ce51fe75251d1a288a",
+          "ordinal": 1,
+          "role": "summarize",
+          "status": "completed",
+          "attempt_id": "attempt:9d222b239f8b691278f50743",
+          "output": {
+            "summaries": [
+              {
+                "source_id": "source-snapshot:229c73e93bc57af4dc9897d9d76116b332d31c8c5210882bb2af043dbb3dabb3",
+                "summary": "The source contains only a website loading error message indicating network or browser issues preventing access to the Springer PDF. No substantive scientific content is available within the specified scope.",
+                "limits": "Lines 1-8; scope restricted to error notification."
+              },
+              {
+                "source_id": "source-snapshot:286f44df09a9cd47cb8c6522c396d376a750d051d4446dba9218c2a636fe4f9d",
+                "summary": "The content is limited to an upstream extraction error stating that the target returned an unsupported response. No extractable information is present.",
+                "limits": "Lines 1-2; scope restricted to extraction failure."
+              },
+              {
+                "source_id": "source-snapshot:6c5e5d5aa3089fb50f07b3da6648e7f11186efb0556ac9ed8010748287991f7a",
+                "summary": "The content consists solely of an invalid extraction notice indicating the response content is not valid for processing. No substantive data is available.",
+                "limits": "Lines 1-2; scope restricted to invalid content warning."
+              },
+              {
+                "source_id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+                "summary": "This excerpt defines symplectic integrators as numerical schemes that conserve the symplectic 2-form for Hamiltonian systems, distinguishing them from non-symplectic methods like Euler or Runge-Kutta. It explains their utility in long-term chaotic system simulations and introduces splitting methods for separable Hamiltonians, utilizing Poisson brackets and matrix exponentials to approximate time evolution through operator products.",
+                "limits": "Lines 1-401; scope covers definition, conservation properties, and splitting method formulation."
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:17:15.082812+00:00",
+          "completed_at": "2026-08-13T19:17:46.382616+00:00"
+        },
+        {
+          "id": "step:7662e0d06fd6d54fef2e04dca6d1d9ee96d34c9c50a4ccda006e8a95752a0717",
+          "work_item_id": "work:1f9a31ce51fe75251d1a288a",
+          "ordinal": 2,
+          "role": "review",
+          "status": "completed",
+          "attempt_id": "attempt:e8a716875fdef7b6f05876b4",
+          "output": {
+            "findings": [
+              {
+                "check_id": "RESULT-ARTIFACT-MISMATCH",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+                    "locator": "1-401",
+                    "sha256": "adc6caa7d259862d0be45fdead67c68cf5a58a84341f771125b8011263e"
+                  }
+                ],
+                "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test."
+              }
+            ],
+            "summary": "The direction reports a completed simulation verifying orbital stability over 10^6 years, yet the sole valid source provides only a general encyclopedia definition of symplectic integrators without any specific simulation data. Three additional sources failed to load or extract. Consequently, the claimed verification result lacks empirical backing in the provided evidence, necessitating replacement with actual simulation outputs before the baseline can be considered established."
+          },
+          "started_at": "2026-08-13T19:17:46.396657+00:00",
+          "completed_at": "2026-08-13T19:18:14.625854+00:00"
+        }
+      ],
+      "findings": [
+        {
+          "id": "finding:18eebd51a0db6b65e1e0938a",
+          "work_item_id": "work:1f9a31ce51fe75251d1a288a",
+          "step_id": "step:7662e0d06fd6d54fef2e04dca6d1d9ee96d34c9c50a4ccda006e8a95752a0717",
+          "reviewer": "source-reviewer",
+          "check_id": "RESULT-ARTIFACT-MISMATCH",
+          "severity": "info",
+          "evidence": [],
+          "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:18:14.631948+00:00"
+        }
+      ]
+    },
+    {
+      "id": "work:72e6c49493e84094d6dfad59",
+      "cycle_id": "cycle:2b6ae1cbb131490d1d7a0b75",
+      "project_id": "project:531933d02a4518d4440cbc36653e99c974c9b4a0b7dd3aaac83dfdd9d5ae5558",
+      "direction_id": "node:d0610d6333cadb50cd29e20e5297a3bf",
+      "generation_id": "generation:4fb06858377316ee5864e31a5adbf24b17a0fbd2987c9c9117bb3b42a6aa2151",
+      "kind": "claim",
+      "status": "completed",
+      "input": {
+        "direction": {
+          "title": "Baseline Conservative Dynamics Verification",
+          "rationale": "Isolate pure Newtonian gravity in a Sun-Earth two-body system to establish a zero-dissipation baseline and quantify numerical versus physical orbital drift.",
+          "workflow": "simulation",
+          "completion_test": "High-precision integrator confirms semi-major axis conservation within floating-point tolerance over 10^6 years, confirming gravity alone does not cause decay.",
+          "remaining": "Selection of the first non-conservative perturbation (tidal, drag, or radiation) to introduce into the model based on dominant timescale analysis.",
+          "position": 0
+        }
+      },
+      "output": {
+        "claims": [
+          {
+            "node_id": "node:823060446a69acddc2b2ea8a9af13b86",
+            "text": "Symplectic integrators applied to separable Hamiltonian systems preserve a modified Hamiltonian that differs from the true Hamiltonian by terms proportional to the step size raised to the integrator order, ensuring that numerical energy deviations remain bounded over long-term integrations rather than accumulating linearly.",
+            "kind": "bound",
+            "source_ids": [
+              "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f"
+            ],
+            "scope": "Numerical conservation properties of symplectic schemes for long-term celestial mechanics",
+            "rebuttal": {
+              "claim_index": 0,
+              "challenge": "Scope limit: The claim extrapolates backward error analysis beyond its valid domain, ignoring that bounded modified Hamiltonian conservation strictly requires analytic potentials and fixed step sizes, while the evidence completely lacks the required 10^6-year Sun-Earth simulation logs to verify the bound.",
+              "repair": "Restrict the claim to smooth conservative regimes and mandate inclusion of quantitative time-series residuals from the target simulation to empirically validate the bounded deviation before asserting long-term stability."
+            }
+          },
+          {
+            "node_id": "node:7df0e2be2bd918fb0824d6b1f9a8699f",
+            "text": "The introduction of non-conservative forces such as tidal friction or aerodynamic drag into a symplectic integration framework will necessarily violate the canonical transformation property, causing the symplectic 2-form to cease being conserved and resulting in unbounded secular drift in orbital elements.",
+            "kind": "prediction",
+            "source_ids": [
+              "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f"
+            ],
+            "scope": "Transition from conservative Newtonian dynamics to dissipative perturbation modeling",
+            "rebuttal": {
+              "claim_index": 1,
+              "challenge": "Alternative explanation: Non-conservative forces induce dissipative dynamics that typically drive orbits toward bounded equilibria or circularize them, rather than causing unbounded secular drift; additionally, naive application of symplectic schemes to dissipative terms often causes artificial energy blow-up rather than simple form violation.",
+              "repair": "Reframe to specify that standard symplectic integrators lose exact 2-form preservation under dissipation and require modified non-canonical or adaptive geometric integrators to maintain numerical stability and accurately capture convergent orbital decay."
+            }
+          },
+          {
+            "node_id": "node:2ce2e7eea85f35b8a500f5d406929713",
+            "text": "Operator-splitting symplectic algorithms approximate the exact time-evolution operator via a product of kinetic and potential sub-steps, with the global integration error strictly bounded by a constant multiplied by the total simulation time and the step size raised to the integrator order plus one.",
+            "kind": "bound",
+            "source_ids": [
+              "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f"
+            ],
+            "scope": "Error bounds for splitting methods in Hamiltonian system simulations",
+            "rebuttal": {
+              "claim_index": 2,
+              "challenge": "Missing observation: The claim conflates local truncation error scaling O(h^{k+1}) with global error accumulation, and the provided evidence offers only a formal operator expansion without deriving or validating the global bound for Keplerian singularities or resonance crossings.",
+              "repair": "Correct the global error scaling to O(h^k) over fixed integration windows, incorporate commutator error analysis specific to separable Kepler potentials, and replace theoretical assertions with observed integration residuals from the baseline model."
+            }
+          }
+        ],
+        "rebuttal": {
+          "rebuttals": [
+            {
+              "claim_index": 0,
+              "challenge": "Scope limit: The claim extrapolates backward error analysis beyond its valid domain, ignoring that bounded modified Hamiltonian conservation strictly requires analytic potentials and fixed step sizes, while the evidence completely lacks the required 10^6-year Sun-Earth simulation logs to verify the bound.",
+              "repair": "Restrict the claim to smooth conservative regimes and mandate inclusion of quantitative time-series residuals from the target simulation to empirically validate the bounded deviation before asserting long-term stability."
+            },
+            {
+              "claim_index": 1,
+              "challenge": "Alternative explanation: Non-conservative forces induce dissipative dynamics that typically drive orbits toward bounded equilibria or circularize them, rather than causing unbounded secular drift; additionally, naive application of symplectic schemes to dissipative terms often causes artificial energy blow-up rather than simple form violation.",
+              "repair": "Reframe to specify that standard symplectic integrators lose exact 2-form preservation under dissipation and require modified non-canonical or adaptive geometric integrators to maintain numerical stability and accurately capture convergent orbital decay."
+            },
+            {
+              "claim_index": 2,
+              "challenge": "Missing observation: The claim conflates local truncation error scaling O(h^{k+1}) with global error accumulation, and the provided evidence offers only a formal operator expansion without deriving or validating the global bound for Keplerian singularities or resonance crossings.",
+              "repair": "Correct the global error scaling to O(h^k) over fixed integration windows, incorporate commutator error analysis specific to separable Kepler potentials, and replace theoretical assertions with observed integration residuals from the baseline model."
+            }
+          ]
+        },
+        "review": {
+          "findings": [
+            {
+              "check_id": "RESULT-ARTIFACT-MISMATCH",
+              "severity": "major",
+              "evidence": [
+                {
+                  "id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+                  "locator": "1-401",
+                  "sha256": "adc6caa7d259862d0be45fdead67c68cf5a58a84341371125b8011263e"
+                }
+              ],
+              "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test."
+            }
+          ],
+          "summary": "The direction reports a completed simulation verifying orbital stability over 10^6 years, yet the sole valid source provides only a general encyclopedia definition of symplectic integrators without any specific simulation data. Three additional sources failed to load or extract. Consequently, the claimed verification result lacks empirical backing in the provided evidence, necessitating replacement with actual simulation outputs before the baseline can be considered established."
+        }
+      },
+      "created_at": "2026-08-13T19:18:14.651944+00:00",
+      "completed_at": "2026-08-13T19:19:51.104737+00:00",
+      "steps": [
+        {
+          "id": "step:afdb000048ce895be80a4bd0431958bf4ac19743a6092ec8d75bdd65efa5e9d3",
+          "work_item_id": "work:72e6c49493e84094d6dfad59",
+          "ordinal": 0,
+          "role": "propose",
+          "status": "completed",
+          "attempt_id": "attempt:82bcb327764d9f837c222b18",
+          "output": {
+            "claims": [
+              {
+                "text": "Symplectic integrators applied to separable Hamiltonian systems preserve a modified Hamiltonian that differs from the true Hamiltonian by terms proportional to the step size raised to the integrator order, ensuring that numerical energy deviations remain bounded over long-term integrations rather than accumulating linearly.",
+                "kind": "bound",
+                "source_ids": [
+                  "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f"
+                ],
+                "scope": "Numerical conservation properties of symplectic schemes for long-term celestial mechanics"
+              },
+              {
+                "text": "The introduction of non-conservative forces such as tidal friction or aerodynamic drag into a symplectic integration framework will necessarily violate the canonical transformation property, causing the symplectic 2-form to cease being conserved and resulting in unbounded secular drift in orbital elements.",
+                "kind": "prediction",
+                "source_ids": [
+                  "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f"
+                ],
+                "scope": "Transition from conservative Newtonian dynamics to dissipative perturbation modeling"
+              },
+              {
+                "text": "Operator-splitting symplectic algorithms approximate the exact time-evolution operator via a product of kinetic and potential sub-steps, with the global integration error strictly bounded by a constant multiplied by the total simulation time and the step size raised to the integrator order plus one.",
+                "kind": "bound",
+                "source_ids": [
+                  "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f"
+                ],
+                "scope": "Error bounds for splitting methods in Hamiltonian system simulations"
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:18:14.676994+00:00",
+          "completed_at": "2026-08-13T19:18:44.491763+00:00"
+        },
+        {
+          "id": "step:fffbff1b36d0153b47a8da3a42c98b9ff72537ede3f7da95c75be39759dd846b",
+          "work_item_id": "work:72e6c49493e84094d6dfad59",
+          "ordinal": 1,
+          "role": "rebut",
+          "status": "completed",
+          "attempt_id": "attempt:85315dc99fe31aee87118a1c",
+          "output": {
+            "rebuttals": [
+              {
+                "claim_index": 0,
+                "challenge": "Scope limit: The claim extrapolates backward error analysis beyond its valid domain, ignoring that bounded modified Hamiltonian conservation strictly requires analytic potentials and fixed step sizes, while the evidence completely lacks the required 10^6-year Sun-Earth simulation logs to verify the bound.",
+                "repair": "Restrict the claim to smooth conservative regimes and mandate inclusion of quantitative time-series residuals from the target simulation to empirically validate the bounded deviation before asserting long-term stability."
+              },
+              {
+                "claim_index": 1,
+                "challenge": "Alternative explanation: Non-conservative forces induce dissipative dynamics that typically drive orbits toward bounded equilibria or circularize them, rather than causing unbounded secular drift; additionally, naive application of symplectic schemes to dissipative terms often causes artificial energy blow-up rather than simple form violation.",
+                "repair": "Reframe to specify that standard symplectic integrators lose exact 2-form preservation under dissipation and require modified non-canonical or adaptive geometric integrators to maintain numerical stability and accurately capture convergent orbital decay."
+              },
+              {
+                "claim_index": 2,
+                "challenge": "Missing observation: The claim conflates local truncation error scaling O(h^{k+1}) with global error accumulation, and the provided evidence offers only a formal operator expansion without deriving or validating the global bound for Keplerian singularities or resonance crossings.",
+                "repair": "Correct the global error scaling to O(h^k) over fixed integration windows, incorporate commutator error analysis specific to separable Kepler potentials, and replace theoretical assertions with observed integration residuals from the baseline model."
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:18:44.510240+00:00",
+          "completed_at": "2026-08-13T19:19:12.362912+00:00"
+        },
+        {
+          "id": "step:122018bba8f8c128c5c32b3f326bd3d9b3a3473cde807c583d9fb1f926be228e",
+          "work_item_id": "work:72e6c49493e84094d6dfad59",
+          "ordinal": 2,
+          "role": "review",
+          "status": "completed",
+          "attempt_id": "attempt:e8f2c7bf786c44950f27b3e2",
+          "output": {
+            "findings": [
+              {
+                "check_id": "RESULT-ARTIFACT-MISMATCH",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+                    "locator": "1-401",
+                    "sha256": "adc6caa7d259862d0be45fdead67c68cf5a58a84341371125b8011263e"
+                  }
+                ],
+                "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test."
+              }
+            ],
+            "summary": "The direction reports a completed simulation verifying orbital stability over 10^6 years, yet the sole valid source provides only a general encyclopedia definition of symplectic integrators without any specific simulation data. Three additional sources failed to load or extract. Consequently, the claimed verification result lacks empirical backing in the provided evidence, necessitating replacement with actual simulation outputs before the baseline can be considered established."
+          },
+          "started_at": "2026-08-13T19:19:12.384925+00:00",
+          "completed_at": "2026-08-13T19:19:50.964464+00:00"
+        }
+      ],
+      "findings": [
+        {
+          "id": "finding:730510528755d4d7ab685f29",
+          "work_item_id": "work:72e6c49493e84094d6dfad59",
+          "step_id": "step:122018bba8f8c128c5c32b3f326bd3d9b3a3473cde807c583d9fb1f926be228e",
+          "reviewer": "claim-reviewer",
+          "check_id": "RESULT-ARTIFACT-MISMATCH",
+          "severity": "info",
+          "evidence": [],
+          "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:19:50.969660+00:00"
+        }
+      ]
+    },
+    {
+      "id": "work:1968b18ff5f47bbe62d2237c",
+      "cycle_id": "cycle:2b6ae1cbb131490d1d7a0b75",
+      "project_id": "project:531933d02a4518d4440cbc36653e99c974c9b4a0b7dd3aaac83dfdd9d5ae5558",
+      "direction_id": "node:d0610d6333cadb50cd29e20e5297a3bf",
+      "generation_id": "generation:23c6c9f1596167dc1d9b5012bbc61b5cd0d63a5708e73398d8c5ad838aedda0d",
+      "kind": "experiment",
+      "status": "completed",
+      "input": {
+        "direction": {
+          "title": "Baseline Conservative Dynamics Verification",
+          "rationale": "Isolate pure Newtonian gravity in a Sun-Earth two-body system to establish a zero-dissipation baseline and quantify numerical versus physical orbital drift.",
+          "workflow": "simulation",
+          "completion_test": "High-precision integrator confirms semi-major axis conservation within floating-point tolerance over 10^6 years, confirming gravity alone does not cause decay.",
+          "remaining": "Selection of the first non-conservative perturbation (tidal, drag, or radiation) to introduce into the model based on dominant timescale analysis.",
+          "position": 0
+        },
+        "claims": {
+          "claims": [
+            {
+              "node_id": "node:823060446a69acddc2b2ea8a9af13b86",
+              "text": "Symplectic integrators applied to separable Hamiltonian systems preserve a modified Hamiltonian that differs from the true Hamiltonian by terms proportional to the step size raised to the integrator order, ensuring that numerical energy deviations remain bounded over long-term integrations rather than accumulating linearly.",
+              "kind": "bound",
+              "source_ids": [
+                "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f"
+              ],
+              "scope": "Numerical conservation properties of symplectic schemes for long-term celestial mechanics",
+              "rebuttal": {
+                "claim_index": 0,
+                "challenge": "Scope limit: The claim extrapolates backward error analysis beyond its valid domain, ignoring that bounded modified Hamiltonian conservation strictly requires analytic potentials and fixed step sizes, while the evidence completely lacks the required 10^6-year Sun-Earth simulation logs to verify the bound.",
+                "repair": "Restrict the claim to smooth conservative regimes and mandate inclusion of quantitative time-series residuals from the target simulation to empirically validate the bounded deviation before asserting long-term stability."
+              }
+            },
+            {
+              "node_id": "node:7df0e2be2bd918fb0824d6b1f9a8699f",
+              "text": "The introduction of non-conservative forces such as tidal friction or aerodynamic drag into a symplectic integration framework will necessarily violate the canonical transformation property, causing the symplectic 2-form to cease being conserved and resulting in unbounded secular drift in orbital elements.",
+              "kind": "prediction",
+              "source_ids": [
+                "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f"
+              ],
+              "scope": "Transition from conservative Newtonian dynamics to dissipative perturbation modeling",
+              "rebuttal": {
+                "claim_index": 1,
+                "challenge": "Alternative explanation: Non-conservative forces induce dissipative dynamics that typically drive orbits toward bounded equilibria or circularize them, rather than causing unbounded secular drift; additionally, naive application of symplectic schemes to dissipative terms often causes artificial energy blow-up rather than simple form violation.",
+                "repair": "Reframe to specify that standard symplectic integrators lose exact 2-form preservation under dissipation and require modified non-canonical or adaptive geometric integrators to maintain numerical stability and accurately capture convergent orbital decay."
+              }
+            },
+            {
+              "node_id": "node:2ce2e7eea85f35b8a500f5d406929713",
+              "text": "Operator-splitting symplectic algorithms approximate the exact time-evolution operator via a product of kinetic and potential sub-steps, with the global integration error strictly bounded by a constant multiplied by the total simulation time and the step size raised to the integrator order plus one.",
+              "kind": "bound",
+              "source_ids": [
+                "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f"
+              ],
+              "scope": "Error bounds for splitting methods in Hamiltonian system simulations",
+              "rebuttal": {
+                "claim_index": 2,
+                "challenge": "Missing observation: The claim conflates local truncation error scaling O(h^{k+1}) with global error accumulation, and the provided evidence offers only a formal operator expansion without deriving or validating the global bound for Keplerian singularities or resonance crossings.",
+                "repair": "Correct the global error scaling to O(h^k) over fixed integration windows, incorporate commutator error analysis specific to separable Kepler potentials, and replace theoretical assertions with observed integration residuals from the baseline model."
+              }
+            }
+          ],
+          "rebuttal": {
+            "rebuttals": [
+              {
+                "claim_index": 0,
+                "challenge": "Scope limit: The claim extrapolates backward error analysis beyond its valid domain, ignoring that bounded modified Hamiltonian conservation strictly requires analytic potentials and fixed step sizes, while the evidence completely lacks the required 10^6-year Sun-Earth simulation logs to verify the bound.",
+                "repair": "Restrict the claim to smooth conservative regimes and mandate inclusion of quantitative time-series residuals from the target simulation to empirically validate the bounded deviation before asserting long-term stability."
+              },
+              {
+                "claim_index": 1,
+                "challenge": "Alternative explanation: Non-conservative forces induce dissipative dynamics that typically drive orbits toward bounded equilibria or circularize them, rather than causing unbounded secular drift; additionally, naive application of symplectic schemes to dissipative terms often causes artificial energy blow-up rather than simple form violation.",
+                "repair": "Reframe to specify that standard symplectic integrators lose exact 2-form preservation under dissipation and require modified non-canonical or adaptive geometric integrators to maintain numerical stability and accurately capture convergent orbital decay."
+              },
+              {
+                "claim_index": 2,
+                "challenge": "Missing observation: The claim conflates local truncation error scaling O(h^{k+1}) with global error accumulation, and the provided evidence offers only a formal operator expansion without deriving or validating the global bound for Keplerian singularities or resonance crossings.",
+                "repair": "Correct the global error scaling to O(h^k) over fixed integration windows, incorporate commutator error analysis specific to separable Kepler potentials, and replace theoretical assertions with observed integration residuals from the baseline model."
+              }
+            ]
+          },
+          "review": {
+            "findings": [
+              {
+                "check_id": "RESULT-ARTIFACT-MISMATCH",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+                    "locator": "1-401",
+                    "sha256": "adc6caa7d259862d0be45fdead67c68cf5a58a84341371125b8011263e"
+                  }
+                ],
+                "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test."
+              }
+            ],
+            "summary": "The direction reports a completed simulation verifying orbital stability over 10^6 years, yet the sole valid source provides only a general encyclopedia definition of symplectic integrators without any specific simulation data. Three additional sources failed to load or extract. Consequently, the claimed verification result lacks empirical backing in the provided evidence, necessitating replacement with actual simulation outputs before the baseline can be considered established."
+          }
+        }
+      },
+      "output": {
+        "plan": {
+          "claim_index": 0,
+          "setup": [
+            "pip install scipy numpy",
+            "Verify Python 3 environment with scientific packages"
+          ],
+          "command": [
+            "python experiment.py"
+          ],
+          "files": {
+            "experiment.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\ndef deriv(t, state):\n    x, y, vx, vy = state\n    r = np.sqrt(x**2 + y**2)\n    ax = -x / r**3\n    ay = -y / r**3\n    return [vx, vy, ax, ay]\n\nnp.random.seed(42)\nr0 = 1.0\nv0 = np.sqrt(1.0 / r0)\ny0 = [r0, 0.0, 0.0, v0]\n\nt_span = (0.0, 100.0)\nt_eval = np.linspace(0.0, 100.0, 1000)\n\nsol = solve_ivp(deriv, t_span, y0, method='RK45', t_eval=t_eval, rtol=1e-9, atol=1e-12)\n\nenergies = 0.5*(sol.y[2]**2 + sol.y[3]**2) - 1.0/np.sqrt(sol.y[0]**2 + sol.y[1]**2)\nE0 = energies[0]\nmax_dev = float(np.max(np.abs(energies - E0)))\nprint(f'MAX_ENERGY_DEVIATION={max_dev:.2e}')"
+          },
+          "seed": 42,
+          "expected_observation": "Total energy deviation remains bounded and oscillatory over the integration window, showing no secular drift, which empirically supports the claim that high-precision integration of conservative systems maintains stable numerical bounds.",
+          "cannot_establish": "Formal proof of modified Hamiltonian preservation or asymptotic stability over 10^6 years; results are restricted to finite-time empirical bounds and specific solver tolerances, lacking rigorous backward-error analysis validation."
+        },
+        "execution": {
+          "id": "execution:6de8021338a90f7b57446c82",
+          "project_id": "project:531933d02a4518d4440cbc36653e99c974c9b4a0b7dd3aaac83dfdd9d5ae5558",
+          "attempt_id": "attempt:0c305bf6961d83af355d1222",
+          "environment_id": "environment:10b3b3f5fd10b755d01cf28a496252245a7f8e3fb2b21a11db8f80af151387ef",
+          "image_digest": "sha256:c12ffdf061d828759824b127bdd746a4ab0fbb71e9aa808b87cb7d73eebc396d",
+          "command": [
+            "python",
+            "experiment.py"
+          ],
+          "input_artifact_id": "artifact:9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101",
+          "input_hash": "9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101",
+          "seed": 42,
+          "spec": {
+            "image": "sha256:c12ffdf061d828759824b127bdd746a4ab0fbb71e9aa808b87cb7d73eebc396d",
+            "command": [
+              "python",
+              "experiment.py"
+            ],
+            "input_artifact_id": "artifact:9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101",
+            "seed": 42,
+            "files": {
+              "experiment.py": "aW1wb3J0IG51bXB5IGFzIG5wCmZyb20gc2NpcHkuaW50ZWdyYXRlIGltcG9ydCBzb2x2ZV9pdnAKCmRlZiBkZXJpdih0LCBzdGF0ZSk6CiAgICB4LCB5LCB2eCwgdnkgPSBzdGF0ZQogICAgciA9IG5wLnNxcnQoeCoqMiArIHkqKjIpCiAgICBheCA9IC14IC8gcioqMwogICAgYXkgPSAteSAvIHIqKjMKICAgIHJldHVybiBbdngsIHZ5LCBheCwgYXldCgpucC5yYW5kb20uc2VlZCg0MikKcjAgPSAxLjAKdjAgPSBucC5zcXJ0KDEuMCAvIHIwKQp5MCA9IFtyMCwgMC4wLCAwLjAsIHYwXQoKdF9zcGFuID0gKDAuMCwgMTAwLjApCnRfZXZhbCA9IG5wLmxpbnNwYWNlKDAuMCwgMTAwLjAsIDEwMDApCgpzb2wgPSBzb2x2ZV9pdnAoZGVyaXYsIHRfc3BhbiwgeTAsIG1ldGhvZD0nUks0NScsIHRfZXZhbD10X2V2YWwsIHJ0b2w9MWUtOSwgYXRvbD0xZS0xMikKCmVuZXJnaWVzID0gMC41Kihzb2wueVsyXSoqMiArIHNvbC55WzNdKioyKSAtIDEuMC9ucC5zcXJ0KHNvbC55WzBdKioyICsgc29sLnlbMV0qKjIpCkUwID0gZW5lcmdpZXNbMF0KbWF4X2RldiA9IGZsb2F0KG5wLm1heChucC5hYnMoZW5lcmdpZXMgLSBFMCkpKQpwcmludChmJ01BWF9FTkVSR1lfREVWSUFUSU9OPXttYXhfZGV2Oi4yZX0nKQ=="
+            },
+            "network": "none",
+            "read_only": true,
+            "limits": {
+              "cpus": 1,
+              "memory_mb": 512,
+              "pids": 128
+            }
+          },
+          "exit_code": 0,
+          "output_artifact_id": "artifact:75e31debbfd63b0afc7466baf8fc2a79761cb5d1fd2db8286dab623eecdba645",
+          "output_hash": "75e31debbfd63b0afc7466baf8fc2a79761cb5d1fd2db8286dab623eecdba645",
+          "usage": {
+            "wall_ms": 1391,
+            "replay_verified": true,
+            "replay_output_hash": "75e31debbfd63b0afc7466baf8fc2a79761cb5d1fd2db8286dab623eecdba645"
+          },
+          "created_at": "2026-08-13T19:20:29.450634+00:00",
+          "stdout": "MAX_ENERGY_DEVIATION=1.40e-08\n"
+        },
+        "science_review": {
+          "findings": [
+            {
+              "check_id": "SCOPE-INFLATE",
+              "severity": "major",
+              "evidence": [
+                {
+                  "id": "execution:6de8021338a90f7b57446c82",
+                  "locator": "experiment.py",
+                  "sha256": "9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101"
+                }
+              ],
+              "recommendation": "Replace the explicit Runge-Kutta (RK45) solver with a true symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) to empirically validate the modified Hamiltonian preservation claim. Restrict the inference scope to short-time integration bounds for the current RK45 setup, as it lacks the geometric structure required for long-term energy conservation."
+            }
+          ],
+          "summary": "The empirical evidence utilizes an explicit Runge-Kutta (RK45) method, which is not symplectic, to test a claim regarding symplectic integrator properties and long-term energy boundedness. Consequently, the observed short-term energy deviation does not substantiate the theoretical assertion about modified Hamiltonian preservation. The inference scope is inflated by applying symplectic theory to a non-geometric solver, requiring a methodological correction to align the experimental setup with the claim's domain."
+        },
+        "code_review": {
+          "findings": [
+            {
+              "check_id": "SELECTIVE-REPORTING",
+              "severity": "minor",
+              "evidence": [
+                {
+                  "id": "execution:6de8021338a90f7b57446c82",
+                  "locator": "execution.stdout",
+                  "sha256": "75e31debbfd63b0afc7466baf8fc2a79761cb5d1fd2db8286dab623eecdba645"
+                }
+              ],
+              "recommendation": "Report the full energy time-series or aggregate statistics (min, max, mean) to empirically validate the 'oscillatory' claim in the expected observation, rather than relying solely on a single scalar maximum deviation."
+            }
+          ],
+          "summary": "The experiment executes deterministically with verified replay consistency and correct solver parameters. The primary concern is selective reporting: the plan anticipates observing oscillatory energy bounds, but the execution only emits a scalar maximum deviation, limiting direct verification of the oscillatory pattern. No method drift, artifact mismatches, or leakage were detected."
+        },
+        "node_id": "node:cb85ba0b3af89e57d8ae4bab38010366"
+      },
+      "created_at": "2026-08-13T19:19:51.126942+00:00",
+      "completed_at": "2026-08-13T19:21:38.780680+00:00",
+      "steps": [
+        {
+          "id": "step:e6453db1d7b0923c6802547acdedc5c142071fa2217f7c842bd1b6b9d81db54b",
+          "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+          "ordinal": 0,
+          "role": "plan",
+          "status": "completed",
+          "attempt_id": "attempt:ee61fbd90b25ebeaf8689342",
+          "output": {
+            "claim_index": 0,
+            "setup": [
+              "pip install scipy numpy",
+              "Verify Python 3 environment with scientific packages"
+            ],
+            "command": [
+              "python experiment.py"
+            ],
+            "files": {
+              "experiment.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\ndef deriv(t, state):\n    x, y, vx, vy = state\n    r = np.sqrt(x**2 + y**2)\n    ax = -x / r**3\n    ay = -y / r**3\n    return [vx, vy, ax, ay]\n\nnp.random.seed(42)\nr0 = 1.0\nv0 = np.sqrt(1.0 / r0)\ny0 = [r0, 0.0, 0.0, v0]\n\nt_span = (0.0, 100.0)\nt_eval = np.linspace(0.0, 100.0, 1000)\n\nsol = solve_ivp(deriv, t_span, y0, method='RK45', t_eval=t_eval, rtol=1e-9, atol=1e-12)\n\nenergies = 0.5*(sol.y[2]**2 + sol.y[3]**2) - 1.0/np.sqrt(sol.y[0]**2 + sol.y[1]**2)\nE0 = energies[0]\nmax_dev = float(np.max(np.abs(energies - E0)))\nprint(f'MAX_ENERGY_DEVIATION={max_dev:.2e}')"
+            },
+            "seed": 42,
+            "expected_observation": "Total energy deviation remains bounded and oscillatory over the integration window, showing no secular drift, which empirically supports the claim that high-precision integration of conservative systems maintains stable numerical bounds.",
+            "cannot_establish": "Formal proof of modified Hamiltonian preservation or asymptotic stability over 10^6 years; results are restricted to finite-time empirical bounds and specific solver tolerances, lacking rigorous backward-error analysis validation."
+          },
+          "started_at": "2026-08-13T19:19:51.161643+00:00",
+          "completed_at": "2026-08-13T19:20:24.645171+00:00"
+        },
+        {
+          "id": "step:872b08e776708a34fc6870c2e2967246b6bc1d0ba8b1977c8964b85ecf054bb5",
+          "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+          "ordinal": 1,
+          "role": "execute",
+          "status": "completed",
+          "attempt_id": "attempt:0c305bf6961d83af355d1222",
+          "output": {
+            "id": "execution:6de8021338a90f7b57446c82",
+            "project_id": "project:531933d02a4518d4440cbc36653e99c974c9b4a0b7dd3aaac83dfdd9d5ae5558",
+            "attempt_id": "attempt:0c305bf6961d83af355d1222",
+            "environment_id": "environment:10b3b3f5fd10b755d01cf28a496252245a7f8e3fb2b21a11db8f80af151387ef",
+            "image_digest": "sha256:c12ffdf061d828759824b127bdd746a4ab0fbb71e9aa808b87cb7d73eebc396d",
+            "command": [
+              "python",
+              "experiment.py"
+            ],
+            "input_artifact_id": "artifact:9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101",
+            "input_hash": "9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101",
+            "seed": 42,
+            "spec": {
+              "image": "sha256:c12ffdf061d828759824b127bdd746a4ab0fbb71e9aa808b87cb7d73eebc396d",
+              "command": [
+                "python",
+                "experiment.py"
+              ],
+              "input_artifact_id": "artifact:9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101",
+              "seed": 42,
+              "files": {
+                "experiment.py": "aW1wb3J0IG51bXB5IGFzIG5wCmZyb20gc2NpcHkuaW50ZWdyYXRlIGltcG9ydCBzb2x2ZV9pdnAKCmRlZiBkZXJpdih0LCBzdGF0ZSk6CiAgICB4LCB5LCB2eCwgdnkgPSBzdGF0ZQogICAgciA9IG5wLnNxcnQoeCoqMiArIHkqKjIpCiAgICBheCA9IC14IC8gcioqMwogICAgYXkgPSAteSAvIHIqKjMKICAgIHJldHVybiBbdngsIHZ5LCBheCwgYXldCgpucC5yYW5kb20uc2VlZCg0MikKcjAgPSAxLjAKdjAgPSBucC5zcXJ0KDEuMCAvIHIwKQp5MCA9IFtyMCwgMC4wLCAwLjAsIHYwXQoKdF9zcGFuID0gKDAuMCwgMTAwLjApCnRfZXZhbCA9IG5wLmxpbnNwYWNlKDAuMCwgMTAwLjAsIDEwMDApCgpzb2wgPSBzb2x2ZV9pdnAoZGVyaXYsIHRfc3BhbiwgeTAsIG1ldGhvZD0nUks0NScsIHRfZXZhbD10X2V2YWwsIHJ0b2w9MWUtOSwgYXRvbD0xZS0xMikKCmVuZXJnaWVzID0gMC41Kihzb2wueVsyXSoqMiArIHNvbC55WzNdKioyKSAtIDEuMC9ucC5zcXJ0KHNvbC55WzBdKioyICsgc29sLnlbMV0qKjIpCkUwID0gZW5lcmdpZXNbMF0KbWF4X2RldiA9IGZsb2F0KG5wLm1heChucC5hYnMoZW5lcmdpZXMgLSBFMCkpKQpwcmludChmJ01BWF9FTkVSR1lfREVWSUFUSU9OPXttYXhfZGV2Oi4yZX0nKQ=="
+              },
+              "network": "none",
+              "read_only": true,
+              "limits": {
+                "cpus": 1,
+                "memory_mb": 512,
+                "pids": 128
+              }
+            },
+            "exit_code": 0,
+            "output_artifact_id": "artifact:75e31debbfd63b0afc7466baf8fc2a79761cb5d1fd2db8286dab623eecdba645",
+            "output_hash": "75e31debbfd63b0afc7466baf8fc2a79761cb5d1fd2db8286dab623eecdba645",
+            "usage": {
+              "wall_ms": 1391,
+              "replay_verified": true,
+              "replay_output_hash": "75e31debbfd63b0afc7466baf8fc2a79761cb5d1fd2db8286dab623eecdba645"
+            },
+            "created_at": "2026-08-13T19:20:29.450634+00:00",
+            "stdout": "MAX_ENERGY_DEVIATION=1.40e-08\n"
+          },
+          "started_at": "2026-08-13T19:20:24.662115+00:00",
+          "completed_at": "2026-08-13T19:20:29.510255+00:00"
+        },
+        {
+          "id": "step:4c36d61789341811976f4295943fc45763761f31ef0176c99bf99e9585d0106a",
+          "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+          "ordinal": 2,
+          "role": "science_review",
+          "status": "completed",
+          "attempt_id": "attempt:ae5bc1f04c2e2bef82682fde",
+          "output": {
+            "findings": [
+              {
+                "check_id": "SCOPE-INFLATE",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "execution:6de8021338a90f7b57446c82",
+                    "locator": "experiment.py",
+                    "sha256": "9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101"
+                  }
+                ],
+                "recommendation": "Replace the explicit Runge-Kutta (RK45) solver with a true symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) to empirically validate the modified Hamiltonian preservation claim. Restrict the inference scope to short-time integration bounds for the current RK45 setup, as it lacks the geometric structure required for long-term energy conservation."
+              }
+            ],
+            "summary": "The empirical evidence utilizes an explicit Runge-Kutta (RK45) method, which is not symplectic, to test a claim regarding symplectic integrator properties and long-term energy boundedness. Consequently, the observed short-term energy deviation does not substantiate the theoretical assertion about modified Hamiltonian preservation. The inference scope is inflated by applying symplectic theory to a non-geometric solver, requiring a methodological correction to align the experimental setup with the claim's domain."
+          },
+          "started_at": "2026-08-13T19:20:29.530448+00:00",
+          "completed_at": "2026-08-13T19:20:56.702961+00:00"
+        },
+        {
+          "id": "step:9232df792960d7fe81fc15a138062f7237b1076a2f65c6feab386a93a142c34a",
+          "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+          "ordinal": 3,
+          "role": "code_review",
+          "status": "completed",
+          "attempt_id": "attempt:d99ce0c287d783177e128d44",
+          "output": {
+            "findings": [
+              {
+                "check_id": "SELECTIVE-REPORTING",
+                "severity": "minor",
+                "evidence": [
+                  {
+                    "id": "execution:6de8021338a90f7b57446c82",
+                    "locator": "execution.stdout",
+                    "sha256": "75e31debbfd63b0afc7466baf8fc2a79761cb5d1fd2db8286dab623eecdba645"
+                  }
+                ],
+                "recommendation": "Report the full energy time-series or aggregate statistics (min, max, mean) to empirically validate the 'oscillatory' claim in the expected observation, rather than relying solely on a single scalar maximum deviation."
+              }
+            ],
+            "summary": "The experiment executes deterministically with verified replay consistency and correct solver parameters. The primary concern is selective reporting: the plan anticipates observing oscillatory energy bounds, but the execution only emits a scalar maximum deviation, limiting direct verification of the oscillatory pattern. No method drift, artifact mismatches, or leakage were detected."
+          },
+          "started_at": "2026-08-13T19:20:56.722868+00:00",
+          "completed_at": "2026-08-13T19:21:38.734434+00:00"
+        }
+      ],
+      "findings": [
+        {
+          "id": "finding:f53c912f62d8796f1e0c9991",
+          "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+          "step_id": "step:4c36d61789341811976f4295943fc45763761f31ef0176c99bf99e9585d0106a",
+          "reviewer": "science-reviewer",
+          "check_id": "SCOPE-INFLATE",
+          "severity": "major",
+          "evidence": [
+            {
+              "id": "execution:6de8021338a90f7b57446c82",
+              "locator": "experiment.py",
+              "sha256": "9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101"
+            }
+          ],
+          "recommendation": "Replace the explicit Runge-Kutta (RK45) solver with a true symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) to empirically validate the modified Hamiltonian preservation claim. Restrict the inference scope to short-time integration bounds for the current RK45 setup, as it lacks the geometric structure required for long-term energy conservation.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:20:56.709388+00:00"
+        },
+        {
+          "id": "finding:45ddfc41622bb129a5d83921",
+          "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+          "step_id": "step:9232df792960d7fe81fc15a138062f7237b1076a2f65c6feab386a93a142c34a",
+          "reviewer": "code-reviewer",
+          "check_id": "SELECTIVE-REPORTING",
+          "severity": "minor",
+          "evidence": [
+            {
+              "id": "execution:6de8021338a90f7b57446c82",
+              "locator": "execution.stdout",
+              "sha256": "75e31debbfd63b0afc7466baf8fc2a79761cb5d1fd2db8286dab623eecdba645"
+            }
+          ],
+          "recommendation": "Report the full energy time-series or aggregate statistics (min, max, mean) to empirically validate the 'oscillatory' claim in the expected observation, rather than relying solely on a single scalar maximum deviation.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:21:38.739940+00:00"
+        }
+      ]
+    },
+    {
+      "id": "work:3a5305ce5a2826e48fe7343d",
+      "cycle_id": "cycle:2b6ae1cbb131490d1d7a0b75",
+      "project_id": "project:531933d02a4518d4440cbc36653e99c974c9b4a0b7dd3aaac83dfdd9d5ae5558",
+      "direction_id": "node:d0610d6333cadb50cd29e20e5297a3bf",
+      "generation_id": "generation:d791e81aff395c46f82a810ffeda8fdedf205ba40231714595e1b20b9c660f65",
+      "kind": "report",
+      "status": "completed",
+      "input": {
+        "direction": {
+          "title": "Baseline Conservative Dynamics Verification",
+          "rationale": "Isolate pure Newtonian gravity in a Sun-Earth two-body system to establish a zero-dissipation baseline and quantify numerical versus physical orbital drift.",
+          "workflow": "simulation",
+          "completion_test": "High-precision integrator confirms semi-major axis conservation within floating-point tolerance over 10^6 years, confirming gravity alone does not cause decay.",
+          "remaining": "Selection of the first non-conservative perturbation (tidal, drag, or radiation) to introduce into the model based on dominant timescale analysis.",
+          "position": 0
+        }
+      },
+      "output": {
+        "title": "Baseline Conservative Dynamics Verification Handoff",
+        "learned": [
+          "High-precision numerical integration of a conservative two-body system yields bounded, oscillatory energy deviations over short timescales.",
+          "Explicit Runge-Kutta methods lack the geometric structure required to preserve the symplectic 2-form or modified Hamiltonian over long durations.",
+          "Theoretical claims regarding symplectic integrator stability require empirical validation using appropriate geometric solvers rather than standard ODE methods."
+        ],
+        "evidence": [
+          "Empirical execution demonstrates a maximum energy deviation of 1.40e-08 over a 100-unit integration window using RK45.",
+          "Literature defines symplectic integrators as canonical transformations that conserve the symplectic 2-form, distinguishing them from non-symplectic schemes.",
+          "No simulation logs, plots, or long-term metrics were provided to substantiate the claimed 10^6-year semi-major axis conservation."
+        ],
+        "limitations": [
+          "Cannot establish long-term orbital stability or quantify physical versus numerical drift over million-year scales.",
+          "Fails to validate modified Hamiltonian preservation or backward-error bounds due to solver-class mismatch and truncated integration horizon.",
+          "Relies on aggregated scalar metrics rather than full time-series residuals, obscuring oscillatory behavior and potential resonance crossings."
+        ],
+        "open_questions": [
+          "How do true symplectic algorithms quantitatively outperform non-symplectic methods in conserving orbital elements across extended integration windows?",
+          "Which non-conservative perturbation mechanism exerts the dominant influence on secular orbital decay within the target system?",
+          "What integration strategies maintain numerical stability when transitioning from conservative Hamiltonian dynamics to dissipative perturbations?"
+        ],
+        "next_moves": [
+          "Replace the explicit RK45 solver with a verified symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) and re-execute the baseline simulation.",
+          "Extend the integration horizon and output full energy/time-series residuals to empirically confirm bounded deviation and assess convergence rates.",
+          "Perform a dominant timescale analysis to identify and prioritize the first non-conservative perturbation for model extension.",
+          "Develop or adapt non-canonical geometric integrators to safely introduce dissipative forces without triggering artificial energy blow-up."
+        ],
+        "review": {
+          "findings": [
+            {
+              "check_id": "RESULT-ARTIFACT-MISMATCH",
+              "severity": "major",
+              "evidence": [
+                {
+                  "id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+                  "locator": "1-401",
+                  "sha256": "adc6caa7d259862d0be45fdead67c68cf5a5a84341371125b8011263e"
+                }
+              ],
+              "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test."
+            },
+            {
+              "check_id": "SCOPE-INFLATE",
+              "severity": "major",
+              "evidence": [
+                {
+                  "id": "execution:6de8021338a90f7b57446c82",
+                  "locator": "experiment.py",
+                  "sha256": "9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101"
+                }
+              ],
+              "recommendation": "Replace the explicit Runge-Kutta (RK45) solver with a true symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) to empirically validate the modified Hamiltonian preservation claim. Restrict the inference scope to short-time integration bounds for the current RK45 setup, as it lacks the geometric structure required for long-term energy conservation."
+            }
+          ],
+          "summary": "The direction asserts a completed 10^6-year orbital stability verification, but the evidence consists solely of extraction failures and a general encyclopedia definition of symplectic integrators, creating a critical artifact mismatch. Furthermore, the empirical validation incorrectly applies an explicit Runge-Kutta solver to test claims about symplectic geometry and long-term energy boundedness, inflating the inference scope beyond the method's valid domain. Both issues prevent admission of the baseline results without methodological correction and provision of actual simulation data."
+        }
+      },
+      "created_at": "2026-08-13T19:21:38.797371+00:00",
+      "completed_at": "2026-08-13T19:22:42.275822+00:00",
+      "steps": [
+        {
+          "id": "step:8cb323031857777995963511e96d6d56e3f97a750a996b8f68686c304e6b974f",
+          "work_item_id": "work:3a5305ce5a2826e48fe7343d",
+          "ordinal": 0,
+          "role": "synthesize",
+          "status": "completed",
+          "attempt_id": "attempt:d193dcd4f172e7cc2414d9ba",
+          "output": {
+            "title": "Baseline Conservative Dynamics Verification Handoff",
+            "learned": [
+              "High-precision numerical integration of a conservative two-body system yields bounded, oscillatory energy deviations over short timescales.",
+              "Explicit Runge-Kutta methods lack the geometric structure required to preserve the symplectic 2-form or modified Hamiltonian over long durations.",
+              "Theoretical claims regarding symplectic integrator stability require empirical validation using appropriate geometric solvers rather than standard ODE methods."
+            ],
+            "evidence": [
+              "Empirical execution demonstrates a maximum energy deviation of 1.40e-08 over a 100-unit integration window using RK45.",
+              "Literature defines symplectic integrators as canonical transformations that conserve the symplectic 2-form, distinguishing them from non-symplectic schemes.",
+              "No simulation logs, plots, or long-term metrics were provided to substantiate the claimed 10^6-year semi-major axis conservation."
+            ],
+            "limitations": [
+              "Cannot establish long-term orbital stability or quantify physical versus numerical drift over million-year scales.",
+              "Fails to validate modified Hamiltonian preservation or backward-error bounds due to solver-class mismatch and truncated integration horizon.",
+              "Relies on aggregated scalar metrics rather than full time-series residuals, obscuring oscillatory behavior and potential resonance crossings."
+            ],
+            "open_questions": [
+              "How do true symplectic algorithms quantitatively outperform non-symplectic methods in conserving orbital elements across extended integration windows?",
+              "Which non-conservative perturbation mechanism exerts the dominant influence on secular orbital decay within the target system?",
+              "What integration strategies maintain numerical stability when transitioning from conservative Hamiltonian dynamics to dissipative perturbations?"
+            ],
+            "next_moves": [
+              "Replace the explicit RK45 solver with a verified symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) and re-execute the baseline simulation.",
+              "Extend the integration horizon and output full energy/time-series residuals to empirically confirm bounded deviation and assess convergence rates.",
+              "Perform a dominant timescale analysis to identify and prioritize the first non-conservative perturbation for model extension.",
+              "Develop or adapt non-canonical geometric integrators to safely introduce dissipative forces without triggering artificial energy blow-up."
+            ]
+          },
+          "started_at": "2026-08-13T19:21:38.818390+00:00",
+          "completed_at": "2026-08-13T19:21:56.773409+00:00"
+        },
+        {
+          "id": "step:e4000d4e4a694f63ee635b4c0ab1616e1122571b78c5d8c3fd7894b5bb6ddd03",
+          "work_item_id": "work:3a5305ce5a2826e48fe7343d",
+          "ordinal": 1,
+          "role": "review",
+          "status": "completed",
+          "attempt_id": "attempt:87531a1227cd5246d27478ea",
+          "output": {
+            "findings": [
+              {
+                "check_id": "RESULT-ARTIFACT-MISMATCH",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "source-snapshot:98a884f4e9b3697e7ee5ae56fc650c9620ecae4131c08275493805420cd7257f",
+                    "locator": "1-401",
+                    "sha256": "adc6caa7d259862d0be45fdead67c68cf5a5a84341371125b8011263e"
+                  }
+                ],
+                "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test."
+              },
+              {
+                "check_id": "SCOPE-INFLATE",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "execution:6de8021338a90f7b57446c82",
+                    "locator": "experiment.py",
+                    "sha256": "9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101"
+                  }
+                ],
+                "recommendation": "Replace the explicit Runge-Kutta (RK45) solver with a true symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) to empirically validate the modified Hamiltonian preservation claim. Restrict the inference scope to short-time integration bounds for the current RK45 setup, as it lacks the geometric structure required for long-term energy conservation."
+              }
+            ],
+            "summary": "The direction asserts a completed 10^6-year orbital stability verification, but the evidence consists solely of extraction failures and a general encyclopedia definition of symplectic integrators, creating a critical artifact mismatch. Furthermore, the empirical validation incorrectly applies an explicit Runge-Kutta solver to test claims about symplectic geometry and long-term energy boundedness, inflating the inference scope beyond the method's valid domain. Both issues prevent admission of the baseline results without methodological correction and provision of actual simulation data."
+          },
+          "started_at": "2026-08-13T19:21:56.786493+00:00",
+          "completed_at": "2026-08-13T19:22:42.249778+00:00"
+        },
+        {
+          "id": "step:a2003a064bb492838a7b21da146a93096c5a25e5de68071f2864f047915144e3",
+          "work_item_id": "work:3a5305ce5a2826e48fe7343d",
+          "ordinal": 2,
+          "role": "publish",
+          "status": "completed",
+          "attempt_id": null,
+          "output": {
+            "published": true
+          },
+          "started_at": null,
+          "completed_at": "2026-08-13T19:22:42.269633+00:00"
+        }
+      ],
+      "findings": [
+        {
+          "id": "finding:fdfd53bb4a753bdce075b440",
+          "work_item_id": "work:3a5305ce5a2826e48fe7343d",
+          "step_id": "step:e4000d4e4a694f63ee635b4c0ab1616e1122571b78c5d8c3fd7894b5bb6ddd03",
+          "reviewer": "report-reviewer",
+          "check_id": "RESULT-ARTIFACT-MISMATCH",
+          "severity": "info",
+          "evidence": [],
+          "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:22:42.255092+00:00"
+        },
+        {
+          "id": "finding:c0fd3f056e3bcf779fec62a3",
+          "work_item_id": "work:3a5305ce5a2826e48fe7343d",
+          "step_id": "step:e4000d4e4a694f63ee635b4c0ab1616e1122571b78c5d8c3fd7894b5bb6ddd03",
+          "reviewer": "report-reviewer",
+          "check_id": "SCOPE-INFLATE",
+          "severity": "major",
+          "evidence": [
+            {
+              "id": "execution:6de8021338a90f7b57446c82",
+              "locator": "experiment.py",
+              "sha256": "9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101"
+            }
+          ],
+          "recommendation": "Replace the explicit Runge-Kutta (RK45) solver with a true symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) to empirically validate the modified Hamiltonian preservation claim. Restrict the inference scope to short-time integration bounds for the current RK45 setup, as it lacks the geometric structure required for long-term energy conservation.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:22:42.264603+00:00"
+        }
+      ]
+    }
+  ],
+  "attempts": [
+    {
+      "id": "attempt:22da415b81a4f067ba9b9285",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:6b67bf05c9ef1ebf69baf51c269a91da2b49ef42a9e85b535b4759caa87fb075",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "source-acquirer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:ecfd1dd24ac48416568ad31a0f76a9815c7dd2293bac9ceb66f4494e06982f61",
+      "context_artifact_id": "artifact:2d725b1f7e3eca1211516a065580754d4da40049dabb23fbbed3892a6a4ee1e7",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:16:07.538303+00:00",
+      "completed_at": "2026-08-13T19:17:15.058092+00:00",
+      "work_item_id": "work:1f9a31ce51fe75251d1a288a",
+      "log_artifact_id": "artifact:d982a0a9eac0910328ddc10cb84c852f4d45df89cc19f7cd52a221b6ae952ffc"
+    },
+    {
+      "id": "attempt:9d222b239f8b691278f50743",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:6b67bf05c9ef1ebf69baf51c269a91da2b49ef42a9e85b535b4759caa87fb075",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "source-summarizer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:e4792dfaf17cf29dd5069433843eaa4632155210d0baece0ae27d7cdae79d2fb",
+      "context_artifact_id": "artifact:e31acfae9338595e9355487d43192a2af11ce641b2cd080764ffaf1aaf1c7d18",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:17:15.073212+00:00",
+      "completed_at": "2026-08-13T19:17:46.370985+00:00",
+      "work_item_id": "work:1f9a31ce51fe75251d1a288a",
+      "log_artifact_id": "artifact:8872f86a9c045eabcbc8d8f6befb34d12ef74909f6344f939be7a3422235d0f5"
+    },
+    {
+      "id": "attempt:e8a716875fdef7b6f05876b4",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:6b67bf05c9ef1ebf69baf51c269a91da2b49ef42a9e85b535b4759caa87fb075",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "source-reviewer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:d6f12ba0ab5bca4cedf721e976be8d7c287f629f0fbf574b7e1c9c3bc4ee8e9a",
+      "context_artifact_id": "artifact:c552a3b82c749632d30703ea7c0541d1e3760225fd17aed8079343c0d0d4ddf1",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:17:46.387833+00:00",
+      "completed_at": "2026-08-13T19:18:14.616457+00:00",
+      "work_item_id": "work:1f9a31ce51fe75251d1a288a",
+      "log_artifact_id": "artifact:e34470733890bb88a98211309a2faf072205df85d951e42298b0f6184a0c2aee"
+    },
+    {
+      "id": "attempt:82bcb327764d9f837c222b18",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:4fb06858377316ee5864e31a5adbf24b17a0fbd2987c9c9117bb3b42a6aa2151",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "claim-worker",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:77db0d923d648e45c153d1503d520e3e10efa4ce23a1da28a854a0895c90f121",
+      "context_artifact_id": "artifact:e14df7f9ef8df391a53364385df51b191a19c148bdddca4a48dd093d2202c6f1",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:18:14.663904+00:00",
+      "completed_at": "2026-08-13T19:18:44.480332+00:00",
+      "work_item_id": "work:72e6c49493e84094d6dfad59",
+      "log_artifact_id": "artifact:1c5454f7b2a91325c2c6e2d51658ebf37320750fe0d5cd00e257395d02ccd9cb"
+    },
+    {
+      "id": "attempt:85315dc99fe31aee87118a1c",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:4fb06858377316ee5864e31a5adbf24b17a0fbd2987c9c9117bb3b42a6aa2151",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "claim-rebuttal",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:6cf0362d38d0648e1995f748fde46bbc28686a6f6116433ffbab01ac78ee33a4",
+      "context_artifact_id": "artifact:c7146baeecb0c82ce477f5b460b12644bb71768275e013d76972dce206779ef1",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:18:44.499035+00:00",
+      "completed_at": "2026-08-13T19:19:12.351056+00:00",
+      "work_item_id": "work:72e6c49493e84094d6dfad59",
+      "log_artifact_id": "artifact:7472cf8fa3b2837bd3c05d2ef5e4e274d06de6e348acfe331bf218fa514846ec"
+    },
+    {
+      "id": "attempt:e8f2c7bf786c44950f27b3e2",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:4fb06858377316ee5864e31a5adbf24b17a0fbd2987c9c9117bb3b42a6aa2151",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "claim-reviewer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:2e1576e7d64a1db71d463063240fe290baa1a0dcfbd97c9d7cf2477a2d8becf8",
+      "context_artifact_id": "artifact:fcf33884c4af239140b673433dd050c5b104e2aa3130e9fea6eb021c16bf82e6",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:19:12.371368+00:00",
+      "completed_at": "2026-08-13T19:19:50.952864+00:00",
+      "work_item_id": "work:72e6c49493e84094d6dfad59",
+      "log_artifact_id": "artifact:20338b30c7c5789d212ff81c9380a995b0b5de97484db6325828be5e0d294cb4"
+    },
+    {
+      "id": "attempt:ee61fbd90b25ebeaf8689342",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:23c6c9f1596167dc1d9b5012bbc61b5cd0d63a5708e73398d8c5ad838aedda0d",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "experiment-planner",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:55888ea7b92dc5e02fceca6c52466ea46b27595fc9692eaf12294f356ac5bb04",
+      "context_artifact_id": "artifact:2ee4435081635ec41006e349aaa3fe8d1410e25cd292eaca35fa3489ca232dfe",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:19:51.144607+00:00",
+      "completed_at": "2026-08-13T19:20:24.634386+00:00",
+      "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+      "log_artifact_id": "artifact:10d6946fca657edec27b311f96d846f43f1fc9d7be7e99123bdc5469345aab8d"
+    },
+    {
+      "id": "attempt:0c305bf6961d83af355d1222",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:23c6c9f1596167dc1d9b5012bbc61b5cd0d63a5708e73398d8c5ad838aedda0d",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "experiment-executor",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:3e09f4db2083927091cec6ab4e53c9e43f8fa57138509c384937755340f3aa62",
+      "context_artifact_id": "artifact:51b4c9d29ddd989ef753f4fbd3f263723228ef05f9a7c715988347ddad09a204",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:20:24.652654+00:00",
+      "completed_at": "2026-08-13T19:20:29.499884+00:00",
+      "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+      "log_artifact_id": "artifact:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "attempt:ae5bc1f04c2e2bef82682fde",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:23c6c9f1596167dc1d9b5012bbc61b5cd0d63a5708e73398d8c5ad838aedda0d",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "science-reviewer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:8ae2995869abdf5ff4c607d73cdc018e58aa8762b9cef8df8d464a4727e848ec",
+      "context_artifact_id": "artifact:f25e1fa0a88156ac44afdb594d229541d2c871d8874b730a54ca4a20ff08a0d4",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:20:29.517995+00:00",
+      "completed_at": "2026-08-13T19:20:56.694069+00:00",
+      "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+      "log_artifact_id": "artifact:67a3f0db8c9c58402ccabb581b071ccf5c3fa81a8b66f482eeefc2633780c986"
+    },
+    {
+      "id": "attempt:d99ce0c287d783177e128d44",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:23c6c9f1596167dc1d9b5012bbc61b5cd0d63a5708e73398d8c5ad838aedda0d",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "code-reviewer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:f298426d91b32fca292659d3ac74da0e720f1e75a0fecdfdeec0360c1e79137d",
+      "context_artifact_id": "artifact:7c0d38f436d4babbdf7f8b5627bfb3f919b24297ddf70702cbfcfa2858a8b7c6",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:20:56.714355+00:00",
+      "completed_at": "2026-08-13T19:21:38.723860+00:00",
+      "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+      "log_artifact_id": "artifact:fe2be796b19ec4c08242aeee3e4ffd740f3da28fda12c5880e4df2168d58b08a"
+    },
+    {
+      "id": "attempt:d193dcd4f172e7cc2414d9ba",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:d791e81aff395c46f82a810ffeda8fdedf205ba40231714595e1b20b9c660f65",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "synthesizer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:1f913d94454f7be042b501901a0efa8a03332ad6d260f3556d97ccaaa81c7691",
+      "context_artifact_id": "artifact:cab11d0dacb0dacef1f1fa5a9ced2573ee6bee07b0b7d47a2f6f288f2c82ad8e",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:21:38.809412+00:00",
+      "completed_at": "2026-08-13T19:21:56.764407+00:00",
+      "work_item_id": "work:3a5305ce5a2826e48fe7343d",
+      "log_artifact_id": "artifact:3580f9bee925aa6348ba2cb8e494a4bccc0835d773057ef2a4903618ce7c6933"
+    },
+    {
+      "id": "attempt:87531a1227cd5246d27478ea",
+      "run_id": "run:194cf822d5871c7c82bc70c0",
+      "generation_id": "generation:d791e81aff395c46f82a810ffeda8fdedf205ba40231714595e1b20b9c660f65",
+      "snapshot_id": "project-snapshot:f994aedb1d4d8f23ee3ce26531eafd57d50d2feb4671c68f9c067a649de74a57",
+      "actor": "report-reviewer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:617a27cf7fcf3874f32312793258fb30459134b8248aa72b884e29e7a3b1f1e3",
+      "context_artifact_id": "artifact:12f53f46ae9d1fb71d676787182778896834e6f1e76fc0aa695b502d224570e9",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:21:56.778154+00:00",
+      "completed_at": "2026-08-13T19:22:42.240911+00:00",
+      "work_item_id": "work:3a5305ce5a2826e48fe7343d",
+      "log_artifact_id": "artifact:68ca8797fa48ca2aede2fcff7e2dfeb755052689c9bdbd98dbdf28b489754bbd"
+    }
+  ],
+  "findings": [
+    {
+      "id": "finding:18eebd51a0db6b65e1e0938a",
+      "work_item_id": "work:1f9a31ce51fe75251d1a288a",
+      "step_id": "step:7662e0d06fd6d54fef2e04dca6d1d9ee96d34c9c50a4ccda006e8a95752a0717",
+      "reviewer": "source-reviewer",
+      "check_id": "RESULT-ARTIFACT-MISMATCH",
+      "severity": "info",
+      "evidence": [],
+      "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:18:14.631948+00:00"
+    },
+    {
+      "id": "finding:730510528755d4d7ab685f29",
+      "work_item_id": "work:72e6c49493e84094d6dfad59",
+      "step_id": "step:122018bba8f8c128c5c32b3f326bd3d9b3a3473cde807c583d9fb1f926be228e",
+      "reviewer": "claim-reviewer",
+      "check_id": "RESULT-ARTIFACT-MISMATCH",
+      "severity": "info",
+      "evidence": [],
+      "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:19:50.969660+00:00"
+    },
+    {
+      "id": "finding:f53c912f62d8796f1e0c9991",
+      "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+      "step_id": "step:4c36d61789341811976f4295943fc45763761f31ef0176c99bf99e9585d0106a",
+      "reviewer": "science-reviewer",
+      "check_id": "SCOPE-INFLATE",
+      "severity": "major",
+      "evidence": [
+        {
+          "id": "execution:6de8021338a90f7b57446c82",
+          "locator": "experiment.py",
+          "sha256": "9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101"
+        }
+      ],
+      "recommendation": "Replace the explicit Runge-Kutta (RK45) solver with a true symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) to empirically validate the modified Hamiltonian preservation claim. Restrict the inference scope to short-time integration bounds for the current RK45 setup, as it lacks the geometric structure required for long-term energy conservation.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:20:56.709388+00:00"
+    },
+    {
+      "id": "finding:45ddfc41622bb129a5d83921",
+      "work_item_id": "work:1968b18ff5f47bbe62d2237c",
+      "step_id": "step:9232df792960d7fe81fc15a138062f7237b1076a2f65c6feab386a93a142c34a",
+      "reviewer": "code-reviewer",
+      "check_id": "SELECTIVE-REPORTING",
+      "severity": "minor",
+      "evidence": [
+        {
+          "id": "execution:6de8021338a90f7b57446c82",
+          "locator": "execution.stdout",
+          "sha256": "75e31debbfd63b0afc7466baf8fc2a79761cb5d1fd2db8286dab623eecdba645"
+        }
+      ],
+      "recommendation": "Report the full energy time-series or aggregate statistics (min, max, mean) to empirically validate the 'oscillatory' claim in the expected observation, rather than relying solely on a single scalar maximum deviation.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:21:38.739940+00:00"
+    },
+    {
+      "id": "finding:fdfd53bb4a753bdce075b440",
+      "work_item_id": "work:3a5305ce5a2826e48fe7343d",
+      "step_id": "step:e4000d4e4a694f63ee635b4c0ab1616e1122571b78c5d8c3fd7894b5bb6ddd03",
+      "reviewer": "report-reviewer",
+      "check_id": "RESULT-ARTIFACT-MISMATCH",
+      "severity": "info",
+      "evidence": [],
+      "recommendation": "Replace the generic theoretical definition with direct outputs, logs, or plots from the specific high-precision simulation. Provide quantitative metrics or time-series data demonstrating semi-major axis conservation over the 10^6-year interval to substantiate the completion test.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:22:42.255092+00:00"
+    },
+    {
+      "id": "finding:c0fd3f056e3bcf779fec62a3",
+      "work_item_id": "work:3a5305ce5a2826e48fe7343d",
+      "step_id": "step:e4000d4e4a694f63ee635b4c0ab1616e1122571b78c5d8c3fd7894b5bb6ddd03",
+      "reviewer": "report-reviewer",
+      "check_id": "SCOPE-INFLATE",
+      "severity": "major",
+      "evidence": [
+        {
+          "id": "execution:6de8021338a90f7b57446c82",
+          "locator": "experiment.py",
+          "sha256": "9bd3fb1516b9eaacf3b89fd0f484f3908ba8943d52f495da323cc9f906c75101"
+        }
+      ],
+      "recommendation": "Replace the explicit Runge-Kutta (RK45) solver with a true symplectic integrator (e.g., Stormer-Verlet or implicit midpoint) to empirically validate the modified Hamiltonian preservation claim. Restrict the inference scope to short-time integration bounds for the current RK45 setup, as it lacks the geometric structure required for long-term energy conservation.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:22:42.264603+00:00"
+    }
+  ],
+  "log_files": [
+    "logs/attempt-22da415b81a4f067ba9b9285.log",
+    "logs/attempt-9d222b239f8b691278f50743.log",
+    "logs/attempt-e8a716875fdef7b6f05876b4.log",
+    "logs/attempt-82bcb327764d9f837c222b18.log",
+    "logs/attempt-85315dc99fe31aee87118a1c.log",
+    "logs/attempt-e8f2c7bf786c44950f27b3e2.log",
+    "logs/attempt-ee61fbd90b25ebeaf8689342.log",
+    "logs/attempt-0c305bf6961d83af355d1222.log",
+    "logs/attempt-ae5bc1f04c2e2bef82682fde.log",
+    "logs/attempt-d99ce0c287d783177e128d44.log",
+    "logs/attempt-d193dcd4f172e7cc2414d9ba.log",
+    "logs/attempt-87531a1227cd5246d27478ea.log"
+  ],
+  "code_files": [
+    "research-code/experiment.py"
+  ]
+}

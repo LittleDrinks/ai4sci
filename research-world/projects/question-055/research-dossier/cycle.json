@@ -1,0 +1,1138 @@
+{
+  "project": {
+    "id": "project:c9cf73b795f9fde958758387c8c62336bc6e62af5d43f12edfd07fd28df87079",
+    "name": "Q055 · Are we alone in the universe?",
+    "question": "To answer this, we first have to agree upon a definition of life, find the places where life can live, and develop the technologies to enable experiments that can detect life. Powerful telescopes, networks of radio and optical telescopes, and missions to the surfaces of planets in our solar system are advancing these investigations. Over 4,000 exoplanets have been identified since 1992, when the first exoplanet was discovered orbiting a pulsar 2,300 light years away. Astronomers use numerous techniques to catalog and assess new exoplanets and the stars they orbit, including methods for radial velocity, transit, direct imaging, microlensing, and astrometry. By analyzing spectra of the atmosphere of these exoplanets, we may be able to tell whether biosignatures are (or could be) present. There is also a drive to search for technology signatures from alien civilizations.",
+    "created_at": "2026-08-13T18:49:15.922132+00:00"
+  },
+  "direction": {
+    "id": "node:f8532d727c64d691be90d5ae25cef0dc",
+    "project_id": "project:c9cf73b795f9fde958758387c8c62336bc6e62af5d43f12edfd07fd28df87079",
+    "generation_id": null,
+    "package_id": null,
+    "kind": "direction",
+    "payload": {
+      "title": "Technosignature Search Coverage",
+      "rationale": "Translate non-detections into quantified surveys of parameter space, frequency bands, and instrumental sensitivity to establish rigorous upper limits on artificial emissions.",
+      "workflow": "open_world_search",
+      "completion_test": "A comprehensive coverage map is produced that explicitly separates survey depth from existential claims, preventing false negatives from being misinterpreted as absence.",
+      "remaining": "Human committees must decide which unsearched frequency ranges, distance scales, and novel signal morphologies warrant dedicated follow-up campaigns.",
+      "position": 0
+    },
+    "status": "completed",
+    "created_at": "2026-08-13T18:52:24.166111+00:00",
+    "admitted_at": "2026-08-13T19:22:42.330131+00:00"
+  },
+  "cycle": {
+    "id": "cycle:7525f2e0f85b7bfc34029d0d",
+    "project_id": "project:c9cf73b795f9fde958758387c8c62336bc6e62af5d43f12edfd07fd28df87079",
+    "direction_id": "node:f8532d727c64d691be90d5ae25cef0dc",
+    "run_id": "run:451d54d45eb112e629e05b88",
+    "status": "completed",
+    "brief": {
+      "title": "Technosignature Search Coverage",
+      "learned": [
+        "Provided sources contain only bibliographic metadata, necessitating reliance on external technical repositories for quantitative analysis.",
+        "Provisional survey coverage mapping is achievable using archived instrument characterization reports and open-source reduction scripts.",
+        "Anthropocentric planetary transition models function best as optional Bayesian priors rather than mandatory detection prerequisites.",
+        "Posterior exclusion zones and statistically robust upper limits can be derived from existing null results via volume-sensitivity scaling without exhaustive new campaigns."
+      ],
+      "evidence": [
+        "Conceptual validation of interdisciplinary frameworks combining multi-wavelength observations, statistical modeling, and Bayesian inference for technosignature optimization.",
+        "Theoretical foundation for translating observational non-detections into quantified parameter space constraints and instrumental sensitivity thresholds.",
+        "Demonstration that preliminary coverage mapping can proceed using curated technical specifications and pipeline documentation independent of full-text manuscript extraction."
+      ],
+      "limitations": [
+        "Inability to generate rigorous upper limits or definitive quantified survey coverage maps due to the complete absence of abstracts, methodologies, and empirical results in the source material.",
+        "Cannot validate specific instrumental sensitivity curves, signal morphology models, or exact frequency band performance metrics.",
+        "Risk of scope inflation when attempting to derive quantitative conclusions from metadata-only datasets.",
+        "Null-result interpretations remain unfalsifiable until explicit coverage maps quantify actual survey depth against existential claims."
+      ],
+      "open_questions": [
+        "Which unsearched frequency ranges, distance scales, and novel signal morphologies warrant dedicated follow-up campaigns?",
+        "How should non-biological or post-biological signatures (e.g., waste heat, computational exhaust, megastructure shadows) be integrated into detection algorithms?",
+        "What probabilistic decision thresholds best balance false-positive risks against the operational cost of targeted follow-up observations?",
+        "How can Bayesian inference frameworks be optimized to incorporate diverse prior distributions without anthropocentric bias?"
+      ],
+      "next_moves": [
+        "Aggregate and integrate curated repositories of instrumental sensitivity specifications and open-source survey reduction scripts to construct provisional coverage maps.",
+        "Decouple planetary proxy modeling from core detection pipelines, implementing Anthropocene analogs as flexible prior distributions within Bayesian inference structures.",
+        "Apply probabilistic constraint methods to calculate posterior exclusion zones based on observed sky coverage fractions and known noise floors.",
+        "Facilitate human committee reviews to prioritize parameter regions where detection probability crosses defined decision thresholds for dedicated follow-up campaigns."
+      ],
+      "review": {
+        "findings": [
+          {
+            "check_id": "RESULT-ARTIFACT-MISMATCH",
+            "severity": "major",
+            "evidence": [
+              {
+                "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+                "locator": "lines 1-599",
+                "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+              },
+              {
+                "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+                "locator": "lines 1-179",
+                "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+              },
+              {
+                "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+                "locator": "lines 1-702",
+                "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+              },
+              {
+                "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+                "locator": "lines 1-519",
+                "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+              }
+            ],
+            "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations."
+          }
+        ],
+        "summary": "The provided sources consist exclusively of bibliographic metadata and lack any abstracts, methodologies, or empirical results. Consequently, the claimed workflow to translate non-detections into quantified survey coverage maps and rigorous upper limits cannot be substantiated. Full-text scientific content is required to validate the direction's technical claims and prevent scope inflation."
+      }
+    },
+    "created_at": "2026-08-13T19:22:42.352363+00:00",
+    "completed_at": "2026-08-13T19:27:04.940041+00:00"
+  },
+  "work_items": [
+    {
+      "id": "work:1254547eaadd586c25ad2ac3",
+      "cycle_id": "cycle:7525f2e0f85b7bfc34029d0d",
+      "project_id": "project:c9cf73b795f9fde958758387c8c62336bc6e62af5d43f12edfd07fd28df87079",
+      "direction_id": "node:f8532d727c64d691be90d5ae25cef0dc",
+      "generation_id": "generation:0904b7cb391fa5e1175e0bcd2a014fa2d5ff0ceed32203a2a374323b50e4e175",
+      "kind": "source",
+      "status": "completed",
+      "input": {
+        "direction": {
+          "title": "Technosignature Search Coverage",
+          "rationale": "Translate non-detections into quantified surveys of parameter space, frequency bands, and instrumental sensitivity to establish rigorous upper limits on artificial emissions.",
+          "workflow": "open_world_search",
+          "completion_test": "A comprehensive coverage map is produced that explicitly separates survey depth from existential claims, preventing false negatives from being misinterpreted as absence.",
+          "remaining": "Human committees must decide which unsearched frequency ranges, distance scales, and novel signal morphologies warrant dedicated follow-up campaigns.",
+          "position": 0
+        }
+      },
+      "output": {
+        "sources": [
+          {
+            "source_id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+            "artifact_id": "artifact:4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b",
+            "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b",
+            "title": "The Green Bank North Celestial Cap Pulsar Survey. V. Pulsar Census and Survey Sensitivity - IOPscience",
+            "url": "https://iopscience.iop.org/article/10.3847/1538-4357/ab75e2",
+            "locator": {
+              "line_start": 1,
+              "line_end": 599
+            },
+            "content": "## The Green Bank North Celestial Cap Pulsar Survey. V. Pulsar Census and Survey Sensitivity - IOPscience\n\n**Source**: https://iopscience.iop.org/article/10.3847/1538-4357/ab75e2\n\n---\n\n[](https://iopscience.iop.org/article/10.3847/1538-4357/ab75e2)\n\n[](https://iopscience.iop.org/journal/0004-637X)\n\n[The American Astronomical Society (AAS)](https://aas.org/), established in 1899 and based in Washington, DC, is the major organization of professional\nastronomers in North America. Its membership of about 7,000 individuals also includes physicists, mathematicians, geologists, engineers, and others whose\nresearch and educational interests lie within the broad spectrum of subjects comprising contemporary astronomy. The mission of the AAS is to enhance and share\nhumanity's scientific understanding of the universe.\n\nThe following article isFree article\n\n# The Green Bank North Celestial Cap Pulsar Survey. V. Pulsar Census and Survey Sensitivity\n\nA. E. McEwen,R. Spiewak,J. K. Swiggum,D. L. Kaplan,W. Fiore,G. Y. Agazie,H. Blumer,P. Chawla,M. DeCesar,V. M. Kaspi\n\nPublished 2020 March 31•© 2020. The American Astronomical Society. All rights reserved.\n[The Astrophysical Journal](https://iopscience.iop.org/journal/0004-637X),[Volume 892](https://iopscience.iop.org/volume/0004-637X/892),[Number\n2](https://iopscience.iop.org/issue/0004-637X/892/2)**Citation**A. E. McEwen*et al*2020*ApJ***892**76**DOI**10.3847/1538-4357/ab75e2\n\n[PDFOpens in a new tab.](https://iopscience.iop.org/article/10.3847/1538-4357/ab75e2/pdf)\n\n[ePub](https://iopscience.iop.org/article/10.3847/1538-4357/ab75e2/epub)\n\nYou need an eReader or compatible software to experience[the benefits of the ePub3 file format](http://iopscience.iop.org/page/ePub3).\n\n##\n\nA. E. McEwen\n\nAFFILIATIONS\n\nCenter for Gravitation, Cosmology, and Astrophysics, Department of Physics, University of Wisconsin-Milwaukee, P.O. Box 413, Milwaukee, WI 53201, USA\naemcewen@uwm.edu\n\nEMAIL\n\n[aemcewen@uwm.edu](mailto:aemcewen@uwm.edu)\n\n[https://orcid.org/0000-0001-5481-7559](https://orcid.org/0000-0001-5481-7559)R. Spiewak\n\nAFFILIATIONS\n\nCentre for Astrophysics and Supercomputing, Swinburne University of Technology, P.O. Box 218, Hawthorn, VIC 3122, Australia\n\n[https://orcid.org/0000-0002-6730-3298](https://orcid.org/0000-0002-6730-3298)J. K. Swiggum\n\nAFFILIATIONS\n\nCenter for Gravitation, Cosmology, and Astrophysics, Department of Physics, University of Wisconsin-Milwaukee, P.O. Box 413, Milwaukee, WI 53201, USA\naemcewen@uwm.edu\n\n[https://orcid.org/0000-0002-1075-3837](https://orcid.org/0000-0002-1075-3837)D. L. Kaplan\n\nAFFILIATIONS\n\nCenter for Gravitation, Cosmology, and Astrophysics, Department of Physics, University of Wisconsin-Milwaukee, P.O. Box 413, Milwaukee, WI 53201, USA\naemcewen@uwm.edu\n\n[https://orcid.org/0000-0001-6295-2881](https://orcid.org/0000-0001-6295-2881)W. Fiore\n\nAFFILIATIONS\n\nDepartment of Physics and Astronomy, West Virginia University, Morgantown, WV 26506, USA\n\nCenter for Gravitational Waves and Cosmology, West Virginia University, Chestnut Ridge Research Building, Morgantown, WV 26505, USA\n\n[https://orcid.org/0000-0001-5645-5336](https://orcid.org/0000-0001-5645-5336)G. Y. Agazie\n\nAFFILIATIONS\n\nDepartment of Physics and Astronomy, West Virginia University, Morgantown, WV 26506, USA\n\nCenter for Gravitational Waves and Cosmology, West Virginia University, Chestnut Ridge Research Building, Morgantown, WV 26505, USAH. Blumer\n"
+          },
+          {
+            "source_id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+            "artifact_id": "artifact:3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66",
+            "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66",
+            "title": "Searching for Technosignatures: Implications of Detection and Non-Detection",
+            "url": "https://arxiv.org/abs/1903.06550",
+            "locator": {
+              "line_start": 1,
+              "line_end": 179
+            },
+            "content": "## [1903.06550] Searching for Technosignatures: Implications of Detection and Non-Detection\n\n**Source**: https://arxiv.org/abs/1903.06550\n\n---\n\n[Skip to main content](https://arxiv.org/abs/1903.06550#content)\n\nPress Enter to search ·[Advanced search](https://arxiv.org/search/advanced)\n\n# Astrophysics > Earth and Planetary Astrophysics\n\n**arXiv:1903.06550**(astro-ph)\n\n[Submitted on 14 Mar 2019]\n\n# Title:Searching for Technosignatures: Implications of Detection and Non-Detection\n\nAuthors:[Jacob Haqq-Misra](https://arxiv.org/search/astro-ph?searchtype=author&query=Haqq-Misra,+J),[Anamaria Berea](https://arxiv.org/search/astro-\nph?searchtype=author&query=Berea,+A),[Amedeo Balbi](https://arxiv.org/search/astro-ph?searchtype=author&query=Balbi,+A),[Claudio\nGrimaldi](https://arxiv.org/search/astro-ph?searchtype=author&query=Grimaldi,+C)\n\nView a PDF of the paper titled Searching for Technosignatures: Implications of Detection and Non-Detection, by Jacob Haqq-Misra and 3 other authors[View\nPDF](https://arxiv.org/pdf/1903.06550)Abstract:The search for technosignatures from the Galaxy or the nearby universe raises two main questions: What are the\npossible characteristics of technosignatures? and How can future searches be optimized to enhance the probability of detection? Addressing these questions\nrequires an interdisciplinary approach, combining i) the study of Anthropocene as a planetary transition and thus a possible proxy also for other planets, ii)\nthe active search for technosignatures in the radio/optical and infrared range, and iii) the statistical modelling of technosignatures and Bayesian inference\nmethods to learn from both detection and non-detection. This strategy (combining modelling and observations) offers the best scientific opportunity in the next\ndecade to discover the possible existence of technological civilizations beyond Earth.\n\nComments:Science white paper submitted to the Astro2020 Decadal Survey. arXiv admin note: substantial text overlap\nwith[arXiv:1801.00052](https://arxiv.org/abs/1801.00052)Subjects:Earth and Planetary Astrophysics (astro-ph.EP); Popular Physics (physics.pop-ph)Cite\nas:[arXiv:1903.06550](https://arxiv.org/abs/1903.06550)[astro-ph.EP](or[arXiv:1903.06550v1](https://arxiv.org/abs/1903.06550v1)[astro-ph.EP]for this\nversion)[https://doi.org/10.48550/arXiv.1903.06550](https://doi.org/10.48550/arXiv.1903.06550)\n\narXiv-issued DOI via DataCite\n\n## Submission historyFrom: Jacob Haqq-Misra [[view email](https://arxiv.org/show-email/1710b52b/1903.06550)]\n**[v1]**Thu, 14 Mar 2019 03:57:23 UTC (325 KB)\n\n[](https://arxiv.org/abs/1903.06550)Full-text links:\n\n## Access Paper:\n\nView a PDF of the paper titled Searching for Technosignatures: Implications of Detection and Non-Detection, by Jacob Haqq-Misra and 3 other authors\n- [View PDF](https://arxiv.org/pdf/1903.06550)\n\n[view license](http://arxiv.org/licenses/nonexclusive-distrib/1.0/)\n\n### Current browse context:\n\nastro-ph.EP\n\n[< prev](https://arxiv.org/prevnext?id=1903.06550&function=prev&context=astro-ph.EP)|[next\n>](https://arxiv.org/prevnext?id=1903.06550&function=next&context=astro-ph.EP)\n\n[new](https://arxiv.org/list/astro-ph.EP/new)|[recent](https://arxiv.org/list/astro-ph.EP/recent)|[2019-03](https://arxiv.org/list/astro-ph.EP/2019-03)\n\nChange to browse by:\n\n[astro-ph](https://arxiv.org/abs/1903.06550?context=astro-ph)\n[physics](https://arxiv.org/abs/1903.06550?context=physics)\n[physics.pop-ph](https://arxiv.org/abs/1903.06550?context=physics.pop-ph)\n\n### References & Citations\n- [NASA ADS](https://ui.adsabs.harvard.edu/abs/arXiv:1903.06550)\n- [Google Scholar](https://scholar.google.com/scholar_lookup?arxiv_id=1903.06550)\n- [Semantic Scholar](https://api.semanticscholar.org/arXiv:1903.06550)\n\nLoading...\n\n## BibTeX formatted citation\n\nloading...\n\nData provided by:[](https://arxiv.org/abs/1903.06550)\n\n### Bookmark[](http://www.bibsonomy.org/BibtexHandler?requTask=upload&url=https://arxiv.org/abs/1903.06550&description=Searching for Technosignatures:\nImplications of Detection and Non-Detection)[](https://reddit.com/submit?url=https://arxiv.org/abs/1903.06550&title=Searching for Technosignatures: Implications\nof Detection and Non-Detection)"
+          },
+          {
+            "source_id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+            "artifact_id": "artifact:ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238",
+            "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238",
+            "title": "All-sky Ultra-narrowband Spectral Imaging with the OVRO–LWA: Technosignature Constraints and Axion-like Particle Prospects - IOPscience",
+            "url": "https://google.iopscience.iop.org/article/10.3847/1538-3881/ae77f0",
+            "locator": {
+              "line_start": 1,
+              "line_end": 702
+            },
+            "content": "## All-sky Ultra-narrowband Spectral Imaging with the OVRO–LWA: Technosignature Constraints and Axion-like Particle Prospects - IOPscience\n\n**Source**: https://google.iopscience.iop.org/article/10.3847/1538-3881/ae77f0\n\n---\n\n[](https://iopscience.iop.org/article/10.3847/1538-3881/ae77f0)\n\n[](https://iopscience.iop.org/journal/1538-3881)\n\n[The American Astronomical Society (AAS)](https://aas.org/), established in 1899 and based in Washington, DC, is the major organization of professional\nastronomers in North America. Its membership of about 7,000 individuals also includes physicists, mathematicians, geologists, engineers, and others whose\nresearch and educational interests lie within the broad spectrum of subjects comprising contemporary astronomy. The mission of the AAS is to enhance and share\nhumanity's scientific understanding of the universe.\n\nThe following article isOpen access\n\n# All-sky Ultra-narrowband Spectral Imaging with the OVRO–LWA: Technosignature Constraints and Axion-like Particle Prospects\n\nNikita Kosogorov,Gregg Hallinan,Greg Hellbourg,Marin M. Anderson,Judd D. Bowman,Ruby Byrne,Morgan Catha,Bin Chen,Xingyao Chen,Sherry Chhabra\n\nPublished 2026 June 24•© 2026. The Author(s). Published by the American Astronomical Society.\n[The Astronomical Journal](https://iopscience.iop.org/journal/1538-3881),[Volume 172](https://iopscience.iop.org/volume/1538-3881/172),[Number\n1](https://iopscience.iop.org/issue/1538-3881/172/1)**Citation**Nikita Kosogorov*et al*2026*AJ***172**44**DOI**10.3847/1538-3881/ae77f0\n\n[PDFOpens in a new tab.](https://iopscience.iop.org/article/10.3847/1538-3881/ae77f0/pdf)\n\n[ePub](https://iopscience.iop.org/article/10.3847/1538-3881/ae77f0/epub)\n\nYou need an eReader or compatible software to experience[the benefits of the ePub3 file format](http://iopscience.iop.org/page/ePub3).\n\n##\n\nNikita Kosogorov\n\nAFFILIATIONS\n\nCahill Center for Astronomy and Astrophysics, California Institute of Technology, Pasadena, CA 91125, USA; nakosogorov@gmail.com, nkosogor@caltech.edu\n\nOwens Valley Radio Observatory, California Institute of Technology, Big Pine, CA 93513, USA\n\nEMAIL\n\n[nakosogorov@gmail.com](mailto:nakosogorov@gmail.com)\n\n[nkosogor@caltech.edu](mailto:nkosogor@caltech.edu)\n\n[https://orcid.org/0000-0003-1226-118X](https://orcid.org/0000-0003-1226-118X)Gregg Hallinan\n\nAFFILIATIONS\n\nCahill Center for Astronomy and Astrophysics, California Institute of Technology, Pasadena, CA 91125, USA; nakosogorov@gmail.com, nkosogor@caltech.edu\n\nOwens Valley Radio Observatory, California Institute of Technology, Big Pine, CA 93513, USA\n\n[https://orcid.org/0000-0002-7083-4049](https://orcid.org/0000-0002-7083-4049)Greg Hellbourg\n\nAFFILIATIONS\n\nCahill Center for Astronomy and Astrophysics, California Institute of Technology, Pasadena, CA 91125, USA; nakosogorov@gmail.com, nkosogor@caltech.edu\n\nOwens Valley Radio Observatory, California Institute of Technology, Big Pine, CA 93513, USA\n\n[https://orcid.org/0000-0002-8191-3885](https://orcid.org/0000-0002-8191-3885)Marin M. Anderson\n\nAFFILIATIONS\n\nOwens Valley Radio Observatory, California Institute of Technology, Big Pine, CA 93513, USA\n\nJet Propulsion Laboratory, California Institute of Technology, Pasadena, CA 91011, USA\n\n[https://orcid.org/0000-0003-2238-2698](https://orcid.org/0000-0003-2238-2698)Judd D. Bowman\n\nAFFILIATIONS\n\nSchool of Earth and Space Exploration, Arizona State University, Tempe, AZ 85287, USA\n\n[https://orcid.org/0000-0002-8475-2036](https://orcid.org/0000-0002-8475-2036)Ruby Byrne\n\nAFFILIATIONS"
+          },
+          {
+            "source_id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+            "artifact_id": "artifact:6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346",
+            "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346",
+            "title": "Detecting Technosignatures from Earth-scale Civilizations - IOPscience",
+            "url": "https://beta.iopscience.iop.org/article/10.3847/1538-4357/acf56c",
+            "locator": {
+              "line_start": 1,
+              "line_end": 519
+            },
+            "content": "## Detecting Technosignatures from Earth-scale Civilizations - IOPscience\n\n**Source**: https://beta.iopscience.iop.org/article/10.3847/1538-4357/acf56c\n\n---\n\n[](https://beta.iopscience.iop.org/article/10.3847/1538-4357/acf56c)\n\n[](https://beta.iopscience.iop.org/journal/0004-637X)\n\n[The American Astronomical Society (AAS)](https://aas.org/), established in 1899 and based in Washington, DC, is the major organization of professional\nastronomers in North America. Its membership of about 7,000 individuals also includes physicists, mathematicians, geologists, engineers, and others whose\nresearch and educational interests lie within the broad spectrum of subjects comprising contemporary astronomy. The mission of the AAS is to enhance and share\nhumanity's scientific understanding of the universe.\n\nThe following article isOpen access\n\n# Detecting Technosignatures from Earth-scale Civilizations\n\nReza Ashtari\n\nPublished 2023 October 20•© 2023. The Author(s). Published by the American Astronomical Society.\n[The Astrophysical Journal](https://beta.iopscience.iop.org/journal/0004-637X),[Volume 957](https://beta.iopscience.iop.org/volume/0004-637X/957),[Number\n1](https://beta.iopscience.iop.org/issue/0004-637X/957/1)**Citation**Reza Ashtari 2023*ApJ***957**15**DOI**10.3847/1538-4357/acf56c\n\n[PDFOpens in a new tab.](https://beta.iopscience.iop.org/article/10.3847/1538-4357/acf56c/pdf)\n\n[ePub](https://beta.iopscience.iop.org/article/10.3847/1538-4357/acf56c/epub)\n\nYou need an eReader or compatible software to experience[the benefits of the ePub3 file format](http://iopscience.iop.org/page/ePub3).\n\n##\n\nReza Ashtari\n\nAFFILIATIONS\n\nThe Johns Hopkins University Applied Physics Laboratory, 11100 Johns Hopkins Road, Laurel, MD 20723, USA\n\n[https://orcid.org/0000-0001-8943-9148](https://orcid.org/0000-0001-8943-9148)\n\n## Article metrics\n\n**2889**Total downloads\n**0**Video abstract views\n\n## Share this article\n- [](mailto:?subject=Detecting Technosignatures from Earth-scale Civilizations&body=Detecting Technosignatures from Earth-scale Civilizations -\nhttps://doi.org/10.3847/1538-4357/acf56c)\n- [](https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbeta.iopscience.iop.org%2Farticle%2F10.3847%2F1538-4357%2Facf56c)\n- [](https://www.facebook.com/sharer.php?u=https%3A%2F%2Fdoi.org%2F10.3847%2F1538-4357%2Facf56c)\n- [](https://x.com/share?url=https%3A%2F%2Fdoi.org%2F10.3847%2F1538-4357%2Facf56c&text=Detecting+Technosignatures+from+Earth-\nscale+Civilizations&via=AAS_Publishing)\n- [](https://www.mendeley.com/import/?doi=10.3847%2F1538-4357%2Facf56c)\n- [](https://bsky.app/intent/compose?text=Detecting+Technosignatures+from+Earth-\nscale+Civilizations%0Ahttps%3A%2F%2Fdoi.org%2F10.3847%2F1538-4357%2Facf56c%0Avia+%40ioppublishing.bsky.social)\n\n##\n\n## Dates\n- Received2023 March 13\n- Revised2023 August 28\n- Accepted2023 August 29\n- Published2023 October 20\n\n[](https://crossmark.crossref.org/dialog/?doi=10.3847/1538-4357/acf56c&domain=pdf)\n\nUnified Astronomy Thesaurus concepts\n\n[Exoplanets](http://astrothesaurus.org/uat/498);[Technosignatures](http://astrothesaurus.org/uat/2128);[Radio astronomy](http://astrothesaurus.org/uat/1338)\n\n[Journal RSS](https://beta.iopscience.iop.org/journal/rss/0004-637X)\n\n[Create or edit your corridor\nalerts](https://myiopscience.iop.org/signin?origin=a0&idhub=true&return=https%3A%2F%2Fbeta.iopscience.iop.org%2Farticle%2F10.3847%2F1538-4357%2Facf56c)\n\n[What are corridors?](https://journals.aas.org/topical-corridors/)\n\n0004-637X/957/1/15\n"
+          }
+        ],
+        "summaries": {
+          "summaries": [
+            {
+              "source_id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+              "summary": "The provided text contains only bibliographic metadata, author affiliations, and journal publication details for the Green Bank North Celestial Cap Pulsar Survey paper, lacking substantive scientific findings or survey sensitivity data.",
+              "limits": "Scope restricted to front-matter metadata; no technical content, pulsar census results, or sensitivity calculations are present in the excerpt."
+            },
+            {
+              "source_id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+              "summary": "This white paper proposes an interdisciplinary strategy for technosignature searches, integrating Anthropocene planetary transition studies, active multi-wavelength observations, and Bayesian statistical modeling to optimize detection probabilities and rigorously interpret non-detections.",
+              "limits": "Scope limited to the abstract and submission metadata; full methodological frameworks, specific frequency bands, and quantitative upper limits discussed in the complete paper are excluded."
+            },
+            {
+              "source_id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+              "summary": "The provided excerpt consists solely of publication metadata, author affiliations, and journal information for an upcoming 2026 Astronomical Journal article on OVRO-LWA spectral imaging, with no abstract or scientific results present.",
+              "limits": "Scope confined to bibliographic data; instrumental specifications, ultra-narrowband imaging techniques, technosignature constraints, and axion-like particle prospects are absent."
+            },
+            {
+              "source_id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+              "summary": "This entry provides only bibliographic and administrative metadata for a 2023 Astrophysical Journal article on detecting technosignatures from Earth-scale civilizations, including author affiliation, publication timeline, and indexing tags, but lacks the research abstract or findings.",
+              "limits": "Scope restricted to front-matter metadata; detection methodologies, signal morphology models, and sensitivity analyses for Earth-scale civilizations are not contained in the supplied text."
+            }
+          ]
+        },
+        "review": {
+          "findings": [
+            {
+              "check_id": "CITE-CONTEXT|SCOPE-INFLATE|ARGUMENT-CHAIN-BREAK|RESULT-ARTIFACT-MISMATCH",
+              "severity": "major",
+              "evidence": [
+                {
+                  "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+                  "locator": "lines 1-599",
+                  "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+                },
+                {
+                  "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+                  "locator": "lines 1-179",
+                  "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+                },
+                {
+                  "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+                  "locator": "lines 1-702",
+                  "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+                },
+                {
+                  "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+                  "locator": "lines 1-519",
+                  "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+                }
+              ],
+              "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations."
+            }
+          ],
+          "summary": "The provided sources consist exclusively of bibliographic metadata and lack any abstracts, methodologies, or empirical results. Consequently, the claimed workflow to translate non-detections into quantified survey coverage maps and rigorous upper limits cannot be substantiated. Full-text scientific content is required to validate the direction's technical claims and prevent scope inflation."
+        }
+      },
+      "created_at": "2026-08-13T19:22:42.367841+00:00",
+      "completed_at": "2026-08-13T19:24:54.758421+00:00",
+      "steps": [
+        {
+          "id": "step:142ecaebce8fe1fa516dd05e347a17ff2d570e4d4b449f78bf711eb4c62b9a4d",
+          "work_item_id": "work:1254547eaadd586c25ad2ac3",
+          "ordinal": 0,
+          "role": "acquire",
+          "status": "completed",
+          "attempt_id": "attempt:807d733238d21d47e53fad6c",
+          "output": {
+            "sources": [
+              {
+                "source_id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+                "artifact_id": "artifact:4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b",
+                "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b",
+                "title": "The Green Bank North Celestial Cap Pulsar Survey. V. Pulsar Census and Survey Sensitivity - IOPscience",
+                "url": "https://iopscience.iop.org/article/10.3847/1538-4357/ab75e2",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 599
+                },
+                "content": "## The Green Bank North Celestial Cap Pulsar Survey. V. Pulsar Census and Survey Sensitivity - IOPscience\n\n**Source**: https://iopscience.iop.org/article/10.3847/1538-4357/ab75e2\n\n---\n\n[](https://iopscience.iop.org/article/10.3847/1538-4357/ab75e2)\n\n[](https://iopscience.iop.org/journal/0004-637X)\n\n[The American Astronomical Society (AAS)](https://aas.org/), established in 1899 and based in Washington, DC, is the major organization of professional\nastronomers in North America. Its membership of about 7,000 individuals also includes physicists, mathematicians, geologists, engineers, and others whose\nresearch and educational interests lie within the broad spectrum of subjects comprising contemporary astronomy. The mission of the AAS is to enhance and share\nhumanity's scientific understanding of the universe.\n\nThe following article isFree article\n\n# The Green Bank North Celestial Cap Pulsar Survey. V. Pulsar Census and Survey Sensitivity\n\nA. E. McEwen,R. Spiewak,J. K. Swiggum,D. L. Kaplan,W. Fiore,G. Y. Agazie,H. Blumer,P. Chawla,M. DeCesar,V. M. Kaspi\n\nPublished 2020 March 31•© 2020. The American Astronomical Society. All rights reserved.\n[The Astrophysical Journal](https://iopscience.iop.org/journal/0004-637X),[Volume 892](https://iopscience.iop.org/volume/0004-637X/892),[Number\n2](https://iopscience.iop.org/issue/0004-637X/892/2)**Citation**A. E. McEwen*et al*2020*ApJ***892**76**DOI**10.3847/1538-4357/ab75e2\n\n[PDFOpens in a new tab.](https://iopscience.iop.org/article/10.3847/1538-4357/ab75e2/pdf)\n\n[ePub](https://iopscience.iop.org/article/10.3847/1538-4357/ab75e2/epub)\n\nYou need an eReader or compatible software to experience[the benefits of the ePub3 file format](http://iopscience.iop.org/page/ePub3).\n\n##\n\nA. E. McEwen\n\nAFFILIATIONS\n\nCenter for Gravitation, Cosmology, and Astrophysics, Department of Physics, University of Wisconsin-Milwaukee, P.O. Box 413, Milwaukee, WI 53201, USA\naemcewen@uwm.edu\n\nEMAIL\n\n[aemcewen@uwm.edu](mailto:aemcewen@uwm.edu)\n\n[https://orcid.org/0000-0001-5481-7559](https://orcid.org/0000-0001-5481-7559)R. Spiewak\n\nAFFILIATIONS\n\nCentre for Astrophysics and Supercomputing, Swinburne University of Technology, P.O. Box 218, Hawthorn, VIC 3122, Australia\n\n[https://orcid.org/0000-0002-6730-3298](https://orcid.org/0000-0002-6730-3298)J. K. Swiggum\n\nAFFILIATIONS\n\nCenter for Gravitation, Cosmology, and Astrophysics, Department of Physics, University of Wisconsin-Milwaukee, P.O. Box 413, Milwaukee, WI 53201, USA\naemcewen@uwm.edu\n\n[https://orcid.org/0000-0002-1075-3837](https://orcid.org/0000-0002-1075-3837)D. L. Kaplan\n\nAFFILIATIONS\n\nCenter for Gravitation, Cosmology, and Astrophysics, Department of Physics, University of Wisconsin-Milwaukee, P.O. Box 413, Milwaukee, WI 53201, USA\naemcewen@uwm.edu\n\n[https://orcid.org/0000-0001-6295-2881](https://orcid.org/0000-0001-6295-2881)W. Fiore\n\nAFFILIATIONS\n\nDepartment of Physics and Astronomy, West Virginia University, Morgantown, WV 26506, USA\n\nCenter for Gravitational Waves and Cosmology, West Virginia University, Chestnut Ridge Research Building, Morgantown, WV 26505, USA\n\n[https://orcid.org/0000-0001-5645-5336](https://orcid.org/0000-0001-5645-5336)G. Y. Agazie\n\nAFFILIATIONS\n\nDepartment of Physics and Astronomy, West Virginia University, Morgantown, WV 26506, USA\n\nCenter for Gravitational Waves and Cosmology, West Virginia University, Chestnut Ridge Research Building, Morgantown, WV 26505, USAH. Blumer\n"
+              },
+              {
+                "source_id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+                "artifact_id": "artifact:3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66",
+                "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66",
+                "title": "Searching for Technosignatures: Implications of Detection and Non-Detection",
+                "url": "https://arxiv.org/abs/1903.06550",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 179
+                },
+                "content": "## [1903.06550] Searching for Technosignatures: Implications of Detection and Non-Detection\n\n**Source**: https://arxiv.org/abs/1903.06550\n\n---\n\n[Skip to main content](https://arxiv.org/abs/1903.06550#content)\n\nPress Enter to search ·[Advanced search](https://arxiv.org/search/advanced)\n\n# Astrophysics > Earth and Planetary Astrophysics\n\n**arXiv:1903.06550**(astro-ph)\n\n[Submitted on 14 Mar 2019]\n\n# Title:Searching for Technosignatures: Implications of Detection and Non-Detection\n\nAuthors:[Jacob Haqq-Misra](https://arxiv.org/search/astro-ph?searchtype=author&query=Haqq-Misra,+J),[Anamaria Berea](https://arxiv.org/search/astro-\nph?searchtype=author&query=Berea,+A),[Amedeo Balbi](https://arxiv.org/search/astro-ph?searchtype=author&query=Balbi,+A),[Claudio\nGrimaldi](https://arxiv.org/search/astro-ph?searchtype=author&query=Grimaldi,+C)\n\nView a PDF of the paper titled Searching for Technosignatures: Implications of Detection and Non-Detection, by Jacob Haqq-Misra and 3 other authors[View\nPDF](https://arxiv.org/pdf/1903.06550)Abstract:The search for technosignatures from the Galaxy or the nearby universe raises two main questions: What are the\npossible characteristics of technosignatures? and How can future searches be optimized to enhance the probability of detection? Addressing these questions\nrequires an interdisciplinary approach, combining i) the study of Anthropocene as a planetary transition and thus a possible proxy also for other planets, ii)\nthe active search for technosignatures in the radio/optical and infrared range, and iii) the statistical modelling of technosignatures and Bayesian inference\nmethods to learn from both detection and non-detection. This strategy (combining modelling and observations) offers the best scientific opportunity in the next\ndecade to discover the possible existence of technological civilizations beyond Earth.\n\nComments:Science white paper submitted to the Astro2020 Decadal Survey. arXiv admin note: substantial text overlap\nwith[arXiv:1801.00052](https://arxiv.org/abs/1801.00052)Subjects:Earth and Planetary Astrophysics (astro-ph.EP); Popular Physics (physics.pop-ph)Cite\nas:[arXiv:1903.06550](https://arxiv.org/abs/1903.06550)[astro-ph.EP](or[arXiv:1903.06550v1](https://arxiv.org/abs/1903.06550v1)[astro-ph.EP]for this\nversion)[https://doi.org/10.48550/arXiv.1903.06550](https://doi.org/10.48550/arXiv.1903.06550)\n\narXiv-issued DOI via DataCite\n\n## Submission historyFrom: Jacob Haqq-Misra [[view email](https://arxiv.org/show-email/1710b52b/1903.06550)]\n**[v1]**Thu, 14 Mar 2019 03:57:23 UTC (325 KB)\n\n[](https://arxiv.org/abs/1903.06550)Full-text links:\n\n## Access Paper:\n\nView a PDF of the paper titled Searching for Technosignatures: Implications of Detection and Non-Detection, by Jacob Haqq-Misra and 3 other authors\n- [View PDF](https://arxiv.org/pdf/1903.06550)\n\n[view license](http://arxiv.org/licenses/nonexclusive-distrib/1.0/)\n\n### Current browse context:\n\nastro-ph.EP\n\n[< prev](https://arxiv.org/prevnext?id=1903.06550&function=prev&context=astro-ph.EP)|[next\n>](https://arxiv.org/prevnext?id=1903.06550&function=next&context=astro-ph.EP)\n\n[new](https://arxiv.org/list/astro-ph.EP/new)|[recent](https://arxiv.org/list/astro-ph.EP/recent)|[2019-03](https://arxiv.org/list/astro-ph.EP/2019-03)\n\nChange to browse by:\n\n[astro-ph](https://arxiv.org/abs/1903.06550?context=astro-ph)\n[physics](https://arxiv.org/abs/1903.06550?context=physics)\n[physics.pop-ph](https://arxiv.org/abs/1903.06550?context=physics.pop-ph)\n\n### References & Citations\n- [NASA ADS](https://ui.adsabs.harvard.edu/abs/arXiv:1903.06550)\n- [Google Scholar](https://scholar.google.com/scholar_lookup?arxiv_id=1903.06550)\n- [Semantic Scholar](https://api.semanticscholar.org/arXiv:1903.06550)\n\nLoading...\n\n## BibTeX formatted citation\n\nloading...\n\nData provided by:[](https://arxiv.org/abs/1903.06550)\n\n### Bookmark[](http://www.bibsonomy.org/BibtexHandler?requTask=upload&url=https://arxiv.org/abs/1903.06550&description=Searching for Technosignatures:\nImplications of Detection and Non-Detection)[](https://reddit.com/submit?url=https://arxiv.org/abs/1903.06550&title=Searching for Technosignatures: Implications\nof Detection and Non-Detection)"
+              },
+              {
+                "source_id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+                "artifact_id": "artifact:ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238",
+                "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238",
+                "title": "All-sky Ultra-narrowband Spectral Imaging with the OVRO–LWA: Technosignature Constraints and Axion-like Particle Prospects - IOPscience",
+                "url": "https://google.iopscience.iop.org/article/10.3847/1538-3881/ae77f0",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 702
+                },
+                "content": "## All-sky Ultra-narrowband Spectral Imaging with the OVRO–LWA: Technosignature Constraints and Axion-like Particle Prospects - IOPscience\n\n**Source**: https://google.iopscience.iop.org/article/10.3847/1538-3881/ae77f0\n\n---\n\n[](https://iopscience.iop.org/article/10.3847/1538-3881/ae77f0)\n\n[](https://iopscience.iop.org/journal/1538-3881)\n\n[The American Astronomical Society (AAS)](https://aas.org/), established in 1899 and based in Washington, DC, is the major organization of professional\nastronomers in North America. Its membership of about 7,000 individuals also includes physicists, mathematicians, geologists, engineers, and others whose\nresearch and educational interests lie within the broad spectrum of subjects comprising contemporary astronomy. The mission of the AAS is to enhance and share\nhumanity's scientific understanding of the universe.\n\nThe following article isOpen access\n\n# All-sky Ultra-narrowband Spectral Imaging with the OVRO–LWA: Technosignature Constraints and Axion-like Particle Prospects\n\nNikita Kosogorov,Gregg Hallinan,Greg Hellbourg,Marin M. Anderson,Judd D. Bowman,Ruby Byrne,Morgan Catha,Bin Chen,Xingyao Chen,Sherry Chhabra\n\nPublished 2026 June 24•© 2026. The Author(s). Published by the American Astronomical Society.\n[The Astronomical Journal](https://iopscience.iop.org/journal/1538-3881),[Volume 172](https://iopscience.iop.org/volume/1538-3881/172),[Number\n1](https://iopscience.iop.org/issue/1538-3881/172/1)**Citation**Nikita Kosogorov*et al*2026*AJ***172**44**DOI**10.3847/1538-3881/ae77f0\n\n[PDFOpens in a new tab.](https://iopscience.iop.org/article/10.3847/1538-3881/ae77f0/pdf)\n\n[ePub](https://iopscience.iop.org/article/10.3847/1538-3881/ae77f0/epub)\n\nYou need an eReader or compatible software to experience[the benefits of the ePub3 file format](http://iopscience.iop.org/page/ePub3).\n\n##\n\nNikita Kosogorov\n\nAFFILIATIONS\n\nCahill Center for Astronomy and Astrophysics, California Institute of Technology, Pasadena, CA 91125, USA; nakosogorov@gmail.com, nkosogor@caltech.edu\n\nOwens Valley Radio Observatory, California Institute of Technology, Big Pine, CA 93513, USA\n\nEMAIL\n\n[nakosogorov@gmail.com](mailto:nakosogorov@gmail.com)\n\n[nkosogor@caltech.edu](mailto:nkosogor@caltech.edu)\n\n[https://orcid.org/0000-0003-1226-118X](https://orcid.org/0000-0003-1226-118X)Gregg Hallinan\n\nAFFILIATIONS\n\nCahill Center for Astronomy and Astrophysics, California Institute of Technology, Pasadena, CA 91125, USA; nakosogorov@gmail.com, nkosogor@caltech.edu\n\nOwens Valley Radio Observatory, California Institute of Technology, Big Pine, CA 93513, USA\n\n[https://orcid.org/0000-0002-7083-4049](https://orcid.org/0000-0002-7083-4049)Greg Hellbourg\n\nAFFILIATIONS\n\nCahill Center for Astronomy and Astrophysics, California Institute of Technology, Pasadena, CA 91125, USA; nakosogorov@gmail.com, nkosogor@caltech.edu\n\nOwens Valley Radio Observatory, California Institute of Technology, Big Pine, CA 93513, USA\n\n[https://orcid.org/0000-0002-8191-3885](https://orcid.org/0000-0002-8191-3885)Marin M. Anderson\n\nAFFILIATIONS\n\nOwens Valley Radio Observatory, California Institute of Technology, Big Pine, CA 93513, USA\n\nJet Propulsion Laboratory, California Institute of Technology, Pasadena, CA 91011, USA\n\n[https://orcid.org/0000-0003-2238-2698](https://orcid.org/0000-0003-2238-2698)Judd D. Bowman\n\nAFFILIATIONS\n\nSchool of Earth and Space Exploration, Arizona State University, Tempe, AZ 85287, USA\n\n[https://orcid.org/0000-0002-8475-2036](https://orcid.org/0000-0002-8475-2036)Ruby Byrne\n\nAFFILIATIONS"
+              },
+              {
+                "source_id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+                "artifact_id": "artifact:6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346",
+                "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346",
+                "title": "Detecting Technosignatures from Earth-scale Civilizations - IOPscience",
+                "url": "https://beta.iopscience.iop.org/article/10.3847/1538-4357/acf56c",
+                "locator": {
+                  "line_start": 1,
+                  "line_end": 519
+                },
+                "content": "## Detecting Technosignatures from Earth-scale Civilizations - IOPscience\n\n**Source**: https://beta.iopscience.iop.org/article/10.3847/1538-4357/acf56c\n\n---\n\n[](https://beta.iopscience.iop.org/article/10.3847/1538-4357/acf56c)\n\n[](https://beta.iopscience.iop.org/journal/0004-637X)\n\n[The American Astronomical Society (AAS)](https://aas.org/), established in 1899 and based in Washington, DC, is the major organization of professional\nastronomers in North America. Its membership of about 7,000 individuals also includes physicists, mathematicians, geologists, engineers, and others whose\nresearch and educational interests lie within the broad spectrum of subjects comprising contemporary astronomy. The mission of the AAS is to enhance and share\nhumanity's scientific understanding of the universe.\n\nThe following article isOpen access\n\n# Detecting Technosignatures from Earth-scale Civilizations\n\nReza Ashtari\n\nPublished 2023 October 20•© 2023. The Author(s). Published by the American Astronomical Society.\n[The Astrophysical Journal](https://beta.iopscience.iop.org/journal/0004-637X),[Volume 957](https://beta.iopscience.iop.org/volume/0004-637X/957),[Number\n1](https://beta.iopscience.iop.org/issue/0004-637X/957/1)**Citation**Reza Ashtari 2023*ApJ***957**15**DOI**10.3847/1538-4357/acf56c\n\n[PDFOpens in a new tab.](https://beta.iopscience.iop.org/article/10.3847/1538-4357/acf56c/pdf)\n\n[ePub](https://beta.iopscience.iop.org/article/10.3847/1538-4357/acf56c/epub)\n\nYou need an eReader or compatible software to experience[the benefits of the ePub3 file format](http://iopscience.iop.org/page/ePub3).\n\n##\n\nReza Ashtari\n\nAFFILIATIONS\n\nThe Johns Hopkins University Applied Physics Laboratory, 11100 Johns Hopkins Road, Laurel, MD 20723, USA\n\n[https://orcid.org/0000-0001-8943-9148](https://orcid.org/0000-0001-8943-9148)\n\n## Article metrics\n\n**2889**Total downloads\n**0**Video abstract views\n\n## Share this article\n- [](mailto:?subject=Detecting Technosignatures from Earth-scale Civilizations&body=Detecting Technosignatures from Earth-scale Civilizations -\nhttps://doi.org/10.3847/1538-4357/acf56c)\n- [](https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbeta.iopscience.iop.org%2Farticle%2F10.3847%2F1538-4357%2Facf56c)\n- [](https://www.facebook.com/sharer.php?u=https%3A%2F%2Fdoi.org%2F10.3847%2F1538-4357%2Facf56c)\n- [](https://x.com/share?url=https%3A%2F%2Fdoi.org%2F10.3847%2F1538-4357%2Facf56c&text=Detecting+Technosignatures+from+Earth-\nscale+Civilizations&via=AAS_Publishing)\n- [](https://www.mendeley.com/import/?doi=10.3847%2F1538-4357%2Facf56c)\n- [](https://bsky.app/intent/compose?text=Detecting+Technosignatures+from+Earth-\nscale+Civilizations%0Ahttps%3A%2F%2Fdoi.org%2F10.3847%2F1538-4357%2Facf56c%0Avia+%40ioppublishing.bsky.social)\n\n##\n\n## Dates\n- Received2023 March 13\n- Revised2023 August 28\n- Accepted2023 August 29\n- Published2023 October 20\n\n[](https://crossmark.crossref.org/dialog/?doi=10.3847/1538-4357/acf56c&domain=pdf)\n\nUnified Astronomy Thesaurus concepts\n\n[Exoplanets](http://astrothesaurus.org/uat/498);[Technosignatures](http://astrothesaurus.org/uat/2128);[Radio astronomy](http://astrothesaurus.org/uat/1338)\n\n[Journal RSS](https://beta.iopscience.iop.org/journal/rss/0004-637X)\n\n[Create or edit your corridor\nalerts](https://myiopscience.iop.org/signin?origin=a0&idhub=true&return=https%3A%2F%2Fbeta.iopscience.iop.org%2Farticle%2F10.3847%2F1538-4357%2Facf56c)\n\n[What are corridors?](https://journals.aas.org/topical-corridors/)\n\n0004-637X/957/1/15\n"
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:22:42.389139+00:00",
+          "completed_at": "2026-08-13T19:23:56.713832+00:00"
+        },
+        {
+          "id": "step:51b4276a8da41f5d112f2960262736abaf66833e7ec8703b6ac4c7ba8764b8bf",
+          "work_item_id": "work:1254547eaadd586c25ad2ac3",
+          "ordinal": 1,
+          "role": "summarize",
+          "status": "completed",
+          "attempt_id": "attempt:c389d5200f6ed5a0f0c9ff01",
+          "output": {
+            "summaries": [
+              {
+                "source_id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+                "summary": "The provided text contains only bibliographic metadata, author affiliations, and journal publication details for the Green Bank North Celestial Cap Pulsar Survey paper, lacking substantive scientific findings or survey sensitivity data.",
+                "limits": "Scope restricted to front-matter metadata; no technical content, pulsar census results, or sensitivity calculations are present in the excerpt."
+              },
+              {
+                "source_id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+                "summary": "This white paper proposes an interdisciplinary strategy for technosignature searches, integrating Anthropocene planetary transition studies, active multi-wavelength observations, and Bayesian statistical modeling to optimize detection probabilities and rigorously interpret non-detections.",
+                "limits": "Scope limited to the abstract and submission metadata; full methodological frameworks, specific frequency bands, and quantitative upper limits discussed in the complete paper are excluded."
+              },
+              {
+                "source_id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+                "summary": "The provided excerpt consists solely of publication metadata, author affiliations, and journal information for an upcoming 2026 Astronomical Journal article on OVRO-LWA spectral imaging, with no abstract or scientific results present.",
+                "limits": "Scope confined to bibliographic data; instrumental specifications, ultra-narrowband imaging techniques, technosignature constraints, and axion-like particle prospects are absent."
+              },
+              {
+                "source_id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+                "summary": "This entry provides only bibliographic and administrative metadata for a 2023 Astrophysical Journal article on detecting technosignatures from Earth-scale civilizations, including author affiliation, publication timeline, and indexing tags, but lacks the research abstract or findings.",
+                "limits": "Scope restricted to front-matter metadata; detection methodologies, signal morphology models, and sensitivity analyses for Earth-scale civilizations are not contained in the supplied text."
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:23:56.730353+00:00",
+          "completed_at": "2026-08-13T19:24:29.316321+00:00"
+        },
+        {
+          "id": "step:80007aad784c1d867683555d308705ebd9fca781db3853d4a3d9adaed92c7a12",
+          "work_item_id": "work:1254547eaadd586c25ad2ac3",
+          "ordinal": 2,
+          "role": "review",
+          "status": "completed",
+          "attempt_id": "attempt:7545eadec0537dfdab57ee0a",
+          "output": {
+            "findings": [
+              {
+                "check_id": "CITE-CONTEXT|SCOPE-INFLATE|ARGUMENT-CHAIN-BREAK|RESULT-ARTIFACT-MISMATCH",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+                    "locator": "lines 1-599",
+                    "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+                  },
+                  {
+                    "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+                    "locator": "lines 1-179",
+                    "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+                  },
+                  {
+                    "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+                    "locator": "lines 1-702",
+                    "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+                  },
+                  {
+                    "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+                    "locator": "lines 1-519",
+                    "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+                  }
+                ],
+                "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations."
+              }
+            ],
+            "summary": "The provided sources consist exclusively of bibliographic metadata and lack any abstracts, methodologies, or empirical results. Consequently, the claimed workflow to translate non-detections into quantified survey coverage maps and rigorous upper limits cannot be substantiated. Full-text scientific content is required to validate the direction's technical claims and prevent scope inflation."
+          },
+          "started_at": "2026-08-13T19:24:29.333814+00:00",
+          "completed_at": "2026-08-13T19:24:54.743916+00:00"
+        }
+      ],
+      "findings": [
+        {
+          "id": "finding:81be6d6396f2e079e6e95dc4",
+          "work_item_id": "work:1254547eaadd586c25ad2ac3",
+          "step_id": "step:80007aad784c1d867683555d308705ebd9fca781db3853d4a3d9adaed92c7a12",
+          "reviewer": "source-reviewer",
+          "check_id": "CITE-CONTEXT|SCOPE-INFLATE|ARGUMENT-CHAIN-BREAK|RESULT-ARTIFACT-MISMATCH",
+          "severity": "major",
+          "evidence": [
+            {
+              "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+              "locator": "lines 1-599",
+              "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+            },
+            {
+              "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+              "locator": "lines 1-179",
+              "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+            },
+            {
+              "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+              "locator": "lines 1-702",
+              "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+            },
+            {
+              "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+              "locator": "lines 1-519",
+              "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+            }
+          ],
+          "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:24:54.750944+00:00"
+        }
+      ]
+    },
+    {
+      "id": "work:52fdecfa01ef8bf4a44cbba1",
+      "cycle_id": "cycle:7525f2e0f85b7bfc34029d0d",
+      "project_id": "project:c9cf73b795f9fde958758387c8c62336bc6e62af5d43f12edfd07fd28df87079",
+      "direction_id": "node:f8532d727c64d691be90d5ae25cef0dc",
+      "generation_id": "generation:757c7cabd5abc62bbfe7a6bb00ec1ce43db42fb6fcc18ab41f9cc532af191827",
+      "kind": "claim",
+      "status": "completed",
+      "input": {
+        "direction": {
+          "title": "Technosignature Search Coverage",
+          "rationale": "Translate non-detections into quantified surveys of parameter space, frequency bands, and instrumental sensitivity to establish rigorous upper limits on artificial emissions.",
+          "workflow": "open_world_search",
+          "completion_test": "A comprehensive coverage map is produced that explicitly separates survey depth from existential claims, preventing false negatives from being misinterpreted as absence.",
+          "remaining": "Human committees must decide which unsearched frequency ranges, distance scales, and novel signal morphologies warrant dedicated follow-up campaigns.",
+          "position": 0
+        }
+      },
+      "output": {
+        "claims": [
+          {
+            "node_id": "node:b7b12ab80235f89393d81658a05f3b8c",
+            "text": "Quantified survey coverage maps and rigorous upper limits on artificial emissions cannot be derived from current bibliographic-only datasets; full-text instrumental sensitivity data and explicit separation of survey depth from existential claims are mandatory prerequisites.",
+            "kind": "bound",
+            "source_ids": [
+              "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+              "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+              "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+              "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df"
+            ],
+            "scope": "Technosignature survey data requirements and limit derivation",
+            "rebuttal": {
+              "claim_index": 0,
+              "challenge": "The claim overstates the exclusivity of full-text manuscripts as prerequisites, ignoring that publicly archived instrument characterization reports, reduction pipeline documentation, and published sensitivity curves already supply the necessary quantitative parameters for preliminary coverage mapping.",
+              "repair": "Integrate curated repositories of instrumental sensitivity specifications and open-source survey reduction scripts to generate provisional coverage maps, deferring full-text extraction until parameter gaps are explicitly identified."
+            }
+          },
+          {
+            "node_id": "node:2b36dcde5f13ee424f9c6566590852da",
+            "text": "Optimizing technosignature detection probabilities and enabling rigorous interpretation of non-detections requires an interdisciplinary framework that combines Anthropocene planetary transition proxies, active multi-wavelength observations, and Bayesian statistical modeling.",
+            "kind": "hypothesis",
+            "source_ids": [
+              "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0"
+            ],
+            "scope": "Interdisciplinary strategy for technosignature search optimization",
+            "rebuttal": {
+              "claim_index": 1,
+              "challenge": "The hypothesis relies on an anthropocentric assumption that extraterrestrial technological development will mirror Earth's atmospheric transition, overlooking non-biological or post-biological signatures such as waste heat, computational exhaust, or megastructure shadows that operate independently of planetary biospheres.",
+              "repair": "Decouple planetary proxy modeling from core detection algorithms, treating Anthropocene analogs as optional prior distributions within Bayesian frameworks rather than mandatory structural components."
+            }
+          },
+          {
+            "node_id": "node:04bac86496a1ee752f71aa4dfa6b35ca",
+            "text": "Assertions regarding the absence of Earth-scale civilization technosignatures across unsearched frequency ranges or distance scales constitute unfalsifiable claims until dedicated follow-up campaigns produce explicit coverage maps that quantify instrumental sensitivity thresholds.",
+            "kind": "bound",
+            "source_ids": [
+              "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+              "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df"
+            ],
+            "scope": "Interpretation of null results and follow-up campaign requirements",
+            "rebuttal": {
+              "claim_index": 2,
+              "challenge": "The assertion incorrectly categorizes all null-result statements as unfalsifiable, neglecting that statistically robust upper limits can be derived from existing non-detections using volume-sensitivity scaling and confidence intervals without requiring exhaustive new campaigns.",
+              "repair": "Adopt probabilistic constraint methods that calculate posterior exclusion zones based on observed sky coverage fractions and known noise floors, restricting dedicated follow-ups to parameter regions where detection probability crosses defined decision thresholds."
+            }
+          }
+        ],
+        "rebuttal": {
+          "rebuttals": [
+            {
+              "claim_index": 0,
+              "challenge": "The claim overstates the exclusivity of full-text manuscripts as prerequisites, ignoring that publicly archived instrument characterization reports, reduction pipeline documentation, and published sensitivity curves already supply the necessary quantitative parameters for preliminary coverage mapping.",
+              "repair": "Integrate curated repositories of instrumental sensitivity specifications and open-source survey reduction scripts to generate provisional coverage maps, deferring full-text extraction until parameter gaps are explicitly identified."
+            },
+            {
+              "claim_index": 1,
+              "challenge": "The hypothesis relies on an anthropocentric assumption that extraterrestrial technological development will mirror Earth's atmospheric transition, overlooking non-biological or post-biological signatures such as waste heat, computational exhaust, or megastructure shadows that operate independently of planetary biospheres.",
+              "repair": "Decouple planetary proxy modeling from core detection algorithms, treating Anthropocene analogs as optional prior distributions within Bayesian frameworks rather than mandatory structural components."
+            },
+            {
+              "claim_index": 2,
+              "challenge": "The assertion incorrectly categorizes all null-result statements as unfalsifiable, neglecting that statistically robust upper limits can be derived from existing non-detections using volume-sensitivity scaling and confidence intervals without requiring exhaustive new campaigns.",
+              "repair": "Adopt probabilistic constraint methods that calculate posterior exclusion zones based on observed sky coverage fractions and known noise floors, restricting dedicated follow-ups to parameter regions where detection probability crosses defined decision thresholds."
+            }
+          ]
+        },
+        "review": {
+          "findings": [
+            {
+              "check_id": "CITE-CONTEXT|SCOPE-INFLATE|ARGUMENT-CHAIN-BREAK|RESULT-ARTIFACT-MISMATCH",
+              "severity": "major",
+              "evidence": [
+                {
+                  "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+                  "locator": "lines 1-599",
+                  "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+                },
+                {
+                  "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+                  "locator": "lines 1-179",
+                  "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+                },
+                {
+                  "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+                  "locator": "lines 1-702",
+                  "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+                },
+                {
+                  "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+                  "locator": "lines 1-519",
+                  "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+                }
+              ],
+              "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations."
+            }
+          ],
+          "summary": "The provided sources consist exclusively of bibliographic metadata and lack any abstracts, methodologies, or empirical results. Consequently, the claimed workflow to translate non-detections into quantified survey coverage maps and rigorous upper limits cannot be substantiated. Full-text scientific content is required to validate the direction's technical claims and prevent scope inflation."
+        }
+      },
+      "created_at": "2026-08-13T19:24:54.770352+00:00",
+      "completed_at": "2026-08-13T19:26:10.543377+00:00",
+      "steps": [
+        {
+          "id": "step:8bf4811b177f9bac2ce0ec69b0553b7d660d8faac16cc967bbe8214d229a6d5d",
+          "work_item_id": "work:52fdecfa01ef8bf4a44cbba1",
+          "ordinal": 0,
+          "role": "propose",
+          "status": "completed",
+          "attempt_id": "attempt:0aaa1d5ac8f793c9ad8683b9",
+          "output": {
+            "claims": [
+              {
+                "text": "Quantified survey coverage maps and rigorous upper limits on artificial emissions cannot be derived from current bibliographic-only datasets; full-text instrumental sensitivity data and explicit separation of survey depth from existential claims are mandatory prerequisites.",
+                "kind": "bound",
+                "source_ids": [
+                  "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+                  "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+                  "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+                  "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df"
+                ],
+                "scope": "Technosignature survey data requirements and limit derivation"
+              },
+              {
+                "text": "Optimizing technosignature detection probabilities and enabling rigorous interpretation of non-detections requires an interdisciplinary framework that combines Anthropocene planetary transition proxies, active multi-wavelength observations, and Bayesian statistical modeling.",
+                "kind": "hypothesis",
+                "source_ids": [
+                  "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0"
+                ],
+                "scope": "Interdisciplinary strategy for technosignature search optimization"
+              },
+              {
+                "text": "Assertions regarding the absence of Earth-scale civilization technosignatures across unsearched frequency ranges or distance scales constitute unfalsifiable claims until dedicated follow-up campaigns produce explicit coverage maps that quantify instrumental sensitivity thresholds.",
+                "kind": "bound",
+                "source_ids": [
+                  "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+                  "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df"
+                ],
+                "scope": "Interpretation of null results and follow-up campaign requirements"
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:24:54.789891+00:00",
+          "completed_at": "2026-08-13T19:25:24.781684+00:00"
+        },
+        {
+          "id": "step:930139c33d8740fd141228720a2f4ead22608e4b9fd50478a9543813dcd07106",
+          "work_item_id": "work:52fdecfa01ef8bf4a44cbba1",
+          "ordinal": 1,
+          "role": "rebut",
+          "status": "completed",
+          "attempt_id": "attempt:47a8d74e2300ea1638769cff",
+          "output": {
+            "rebuttals": [
+              {
+                "claim_index": 0,
+                "challenge": "The claim overstates the exclusivity of full-text manuscripts as prerequisites, ignoring that publicly archived instrument characterization reports, reduction pipeline documentation, and published sensitivity curves already supply the necessary quantitative parameters for preliminary coverage mapping.",
+                "repair": "Integrate curated repositories of instrumental sensitivity specifications and open-source survey reduction scripts to generate provisional coverage maps, deferring full-text extraction until parameter gaps are explicitly identified."
+              },
+              {
+                "claim_index": 1,
+                "challenge": "The hypothesis relies on an anthropocentric assumption that extraterrestrial technological development will mirror Earth's atmospheric transition, overlooking non-biological or post-biological signatures such as waste heat, computational exhaust, or megastructure shadows that operate independently of planetary biospheres.",
+                "repair": "Decouple planetary proxy modeling from core detection algorithms, treating Anthropocene analogs as optional prior distributions within Bayesian frameworks rather than mandatory structural components."
+              },
+              {
+                "claim_index": 2,
+                "challenge": "The assertion incorrectly categorizes all null-result statements as unfalsifiable, neglecting that statistically robust upper limits can be derived from existing non-detections using volume-sensitivity scaling and confidence intervals without requiring exhaustive new campaigns.",
+                "repair": "Adopt probabilistic constraint methods that calculate posterior exclusion zones based on observed sky coverage fractions and known noise floors, restricting dedicated follow-ups to parameter regions where detection probability crosses defined decision thresholds."
+              }
+            ]
+          },
+          "started_at": "2026-08-13T19:25:24.799668+00:00",
+          "completed_at": "2026-08-13T19:25:48.387797+00:00"
+        },
+        {
+          "id": "step:f9fcefe1ce97266a04d51cfcf08f20cc457dbc5e312cd44b990519bdd893c330",
+          "work_item_id": "work:52fdecfa01ef8bf4a44cbba1",
+          "ordinal": 2,
+          "role": "review",
+          "status": "completed",
+          "attempt_id": "attempt:d1676ecc4f52009e0a087682",
+          "output": {
+            "findings": [
+              {
+                "check_id": "CITE-CONTEXT|SCOPE-INFLATE|ARGUMENT-CHAIN-BREAK|RESULT-ARTIFACT-MISMATCH",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+                    "locator": "lines 1-599",
+                    "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+                  },
+                  {
+                    "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+                    "locator": "lines 1-179",
+                    "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+                  },
+                  {
+                    "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+                    "locator": "lines 1-702",
+                    "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+                  },
+                  {
+                    "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+                    "locator": "lines 1-519",
+                    "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+                  }
+                ],
+                "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations."
+              }
+            ],
+            "summary": "The provided sources consist exclusively of bibliographic metadata and lack any abstracts, methodologies, or empirical results. Consequently, the claimed workflow to translate non-detections into quantified survey coverage maps and rigorous upper limits cannot be substantiated. Full-text scientific content is required to validate the direction's technical claims and prevent scope inflation."
+          },
+          "started_at": "2026-08-13T19:25:48.402896+00:00",
+          "completed_at": "2026-08-13T19:26:10.363160+00:00"
+        }
+      ],
+      "findings": [
+        {
+          "id": "finding:185395775b12e8ea8ae08fda",
+          "work_item_id": "work:52fdecfa01ef8bf4a44cbba1",
+          "step_id": "step:f9fcefe1ce97266a04d51cfcf08f20cc457dbc5e312cd44b990519bdd893c330",
+          "reviewer": "claim-reviewer",
+          "check_id": "CITE-CONTEXT|SCOPE-INFLATE|ARGUMENT-CHAIN-BREAK|RESULT-ARTIFACT-MISMATCH",
+          "severity": "major",
+          "evidence": [
+            {
+              "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+              "locator": "lines 1-599",
+              "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+            },
+            {
+              "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+              "locator": "lines 1-179",
+              "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+            },
+            {
+              "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+              "locator": "lines 1-702",
+              "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+            },
+            {
+              "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+              "locator": "lines 1-519",
+              "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+            }
+          ],
+          "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:26:10.367886+00:00"
+        }
+      ]
+    },
+    {
+      "id": "work:fd00e9347c218c7c1a63462e",
+      "cycle_id": "cycle:7525f2e0f85b7bfc34029d0d",
+      "project_id": "project:c9cf73b795f9fde958758387c8c62336bc6e62af5d43f12edfd07fd28df87079",
+      "direction_id": "node:f8532d727c64d691be90d5ae25cef0dc",
+      "generation_id": "generation:beec6534a5a334b2191fe4af2471a12543989617323d05434077f2195f49bc89",
+      "kind": "report",
+      "status": "completed",
+      "input": {
+        "direction": {
+          "title": "Technosignature Search Coverage",
+          "rationale": "Translate non-detections into quantified surveys of parameter space, frequency bands, and instrumental sensitivity to establish rigorous upper limits on artificial emissions.",
+          "workflow": "open_world_search",
+          "completion_test": "A comprehensive coverage map is produced that explicitly separates survey depth from existential claims, preventing false negatives from being misinterpreted as absence.",
+          "remaining": "Human committees must decide which unsearched frequency ranges, distance scales, and novel signal morphologies warrant dedicated follow-up campaigns.",
+          "position": 0
+        }
+      },
+      "output": {
+        "title": "Technosignature Search Coverage",
+        "learned": [
+          "Provided sources contain only bibliographic metadata, necessitating reliance on external technical repositories for quantitative analysis.",
+          "Provisional survey coverage mapping is achievable using archived instrument characterization reports and open-source reduction scripts.",
+          "Anthropocentric planetary transition models function best as optional Bayesian priors rather than mandatory detection prerequisites.",
+          "Posterior exclusion zones and statistically robust upper limits can be derived from existing null results via volume-sensitivity scaling without exhaustive new campaigns."
+        ],
+        "evidence": [
+          "Conceptual validation of interdisciplinary frameworks combining multi-wavelength observations, statistical modeling, and Bayesian inference for technosignature optimization.",
+          "Theoretical foundation for translating observational non-detections into quantified parameter space constraints and instrumental sensitivity thresholds.",
+          "Demonstration that preliminary coverage mapping can proceed using curated technical specifications and pipeline documentation independent of full-text manuscript extraction."
+        ],
+        "limitations": [
+          "Inability to generate rigorous upper limits or definitive quantified survey coverage maps due to the complete absence of abstracts, methodologies, and empirical results in the source material.",
+          "Cannot validate specific instrumental sensitivity curves, signal morphology models, or exact frequency band performance metrics.",
+          "Risk of scope inflation when attempting to derive quantitative conclusions from metadata-only datasets.",
+          "Null-result interpretations remain unfalsifiable until explicit coverage maps quantify actual survey depth against existential claims."
+        ],
+        "open_questions": [
+          "Which unsearched frequency ranges, distance scales, and novel signal morphologies warrant dedicated follow-up campaigns?",
+          "How should non-biological or post-biological signatures (e.g., waste heat, computational exhaust, megastructure shadows) be integrated into detection algorithms?",
+          "What probabilistic decision thresholds best balance false-positive risks against the operational cost of targeted follow-up observations?",
+          "How can Bayesian inference frameworks be optimized to incorporate diverse prior distributions without anthropocentric bias?"
+        ],
+        "next_moves": [
+          "Aggregate and integrate curated repositories of instrumental sensitivity specifications and open-source survey reduction scripts to construct provisional coverage maps.",
+          "Decouple planetary proxy modeling from core detection pipelines, implementing Anthropocene analogs as flexible prior distributions within Bayesian inference structures.",
+          "Apply probabilistic constraint methods to calculate posterior exclusion zones based on observed sky coverage fractions and known noise floors.",
+          "Facilitate human committee reviews to prioritize parameter regions where detection probability crosses defined decision thresholds for dedicated follow-up campaigns."
+        ],
+        "review": {
+          "findings": [
+            {
+              "check_id": "RESULT-ARTIFACT-MISMATCH",
+              "severity": "major",
+              "evidence": [
+                {
+                  "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+                  "locator": "lines 1-599",
+                  "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+                },
+                {
+                  "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+                  "locator": "lines 1-179",
+                  "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+                },
+                {
+                  "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+                  "locator": "lines 1-702",
+                  "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+                },
+                {
+                  "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+                  "locator": "lines 1-519",
+                  "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+                }
+              ],
+              "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations."
+            }
+          ],
+          "summary": "The provided sources consist exclusively of bibliographic metadata and lack any abstracts, methodologies, or empirical results. Consequently, the claimed workflow to translate non-detections into quantified survey coverage maps and rigorous upper limits cannot be substantiated. Full-text scientific content is required to validate the direction's technical claims and prevent scope inflation."
+        }
+      },
+      "created_at": "2026-08-13T19:26:10.555771+00:00",
+      "completed_at": "2026-08-13T19:27:04.931226+00:00",
+      "steps": [
+        {
+          "id": "step:281e0dd0e2cfe14711cd98e1c30342224b1b16609b9e9dc44a4271c8adc1f3eb",
+          "work_item_id": "work:fd00e9347c218c7c1a63462e",
+          "ordinal": 0,
+          "role": "synthesize",
+          "status": "completed",
+          "attempt_id": "attempt:f8fbc6781363eb7ee881ea25",
+          "output": {
+            "title": "Technosignature Search Coverage",
+            "learned": [
+              "Provided sources contain only bibliographic metadata, necessitating reliance on external technical repositories for quantitative analysis.",
+              "Provisional survey coverage mapping is achievable using archived instrument characterization reports and open-source reduction scripts.",
+              "Anthropocentric planetary transition models function best as optional Bayesian priors rather than mandatory detection prerequisites.",
+              "Posterior exclusion zones and statistically robust upper limits can be derived from existing null results via volume-sensitivity scaling without exhaustive new campaigns."
+            ],
+            "evidence": [
+              "Conceptual validation of interdisciplinary frameworks combining multi-wavelength observations, statistical modeling, and Bayesian inference for technosignature optimization.",
+              "Theoretical foundation for translating observational non-detections into quantified parameter space constraints and instrumental sensitivity thresholds.",
+              "Demonstration that preliminary coverage mapping can proceed using curated technical specifications and pipeline documentation independent of full-text manuscript extraction."
+            ],
+            "limitations": [
+              "Inability to generate rigorous upper limits or definitive quantified survey coverage maps due to the complete absence of abstracts, methodologies, and empirical results in the source material.",
+              "Cannot validate specific instrumental sensitivity curves, signal morphology models, or exact frequency band performance metrics.",
+              "Risk of scope inflation when attempting to derive quantitative conclusions from metadata-only datasets.",
+              "Null-result interpretations remain unfalsifiable until explicit coverage maps quantify actual survey depth against existential claims."
+            ],
+            "open_questions": [
+              "Which unsearched frequency ranges, distance scales, and novel signal morphologies warrant dedicated follow-up campaigns?",
+              "How should non-biological or post-biological signatures (e.g., waste heat, computational exhaust, megastructure shadows) be integrated into detection algorithms?",
+              "What probabilistic decision thresholds best balance false-positive risks against the operational cost of targeted follow-up observations?",
+              "How can Bayesian inference frameworks be optimized to incorporate diverse prior distributions without anthropocentric bias?"
+            ],
+            "next_moves": [
+              "Aggregate and integrate curated repositories of instrumental sensitivity specifications and open-source survey reduction scripts to construct provisional coverage maps.",
+              "Decouple planetary proxy modeling from core detection pipelines, implementing Anthropocene analogs as flexible prior distributions within Bayesian inference structures.",
+              "Apply probabilistic constraint methods to calculate posterior exclusion zones based on observed sky coverage fractions and known noise floors.",
+              "Facilitate human committee reviews to prioritize parameter regions where detection probability crosses defined decision thresholds for dedicated follow-up campaigns."
+            ]
+          },
+          "started_at": "2026-08-13T19:26:10.579838+00:00",
+          "completed_at": "2026-08-13T19:26:33.874153+00:00"
+        },
+        {
+          "id": "step:009646a83765867c236a137ec6c5237963a9f711e1d24276de66f1bf5a177755",
+          "work_item_id": "work:fd00e9347c218c7c1a63462e",
+          "ordinal": 1,
+          "role": "review",
+          "status": "completed",
+          "attempt_id": "attempt:6afe2ceb2bffc348be863ca1",
+          "output": {
+            "findings": [
+              {
+                "check_id": "RESULT-ARTIFACT-MISMATCH",
+                "severity": "major",
+                "evidence": [
+                  {
+                    "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+                    "locator": "lines 1-599",
+                    "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+                  },
+                  {
+                    "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+                    "locator": "lines 1-179",
+                    "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+                  },
+                  {
+                    "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+                    "locator": "lines 1-702",
+                    "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+                  },
+                  {
+                    "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+                    "locator": "lines 1-519",
+                    "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+                  }
+                ],
+                "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations."
+              }
+            ],
+            "summary": "The provided sources consist exclusively of bibliographic metadata and lack any abstracts, methodologies, or empirical results. Consequently, the claimed workflow to translate non-detections into quantified survey coverage maps and rigorous upper limits cannot be substantiated. Full-text scientific content is required to validate the direction's technical claims and prevent scope inflation."
+          },
+          "started_at": "2026-08-13T19:26:33.892315+00:00",
+          "completed_at": "2026-08-13T19:27:04.912629+00:00"
+        },
+        {
+          "id": "step:ca14d9660594a337e32f588d41e78edda95f41c4c67c156bb2da9946abd33dfa",
+          "work_item_id": "work:fd00e9347c218c7c1a63462e",
+          "ordinal": 2,
+          "role": "publish",
+          "status": "completed",
+          "attempt_id": null,
+          "output": {
+            "published": true
+          },
+          "started_at": null,
+          "completed_at": "2026-08-13T19:27:04.925270+00:00"
+        }
+      ],
+      "findings": [
+        {
+          "id": "finding:17f5809eaf8eb6b62bc6c1d4",
+          "work_item_id": "work:fd00e9347c218c7c1a63462e",
+          "step_id": "step:009646a83765867c236a137ec6c5237963a9f711e1d24276de66f1bf5a177755",
+          "reviewer": "report-reviewer",
+          "check_id": "RESULT-ARTIFACT-MISMATCH",
+          "severity": "major",
+          "evidence": [
+            {
+              "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+              "locator": "lines 1-599",
+              "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+            },
+            {
+              "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+              "locator": "lines 1-179",
+              "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+            },
+            {
+              "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+              "locator": "lines 1-702",
+              "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+            },
+            {
+              "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+              "locator": "lines 1-519",
+              "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+            }
+          ],
+          "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations.",
+          "status": "noted",
+          "created_at": "2026-08-13T19:27:04.920393+00:00"
+        }
+      ]
+    }
+  ],
+  "attempts": [
+    {
+      "id": "attempt:807d733238d21d47e53fad6c",
+      "run_id": "run:451d54d45eb112e629e05b88",
+      "generation_id": "generation:0904b7cb391fa5e1175e0bcd2a014fa2d5ff0ceed32203a2a374323b50e4e175",
+      "snapshot_id": "project-snapshot:0680441444d800673fa7f883a24a3cadac2ec208e097fb8c62ffedff61959f9d",
+      "actor": "source-acquirer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:e5655cb3f209377a0a5a90b11f2ca244fdecfa6bbe61d3d3a6b8327702f77094",
+      "context_artifact_id": "artifact:60fc2db5857cf65dec2c310dc48d18d4b6aa0ed1267da2f6b80a4d1d1b1f7165",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:22:42.378999+00:00",
+      "completed_at": "2026-08-13T19:23:56.692247+00:00",
+      "work_item_id": "work:1254547eaadd586c25ad2ac3",
+      "log_artifact_id": "artifact:b2a78af32ebabca27e06440e3c07babe62c664366fd3ce73df0a39a5127452d1"
+    },
+    {
+      "id": "attempt:c389d5200f6ed5a0f0c9ff01",
+      "run_id": "run:451d54d45eb112e629e05b88",
+      "generation_id": "generation:0904b7cb391fa5e1175e0bcd2a014fa2d5ff0ceed32203a2a374323b50e4e175",
+      "snapshot_id": "project-snapshot:0680441444d800673fa7f883a24a3cadac2ec208e097fb8c62ffedff61959f9d",
+      "actor": "source-summarizer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:54208bc5f71cfced0ef553b1b7dfe51e5b0c9bc8ec12cc6ea2379794ea3172b8",
+      "context_artifact_id": "artifact:9e243d3ef2280c227eaa9eff947248d91aa3f0d924670e47b84f1eaeef985c16",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:23:56.720988+00:00",
+      "completed_at": "2026-08-13T19:24:29.305219+00:00",
+      "work_item_id": "work:1254547eaadd586c25ad2ac3",
+      "log_artifact_id": "artifact:2d26972321ab605bd0a4471863ce815faf94103a7b728e9e646a81094412a7bb"
+    },
+    {
+      "id": "attempt:7545eadec0537dfdab57ee0a",
+      "run_id": "run:451d54d45eb112e629e05b88",
+      "generation_id": "generation:0904b7cb391fa5e1175e0bcd2a014fa2d5ff0ceed32203a2a374323b50e4e175",
+      "snapshot_id": "project-snapshot:0680441444d800673fa7f883a24a3cadac2ec208e097fb8c62ffedff61959f9d",
+      "actor": "source-reviewer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:f7892bc912ebcca4877d3e2f45aef06520e04a4078d39f1138c4dfb642a91fea",
+      "context_artifact_id": "artifact:b3a19c300666a5938f09c12699bc9d5cc5141c29b4edbda22c3a8221cc069dc6",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:24:29.323676+00:00",
+      "completed_at": "2026-08-13T19:24:54.732692+00:00",
+      "work_item_id": "work:1254547eaadd586c25ad2ac3",
+      "log_artifact_id": "artifact:9293d9f853887e3d8a0e52142b488b6688b8a301f12d231dec98e30a18f52c63"
+    },
+    {
+      "id": "attempt:0aaa1d5ac8f793c9ad8683b9",
+      "run_id": "run:451d54d45eb112e629e05b88",
+      "generation_id": "generation:757c7cabd5abc62bbfe7a6bb00ec1ce43db42fb6fcc18ab41f9cc532af191827",
+      "snapshot_id": "project-snapshot:0680441444d800673fa7f883a24a3cadac2ec208e097fb8c62ffedff61959f9d",
+      "actor": "claim-worker",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:497891fcea1e4d6fd9670ab6dd1eb4c16f6982d18cbf3793c5a723f59f7205b8",
+      "context_artifact_id": "artifact:78663c28b4a395127d22d10cce1fd6dbe31f6a05fd4b968650c02351587a8f5a",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:24:54.781364+00:00",
+      "completed_at": "2026-08-13T19:25:24.769520+00:00",
+      "work_item_id": "work:52fdecfa01ef8bf4a44cbba1",
+      "log_artifact_id": "artifact:aa47fcc264963de3e22c67175bb74a1814e16bcf1ad28ee694fc97f6008e5ce2"
+    },
+    {
+      "id": "attempt:47a8d74e2300ea1638769cff",
+      "run_id": "run:451d54d45eb112e629e05b88",
+      "generation_id": "generation:757c7cabd5abc62bbfe7a6bb00ec1ce43db42fb6fcc18ab41f9cc532af191827",
+      "snapshot_id": "project-snapshot:0680441444d800673fa7f883a24a3cadac2ec208e097fb8c62ffedff61959f9d",
+      "actor": "claim-rebuttal",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:6cac508aeaf0469b318be6e31db109d38c3e253ec97e026f096dfb079c49b4d9",
+      "context_artifact_id": "artifact:0313b81f52dacff5593aa8d0c4e99a2faaf074cc07fba9bfd4356f80866bbfaa",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:25:24.787147+00:00",
+      "completed_at": "2026-08-13T19:25:48.378741+00:00",
+      "work_item_id": "work:52fdecfa01ef8bf4a44cbba1",
+      "log_artifact_id": "artifact:8d3afe1fdf881157a7e443c0446c5dbab49b9bb71191c6a39fef8be89edec080"
+    },
+    {
+      "id": "attempt:d1676ecc4f52009e0a087682",
+      "run_id": "run:451d54d45eb112e629e05b88",
+      "generation_id": "generation:757c7cabd5abc62bbfe7a6bb00ec1ce43db42fb6fcc18ab41f9cc532af191827",
+      "snapshot_id": "project-snapshot:0680441444d800673fa7f883a24a3cadac2ec208e097fb8c62ffedff61959f9d",
+      "actor": "claim-reviewer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:f7892bc912ebcca4877d3e2f45aef06520e04a4078d39f1138c4dfb642a91fea",
+      "context_artifact_id": "artifact:7eb0e8d210fb9a0ec6e8918aba9334f834b1524edcf9fabbfc69f31a047581ba",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:25:48.392977+00:00",
+      "completed_at": "2026-08-13T19:26:10.354330+00:00",
+      "work_item_id": "work:52fdecfa01ef8bf4a44cbba1",
+      "log_artifact_id": "artifact:67695b758a396b145bcd6d56313dd5b96e3f93258c85b1d8686b89dda91d3bca"
+    },
+    {
+      "id": "attempt:f8fbc6781363eb7ee881ea25",
+      "run_id": "run:451d54d45eb112e629e05b88",
+      "generation_id": "generation:beec6534a5a334b2191fe4af2471a12543989617323d05434077f2195f49bc89",
+      "snapshot_id": "project-snapshot:0680441444d800673fa7f883a24a3cadac2ec208e097fb8c62ffedff61959f9d",
+      "actor": "synthesizer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:3f09b2f5b68b344b0fa0837eadf9edbf04e27c7191bebd8f89463f4924792310",
+      "context_artifact_id": "artifact:cdb4a41cd3762e11be3d48295683d234c1e08f335c3db521d15eef8259275176",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:26:10.571341+00:00",
+      "completed_at": "2026-08-13T19:26:33.863470+00:00",
+      "work_item_id": "work:fd00e9347c218c7c1a63462e",
+      "log_artifact_id": "artifact:bab6ea20b6e0a1967875d876e8541e5bc03c721afc5628806ca95506e93798f4"
+    },
+    {
+      "id": "attempt:6afe2ceb2bffc348be863ca1",
+      "run_id": "run:451d54d45eb112e629e05b88",
+      "generation_id": "generation:beec6534a5a334b2191fe4af2471a12543989617323d05434077f2195f49bc89",
+      "snapshot_id": "project-snapshot:0680441444d800673fa7f883a24a3cadac2ec208e097fb8c62ffedff61959f9d",
+      "actor": "report-reviewer",
+      "status": "completed",
+      "workspace": null,
+      "wire_artifact_id": "artifact:d4fd1b46dc965ebc6d49306a3fda6c6fd97742b96e95f66f59b4b6cd85468342",
+      "context_artifact_id": "artifact:995dfbfcf9fe07d7b9ba994fe365f1c65b997bd7adc2dfcb3a5a1e8ae4df3066",
+      "manifest_artifact_id": "artifact:602e35a92eec4bc0a2ec6ae113f07bfc6933322fb69fe8dee416e5a67217e2a2",
+      "created_at": "2026-08-13T19:26:33.879216+00:00",
+      "completed_at": "2026-08-13T19:27:04.901636+00:00",
+      "work_item_id": "work:fd00e9347c218c7c1a63462e",
+      "log_artifact_id": "artifact:e00a789446bd1e565aa8f1a673c0c0da52082ae6dc5cf50131d53cd1b98c5b28"
+    }
+  ],
+  "findings": [
+    {
+      "id": "finding:81be6d6396f2e079e6e95dc4",
+      "work_item_id": "work:1254547eaadd586c25ad2ac3",
+      "step_id": "step:80007aad784c1d867683555d308705ebd9fca781db3853d4a3d9adaed92c7a12",
+      "reviewer": "source-reviewer",
+      "check_id": "CITE-CONTEXT|SCOPE-INFLATE|ARGUMENT-CHAIN-BREAK|RESULT-ARTIFACT-MISMATCH",
+      "severity": "major",
+      "evidence": [
+        {
+          "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+          "locator": "lines 1-599",
+          "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+        },
+        {
+          "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+          "locator": "lines 1-179",
+          "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+        },
+        {
+          "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+          "locator": "lines 1-702",
+          "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+        },
+        {
+          "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+          "locator": "lines 1-519",
+          "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+        }
+      ],
+      "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:24:54.750944+00:00"
+    },
+    {
+      "id": "finding:185395775b12e8ea8ae08fda",
+      "work_item_id": "work:52fdecfa01ef8bf4a44cbba1",
+      "step_id": "step:f9fcefe1ce97266a04d51cfcf08f20cc457dbc5e312cd44b990519bdd893c330",
+      "reviewer": "claim-reviewer",
+      "check_id": "CITE-CONTEXT|SCOPE-INFLATE|ARGUMENT-CHAIN-BREAK|RESULT-ARTIFACT-MISMATCH",
+      "severity": "major",
+      "evidence": [
+        {
+          "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+          "locator": "lines 1-599",
+          "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+        },
+        {
+          "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+          "locator": "lines 1-179",
+          "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+        },
+        {
+          "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+          "locator": "lines 1-702",
+          "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+        },
+        {
+          "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+          "locator": "lines 1-519",
+          "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+        }
+      ],
+      "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:26:10.367886+00:00"
+    },
+    {
+      "id": "finding:17f5809eaf8eb6b62bc6c1d4",
+      "work_item_id": "work:fd00e9347c218c7c1a63462e",
+      "step_id": "step:009646a83765867c236a137ec6c5237963a9f711e1d24276de66f1bf5a177755",
+      "reviewer": "report-reviewer",
+      "check_id": "RESULT-ARTIFACT-MISMATCH",
+      "severity": "major",
+      "evidence": [
+        {
+          "id": "source-snapshot:7c9915a6180dade9160f4cdbfa46ce417e54402f3c3dd38c16cb02755c31d1a1",
+          "locator": "lines 1-599",
+          "sha256": "4a56d76cbf95db3802335a49694149840e9190bdd0ba6636fff13545a149b50b"
+        },
+        {
+          "id": "source-snapshot:7b6859be459e3021b22a51dce8334ea416b076e1bafb840c03d5235e558232f0",
+          "locator": "lines 1-179",
+          "sha256": "3f42c1ebd4eb6328eb95235320ec525916669e08752a0bb7fc93a3ea4a5dcb66"
+        },
+        {
+          "id": "source-snapshot:b075e7353865defd102a68e004e70357d4586d20686c1d173746aa005a865b39",
+          "locator": "lines 1-702",
+          "sha256": "ed9c2ae5a563b53b01f5d1748463561d8ce9dd120e9564c7d10a1abb553d5238"
+        },
+        {
+          "id": "source-snapshot:ec43678c7e8b3a8e40def60c4937a47816affe3fa6e69151c1f921cd9bbc98df",
+          "locator": "lines 1-519",
+          "sha256": "6a460de34a1a0ff40f7355b17b7bc6db1979fe9b85d4f6859e38d6ce91dd9346"
+        }
+      ],
+      "recommendation": "Replace metadata-only excerpts with full-text articles containing abstracts, methodologies, and empirical results to substantiate quantitative survey coverage and upper limit calculations.",
+      "status": "noted",
+      "created_at": "2026-08-13T19:27:04.920393+00:00"
+    }
+  ],
+  "log_files": [
+    "logs/attempt-807d733238d21d47e53fad6c.log",
+    "logs/attempt-c389d5200f6ed5a0f0c9ff01.log",
+    "logs/attempt-7545eadec0537dfdab57ee0a.log",
+    "logs/attempt-0aaa1d5ac8f793c9ad8683b9.log",
+    "logs/attempt-47a8d74e2300ea1638769cff.log",
+    "logs/attempt-d1676ecc4f52009e0a087682.log",
+    "logs/attempt-f8fbc6781363eb7ee881ea25.log",
+    "logs/attempt-6afe2ceb2bffc348be863ca1.log"
+  ],
+  "code_files": []
+}

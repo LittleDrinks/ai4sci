@@ -11,9 +11,6 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
-    "@xyflow/react": "latest",
-    "d3-force": "^3.0.0",
-    "elkjs": "0.12.0",
     "lucide-react": "latest",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

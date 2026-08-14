@@ -4,8 +4,8 @@ services:
       context: .
       target: runtime
     environment:
-      MODEL_API_BASE: ${MODEL_API_BASE:-}
-      MODEL_API_KEY: ${MODEL_API_KEY:-}
+      MODEL_API_BASE: ${baseurl:-}
+      MODEL_API_KEY: ${apikey:-}
       RW_PROJECTS_ROOT: /projects
       RW_DATA_ROOT: /app/data
       RUNNER_CONTROLLER_URL: http://runner-controller:8096
@@ -20,25 +20,6 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
-
-  worker:
-    build:
-      context: .
-      target: runtime
-    command: ["python", "-m", "worker"]
-    environment:
-      MODEL_API_BASE: ${MODEL_API_BASE:-}
-      MODEL_API_KEY: ${MODEL_API_KEY:-}
-      RW_PROJECTS_ROOT: /projects
-      RW_DATA_ROOT: /app/data
-      RUNNER_CONTROLLER_URL: http://runner-controller:8096
-    volumes:
-      - rw-data:/app/data
-      - ${RW_PROJECTS_ROOT:-./projects}:/projects:ro
-    networks: [control, worker-egress]
-    depends_on:
-      control:
-        condition: service_healthy
 
   runner-controller:
     build:

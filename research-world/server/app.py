@@ -91,7 +91,7 @@ def graph_routes(app: FastAPI, world: World) -> None:
 
     @app.get("/api/v1/nodes/{node_id}")
     def node(node_id: str):
-        return world.admitted_node(node_id)
+        return public_node(world.admitted_node(node_id))
 
     @app.get("/api/v1/artifacts/{artifact_id}/content")
     def artifact_content(artifact_id: str):
@@ -122,11 +122,41 @@ def bootstrap_data(world: World, projects: list[dict], selected: str | None) -> 
     if not selected:
         return {"projects": [], "active_project_id": None, "nodes": [], "edges": [], "events": [], "jobs": [], "agents": [], "runtimes": [], "artifacts": []}
     runs = [run for run in world.runs() if run["project_id"] == selected]
+    nodes = [public_node(node) for node in world.admitted_nodes(selected)]
     return {"projects": [{**item, "title": item["name"]} for item in projects], "active_project_id": selected,
-            "nodes": world.admitted_nodes(selected), "review_nodes": world.admitted_nodes(selected),
+            "nodes": nodes, "review_nodes": nodes,
             "edges": world.project_edges(selected), "events": [event for run in runs for event in world.events(run["id"])],
             "jobs": [attempt for run in runs for attempt in world.attempts(run["id"])], "agents": [], "runtimes": [],
-            "artifacts": world.project_artifacts(selected), "runs": runs}
+            "artifacts": public_artifacts(world.project_artifacts(selected), nodes), "runs": runs}
+
+
+def public_node(node: dict) -> dict:
+    payload = node.get("payload") or {}
+    actor = node.get("generation_id")
+    return {key: value for key, value in node.items() if key != "payload"} | {
+        "title": node_text(payload, 96), "summary": node_text(payload, 280),
+        "content": {"record": payload},
+        "created_by": {"kind": "agent" if actor else "system", "id": actor or "system"},
+        "audit": "approve" if node.get("status") == "admitted" else "pending",
+    }
+
+
+def node_text(payload: dict, limit: int) -> str:
+    value = next((payload[key] for key in ("title", "text", "strategy", "role")
+                  if isinstance(payload.get(key), str) and payload[key].strip()), "Untitled node")
+    compact = " ".join(value.split())
+    return compact if len(compact) <= limit else f"{compact[:limit - 3]}..."
+
+
+def public_artifacts(artifacts: list[dict], nodes: list[dict]) -> list[dict]:
+    owners = {node["content"]["record"].get("artifact_id"): node for node in nodes}
+    return [public_artifact(artifact, owners.get(artifact["id"])) for artifact in artifacts]
+
+
+def public_artifact(artifact: dict, owner: dict | None) -> dict:
+    return {**artifact, "node_id": owner["id"] if owner else None,
+            "title": owner["title"] if owner else artifact["id"],
+            "kind": owner["kind"] if owner else "artifact", "content_type": artifact["media_type"]}
 
 
 def attempt_artifacts(world: World, run_id: str, field: str) -> list[dict]:

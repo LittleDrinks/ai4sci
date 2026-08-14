@@ -47,6 +47,17 @@ def test_run_detail_contains_event_history(world, project):
     assert response.json()["events"][0]["type"] == "run_started"
 
 
+def test_bootstrap_presents_persisted_nodes_for_the_map(world, project):
+    with TestClient(create_app(world)) as client:
+        body = client.get("/api/v1/bootstrap").json()
+        detail = client.get(f"/api/v1/nodes/{body['nodes'][0]['id']}").json()
+    node = body["nodes"][0]
+    assert node["title"] == "Why do planetary orbits remain stable?"
+    assert node["content"]["record"] == {"text": node["summary"]}
+    assert node["created_by"] == {"kind": "system", "id": "system"}
+    assert node["audit"] == "approve" and detail == node
+
+
 def test_api_does_not_publish_unadmitted_artifacts(world):
     artifact = world.add_artifact(b"pending", "text/plain")
     with TestClient(create_app(world), raise_server_exceptions=False) as client:

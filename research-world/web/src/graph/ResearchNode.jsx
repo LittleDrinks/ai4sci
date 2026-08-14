@@ -23,7 +23,7 @@ function HiddenHandles({ type }) {
 }
 
 function NodeMeta({ data }) {
-  const actor = data.created_by;
+  const actor = data.created_by || { kind: "system", id: "system" };
   const ActorIcon = actor.kind === "agent" ? Bot : UserRound;
   const owner = shortId(actor.id || "system");
   return <div className="node-meta"><span><ActorIcon size={15} />{owner}</span><time>{formatTime(data.created_at, false)}</time></div>;

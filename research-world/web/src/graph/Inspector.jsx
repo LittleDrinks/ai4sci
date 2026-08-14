@@ -15,7 +15,7 @@ function InspectorActions({ openNode, openPlan, openJob, openReport, disabled })
 }
 
 function Provenance({ node }) {
-  const actor = node.created_by;
+  const actor = node.created_by || { id: "system" };
   const source = node.content?.provenance || {};
   return <dl className="inspector-provenance"><div><dt>提交</dt><dd>{actor.id || "系统"} · {formatTime(node.created_at)}</dd></div><Source label="原始资料" path={source.source_path} hash={source.source_sha256} /><Source label="图谱快照" path={source.graph_path} hash={source.graph_sha256} /><div><dt>节点</dt><dd><code>{shortId(node.id)}</code></dd></div></dl>;
 }

@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from researchharness import tool as harness_tool
+
 from .world import World
 
 
@@ -35,6 +37,17 @@ class ToolBroker:
         if tool not in allowed:
             raise PermissionError(f"tool {tool} is not exposed by {server}")
         return self._invoke(attempt_id, server, tool, arguments, config)
+
+    def harness_tools(self, attempt_id: str) -> list:
+        @harness_tool(name="list_project_tools", description="List MCP tools allowed by the current project snapshot.")
+        def list_project_tools() -> dict:
+            return self.list(attempt_id)
+
+        @harness_tool(name="call_project_tool", description="Call one allowed project MCP tool. Arguments must match its schema.")
+        def call_project_tool(server: str, tool_name: str, arguments: dict) -> Any:
+            return self.call(attempt_id, server, tool_name, arguments)
+
+        return [list_project_tools, call_project_tool]
 
     def _invoke(self, attempt_id, server, tool, arguments, config):
         try:

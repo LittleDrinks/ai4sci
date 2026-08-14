@@ -4,8 +4,6 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
-from dotenv import dotenv_values
-
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -21,11 +19,10 @@ class Settings:
 
 def load_settings() -> Settings:
     data = Path(os.getenv("RW_DATA_ROOT", ROOT / "data"))
-    local = dotenv_values(ROOT.parent / ".env")
     return Settings(
         database=data / "research-world.db",
         artifacts=data / "artifacts",
         projects_root=Path(os.getenv("RW_PROJECTS_ROOT", ROOT / "projects")),
-        model_api_base=os.getenv("MODEL_API_BASE") or local.get("baseurl"),
-        model_api_key=os.getenv("MODEL_API_KEY") or local.get("apikey"),
+        model_api_base=os.getenv("MODEL_API_BASE"),
+        model_api_key=os.getenv("MODEL_API_KEY"),
     )

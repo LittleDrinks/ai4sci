@@ -24,14 +24,6 @@ CREATE TABLE IF NOT EXISTS events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,run
 CREATE TABLE IF NOT EXISTS tool_receipts(id TEXT PRIMARY KEY,attempt_id TEXT NOT NULL,server TEXT NOT NULL,tool TEXT NOT NULL,arguments TEXT NOT NULL,result TEXT NOT NULL,error TEXT,created_at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS executions(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,attempt_id TEXT NOT NULL,environment_id TEXT NOT NULL,image_digest TEXT NOT NULL,command TEXT NOT NULL,input_artifact_id TEXT NOT NULL,input_hash TEXT NOT NULL,seed INTEGER NOT NULL,spec TEXT NOT NULL,exit_code INTEGER NOT NULL,output_artifact_id TEXT NOT NULL,output_hash TEXT NOT NULL,usage TEXT NOT NULL,created_at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS environments(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,attempt_id TEXT NOT NULL,image_digest TEXT NOT NULL,lock_artifact_id TEXT NOT NULL,setup TEXT NOT NULL,created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS research_cycles(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,direction_id TEXT NOT NULL,run_id TEXT NOT NULL,status TEXT NOT NULL,brief TEXT NOT NULL,created_at TEXT NOT NULL,completed_at TEXT);
-CREATE TABLE IF NOT EXISTS work_items(id TEXT PRIMARY KEY,cycle_id TEXT NOT NULL,project_id TEXT NOT NULL,direction_id TEXT NOT NULL,generation_id TEXT NOT NULL,kind TEXT NOT NULL,status TEXT NOT NULL,input TEXT NOT NULL,output TEXT NOT NULL,created_at TEXT NOT NULL,completed_at TEXT);
-CREATE TABLE IF NOT EXISTS workflow_steps(id TEXT PRIMARY KEY,work_item_id TEXT NOT NULL,ordinal INTEGER NOT NULL,role TEXT NOT NULL,status TEXT NOT NULL,attempt_id TEXT,output TEXT NOT NULL,started_at TEXT,completed_at TEXT,UNIQUE(work_item_id,ordinal));
-CREATE TABLE IF NOT EXISTS findings(id TEXT PRIMARY KEY,work_item_id TEXT NOT NULL,step_id TEXT NOT NULL,reviewer TEXT NOT NULL,check_id TEXT NOT NULL,severity TEXT NOT NULL,evidence TEXT NOT NULL,recommendation TEXT NOT NULL,status TEXT NOT NULL,created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS project_messages(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,role TEXT NOT NULL,content TEXT NOT NULL,node_id TEXT,created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS work_item_attempts(work_item_id TEXT NOT NULL,attempt_id TEXT NOT NULL,PRIMARY KEY(work_item_id,attempt_id));
-CREATE TABLE IF NOT EXISTS attempt_logs(attempt_id TEXT PRIMARY KEY,artifact_id TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS project_calls(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,attempt_id TEXT NOT NULL,role TEXT NOT NULL,log_artifact_id TEXT NOT NULL,status TEXT NOT NULL,created_at TEXT NOT NULL);
 CREATE VIRTUAL TABLE IF NOT EXISTS node_fts USING fts5(node_id UNINDEXED,project_id UNINDEXED,text);
 """
 

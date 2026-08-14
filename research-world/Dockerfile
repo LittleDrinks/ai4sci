@@ -12,6 +12,7 @@ RUN pip install --no-cache-dir uv==0.8.13
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev
 COPY server/ server/
+COPY worker/ worker/
 COPY --from=web /build/web/dist web/dist
 EXPOSE 8095
 CMD ["rw", "serve", "--host", "0.0.0.0", "--port", "8095"]

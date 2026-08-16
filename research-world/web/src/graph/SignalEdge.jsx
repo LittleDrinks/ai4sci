@@ -33,8 +33,8 @@ export function SignalEdge(props) {
   const duration = props.data?.active ? "1.25s" : "2s";
   return <g className={edgeClass(props.data)}>
     <BaseEdge id={props.id} path={path} style={props.style} />
-    {!props.data?.muted && <path className="signal-flow-path" d={path} fill="none" strokeLinecap="round" strokeDasharray="0 60" strokeDashoffset="60" aria-hidden="true">
+    <path className="signal-flow-path" d={path} fill="none" strokeLinecap="round" strokeDasharray="0 60" strokeDashoffset="60" aria-hidden="true">
       <animate attributeName="stroke-dashoffset" from="60" to="0" dur={duration} calcMode="linear" repeatCount="indefinite" />
-    </path>}
+    </path>
   </g>;
 }

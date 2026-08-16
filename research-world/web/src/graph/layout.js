@@ -1,8 +1,15 @@
+import { Position } from "@xyflow/react";
+
+
 export const NODE_WIDTH = 280;
 export const NODE_HEIGHT = 128;
 const KIND_ORDER = ["question", "source", "direction", "experiment"];
 const COLUMN_GAP = 150;
 const OPPOSITE = { top: "bottom", right: "left", bottom: "top", left: "right" };
+const HANDLE_POINTS = [[Position.Top, NODE_WIDTH / 2, 0], [Position.Right, NODE_WIDTH, NODE_HEIGHT / 2],
+  [Position.Bottom, NODE_WIDTH / 2, NODE_HEIGHT], [Position.Left, 0, NODE_HEIGHT / 2]];
+const HANDLES = ["target", "source"].flatMap((type) => HANDLE_POINTS.map(([position, x, y]) => (
+  { id: `${type}-${position}`, type, position, x, y, width: 1, height: 1 })));
 const OPTIONS = { "elk.algorithm": "layered", "elk.direction": "RIGHT", "elk.edgeRouting": "ORTHOGONAL",
   "elk.spacing.nodeNode": "76", "elk.layered.spacing.nodeNodeBetweenLayers": "150",
   "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX", "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP" };
@@ -46,7 +53,8 @@ function visibleColumns(nodes) {
 
 function flowNode(layout, node, columns) {
   const x = (columns.get(node.kind) || 0) * (NODE_WIDTH + COLUMN_GAP);
-  return { id: node.id, type: "research", position: { x, y: layout.y }, width: NODE_WIDTH, height: NODE_HEIGHT };
+  return { id: node.id, type: "research", position: { x, y: layout.y }, width: NODE_WIDTH, height: NODE_HEIGHT,
+    measured: { width: NODE_WIDTH, height: NODE_HEIGHT }, handles: HANDLES };
 }
 
 

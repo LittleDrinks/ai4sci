@@ -36,8 +36,20 @@ test("lays out the four fixed node kinds as graph lanes", async ({ page }) => {
   expect(await nodeX(page, "node:e")).toBeGreaterThan(await nodeX(page, "node:d"));
   await expect(page.locator(".react-flow__edge")).toHaveCount(3);
   await expect(page.locator(".node-run")).toHaveCount(0);
+  await expect(page.locator('.react-flow__node[data-id="node:q"] footer')).not.toContainText("0");
   await expect(page.getByRole("img", { name: "问题图标" })).toBeVisible();
   expect(await page.locator(".hidden-handle").first().evaluate((element) => getComputedStyle(element).opacity)).toBe("0");
+});
+
+
+test("keeps large graph edges initialized", async ({ page }) => {
+  const body = fixture();
+  body.nodes = [body.nodes[0], ...Array.from({ length: 45 }, (_, index) => node(`node:d${index}`, "direction", { parent_id: "node:q" }))];
+  body.edges = [];
+  await mockMap(page, body);
+  await page.goto("/map");
+  await expect(page.locator(".signal-edge")).toHaveCount(45);
+  await expect(page.locator(".signal-flow-path")).toHaveCount(45);
 });
 
 
@@ -46,7 +58,7 @@ test("animates visible signal paths along graph relations", async ({ page }) => 
   await page.goto("/map");
   const paths = page.locator(".signal-flow-path");
   await expect(paths).not.toHaveCount(0);
-  expect(await paths.count()).toBe(await page.locator(".signal-edge:not(.muted)").count());
+  expect(await paths.count()).toBe(await page.locator(".signal-edge").count());
   expect(await paths.first().evaluate((element) => getComputedStyle(element).display)).not.toBe("none");
   await expect(paths.first().locator("animate")).toHaveAttribute("repeatCount", "indefinite");
 });

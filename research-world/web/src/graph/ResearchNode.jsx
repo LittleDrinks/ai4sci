@@ -19,7 +19,7 @@ export function ResearchNode({ data, selected }) {
   return <article className={`research-node kind-${data.kind} life-${data.life_state} ${data.working ? "is-working" : ""} ${data.justCompleted ? "just-completed" : ""} ${selected ? "selected" : ""}`}>
     <Handles type="target" /><header><span className="node-kind-icon" role="img" aria-label={`${LABELS[data.kind]}图标`}><Icon size={21} /></span>
       <div><span>{LABELS[data.kind]}</span><h3>{title}</h3></div></header>
-    <footer><span>{state}</span>{data.working && <LoaderCircle className="spin" size={15} />}{data.life_state === "ghost" && <X size={14} />}</footer>
+    <footer><span>{state}</span>{Boolean(data.working) && <LoaderCircle className="spin" size={15} />}{data.life_state === "ghost" && <X size={14} />}</footer>
     <Handles type="source" />
   </article>;
 }

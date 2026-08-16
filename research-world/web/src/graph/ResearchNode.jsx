@@ -17,7 +17,7 @@ export function ResearchNode({ data, selected }) {
   const title = data.payload?.title || data.payload?.text || "未命名节点";
   const state = data.life_state === "ghost" ? "已驳回" : data.life_state === "pending" ? "待审查" : data.direction_status || "已入图";
   return <article className={`research-node kind-${data.kind} life-${data.life_state} ${data.working ? "is-working" : ""} ${data.justCompleted ? "just-completed" : ""} ${selected ? "selected" : ""}`}>
-    <Handles type="target" /><header><span className="node-kind-icon"><Icon size={21} /></span><div><span>{LABELS[data.kind]}</span><h3>{title}</h3></div>
+    <Handles type="target" /><header><span className="node-kind-icon" role="img" aria-label={`${LABELS[data.kind]}图标`}><Icon size={21} /></span><div><span>{LABELS[data.kind]}</span><h3>{title}</h3></div>
       <button className="node-run" onClick={(event) => { event.stopPropagation(); data.onStart(data); }} aria-label={`从${LABELS[data.kind]}发起工作流`} title="发起工作流"><Play size={15} fill="currentColor" /></button></header>
     <footer><span>{state}</span>{data.working && <LoaderCircle className="spin" size={15} />}{data.life_state === "ghost" && <X size={14} />}</footer>
     <Handles type="source" />

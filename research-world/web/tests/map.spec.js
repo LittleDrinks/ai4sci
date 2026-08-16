@@ -9,7 +9,8 @@ function node(id, kind, state = {}) {
 
 
 function fixture() {
-  const nodes = [node("node:q", "question"), node("node:s", "source"), node("node:d", "direction"), node("node:e", "experiment")];
+  const nodes = [node("node:q", "question"), node("node:s", "source"),
+    node("node:d", "direction", { parent_id: "node:q" }), node("node:e", "experiment", { parent_id: "node:d" })];
   return { projects: [{ id: "project:test", title: "测试项目", question: "Why?", auto: 0 }], active_project_id: "project:test", nodes,
     edges: [{ source: "node:s", target: "node:d", polarity: "supports" }, { source: "node:e", target: "node:d", polarity: "refutes" }], workflows: [], slots: [{ index: 1, workflow: null }, { index: 2, workflow: null }] };
 }
@@ -33,6 +34,9 @@ test("lays out the four fixed node kinds as graph lanes", async ({ page }) => {
   expect(await nodeX(page, "node:s")).toBeGreaterThan(await nodeX(page, "node:q"));
   expect(await nodeX(page, "node:d")).toBeGreaterThan(await nodeX(page, "node:s"));
   expect(await nodeX(page, "node:e")).toBeGreaterThan(await nodeX(page, "node:d"));
+  await expect(page.locator(".react-flow__edge")).toHaveCount(3);
+  await expect(page.getByRole("img", { name: "问题图标" })).toBeVisible();
+  expect(await page.locator(".hidden-handle").first().evaluate((element) => getComputedStyle(element).opacity)).toBe("0");
 });
 
 

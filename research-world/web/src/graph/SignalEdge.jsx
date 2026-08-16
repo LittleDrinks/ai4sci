@@ -24,7 +24,7 @@ function edgePath(props) {
 }
 
 function edgeClass(data) {
-  return ["signal-edge", data?.active && "active", data?.incident && "incident",
+  return ["signal-edge", data?.polarity && `polarity-${data.polarity}`, data?.active && "active", data?.incident && "incident",
     data?.related && "related", data?.muted && "muted"].filter(Boolean).join(" ");
 }
 

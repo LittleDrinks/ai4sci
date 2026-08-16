@@ -19,11 +19,11 @@
 .research-node.life-pending { border-style: dashed; border-width: 2px; }
 .research-node.life-ghost { opacity: .32; filter: grayscale(.65); }
 .research-node.life-ghost:hover, .research-node.life-ghost.selected { opacity: .72; }
-.research-node > header { min-height: 88px; display: grid; grid-template-columns: 42px minmax(0, 1fr) 32px; align-items: start; gap: 10px; padding: 14px 12px; }
+.research-node > header { height: 88px; display: grid; grid-template-columns: 42px minmax(0, 1fr) 32px; align-items: start; gap: 10px; padding: 14px 12px; overflow: hidden; }
 .research-node > header > div { min-width: 0; }
 .research-node > header > div > span { display: block; margin-bottom: 4px; color: #6b7280; font-size: 11px; }
-.research-node > header h3 { display: -webkit-box; margin: 0; color: #111827; font-size: 14px; line-height: 1.4; font-weight: 600; letter-spacing: 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
-.research-node .node-kind-icon { width: 36px; height: 36px; border-radius: 6px; color: #fff; }
+.research-node > header h3 { display: -webkit-box; margin: 0; color: #111827; font-size: 14px; line-height: 1.4; font-weight: 600; letter-spacing: 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.research-node .node-kind-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 6px; color: #fff; }
 .kind-question .node-kind-icon { background: #4f46e5; }
 .kind-source .node-kind-icon { background: #0e7490; }
 .kind-direction .node-kind-icon { background: #b45309; }
@@ -38,9 +38,11 @@
 @keyframes map-working { 50% { box-shadow: 0 0 0 5px rgb(26 115 232 / .16); border-color: #8ab4f8; } }
 @keyframes map-complete { 0% { box-shadow: 0 0 0 3px #fff, 0 0 0 8px rgb(21 128 61 / .5); } 100% { box-shadow: 0 0 0 18px rgb(21 128 61 / 0); } }
 @keyframes map-spin { to { transform: rotate(360deg); } }
-.signal-edge .react-flow__edge-path { stroke: #9ca3af; }
-.signal-edge:has(.react-flow__edge-path[style*="7 5"]) .react-flow__edge-path { stroke: #b91c1c; }
-.signal-edge.incident .react-flow__edge-path { stroke: #1a73e8; }
+.hidden-handle { width: 1px !important; height: 1px !important; min-width: 0 !important; min-height: 0 !important; border: 0 !important; opacity: 0 !important; pointer-events: none !important; }
+.signal-edge.polarity-lineage .react-flow__edge-path { stroke: #64748b; }
+.signal-edge.polarity-supports .react-flow__edge-path { stroke: #15803d; }
+.signal-edge.polarity-refutes .react-flow__edge-path { stroke: #b91c1c; }
+.signal-edge.incident.polarity-lineage .react-flow__edge-path { stroke: #1a73e8; }
 .signal-edge.muted { opacity: .16; }
 .signal-flow-path { display: none; }
 .inspector { display: grid; grid-template-rows: minmax(0, 1fr) auto; }

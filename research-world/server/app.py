@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from asyncio import to_thread
 from pathlib import Path
 import threading
 
@@ -80,7 +81,11 @@ def conversation_routes(app: FastAPI, world: World) -> None:
     @app.post("/api/v1/projects/{project_id}/messages", status_code=201)
     async def send_message(project_id: str, request: Request):
         value = await request.json()
-        return manager.assist(project_id, value["node_id"], value["message"])
+        return await to_thread(manager.assist, project_id, value["node_id"], value["message"])
+
+    @app.delete("/api/v1/projects/{project_id}/messages", status_code=204)
+    async def clear_messages(project_id: str, node_id: str):
+        manager.reset(project_id, node_id)
 
     @app.post("/api/v1/projects/{project_id}/drafts/materialize", status_code=201)
     async def materialize(project_id: str, request: Request):

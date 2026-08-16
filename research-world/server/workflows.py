@@ -102,7 +102,7 @@ class WorkflowEngine:
         origin = self.world.set_working(workflow["node_id"], True)
         self.world.update_workflow(workflow["id"], "brainstorm", "running")
         count = int(workflow["payload"].get("count", 8))
-        result = self.agents.brainstorm(origin["payload"], count)
+        result = self.agents.brainstorm(agent_context(workflow, origin["payload"]), count)
         self._record_agent(workflow["id"], "brainstormer", result)
         candidates = result["candidates"]
         try:
@@ -175,7 +175,7 @@ class WorkflowEngine:
         payload = {**workflow["payload"], "experiment_id": experiment["id"]}
         self.world.update_workflow(workflow["id"], "plan", "running", payload)
         self._event(workflow["id"], "control", "experiment_created", {"node_id": experiment["id"]})
-        plan = self.agents.plan(direction["payload"])
+        plan = self.agents.plan(agent_context(workflow, direction["payload"]))
         self._record_agent(workflow["id"], "planner", plan)
         for ordinal, step in enumerate(plan["steps"], 1):
             self.world.add_step(workflow["id"], ordinal, "execute", step, not bool(workflow["auto"]))
@@ -244,20 +244,27 @@ class WorkflowEngine:
         payload = {**experiment["payload"], "outputs": outputs}
         if approved:
             self.world.admit_node(experiment["id"], payload)
-            self.world.update_node(direction["id"], direction_status="supported", working=False)
             self.world.add_edge(experiment["id"], direction["id"], "supports")
         else:
             self.world.ghost_node(experiment["id"], "机械证据审计或双审未通过", experiment.get("rebuttal"))
-            self.world.update_node(direction["id"], direction_status="refuted", working=False)
             self.world.add_edge(experiment["id"], direction["id"], "refutes")
+        self._resolve_direction(direction, approved)
         lineage = self.world.register_review(direction["lineage_id"], approved)
         if lineage["auto_paused"]:
             self.world.update_workflow(workflow["id"], "review", "paused", {**workflow["payload"], "reason": "同一谱系连续 2 次驳回"})
 
+    def _resolve_direction(self, direction: dict, approved: bool) -> None:
+        if direction["direction_status"] == "proposed":
+            state = "supported" if approved else "refuted"
+            self.world.update_node(direction["id"], direction_status=state, working=False)
+        else:
+            self.world.set_working(direction["id"], False)
+
     def _reflect(self, workflow, experiment, outputs) -> dict:
         if self.world.workflow(workflow["id"])["status"] == "paused":
             return self.world.workflow(workflow["id"])
-        value = self.agents.reflect({"experiment": experiment["payload"], "outputs": outputs})
+        context = {"experiment": experiment["payload"], "outputs": outputs}
+        value = self.agents.reflect(agent_context(workflow, context))
         self._record_agent(workflow["id"], "reflector", value)
         node = self.world.create_node(workflow["project_id"], "direction", {"text": value["text"]},
                                      parent_id=experiment["id"], lineage_id=experiment["lineage_id"])
@@ -291,6 +298,11 @@ def clean(value: dict) -> dict:
     return {key: item for key, item in value.items() if not key.startswith("_")}
 
 
+def agent_context(workflow: dict, context: dict) -> dict:
+    return {**context, "instruction": workflow["payload"].get("instruction", ""),
+            "mode": workflow["payload"].get("mode", "")}
+
+
 def required(value: dict, field: str):
     if field not in value:
         raise ValueError(f"harness response missing required field '{field}'")
@@ -308,7 +320,7 @@ def default_engine(world: World) -> WorkflowEngine:
 
 
 BRAINSTORM_PROMPT = (
-    "输入 text 是唯一研究问题，count 是候选数。只围绕该问题生成恰好 count 个相互差异显著、"
+    "输入节点内容与 instruction 是研究约束，count 是候选数。严格执行 instruction，生成恰好 count 个相互差异显著、"
     "可证伪的研究方向。严格返回 {\"candidates\":[{\"text\":\"...\",\"quality\":0.0}]}，quality 范围 0-1。"
 )
 PAIR_PROMPT = (
@@ -316,7 +328,7 @@ PAIR_PROMPT = (
     "严格返回 {\"duplicate\":true}，duplicate 只能是布尔值。"
 )
 PLAN_PROMPT = (
-    "把输入方向拆为可独立确认的最小实验步骤。严格返回 "
+    "严格执行 instruction，把输入方向拆为可独立确认的最小实验步骤。严格返回 "
     "{\"steps\":[{\"image\":\"busybox:1.36\",\"command\":[\"sh\",\"-lc\",\"...\"],"
     "\"files\":{},\"seed\":0,\"limits\":{\"cpus\":1,\"memory_mb\":512,\"pids\":128}}]}。"
 )
@@ -326,5 +338,5 @@ REVIEW_PROMPT = (
     "decision 只能是 approve 或 reject，分数范围 0-1。"
 )
 REFLECT_PROMPT = (
-    "基于实验输出与失败边界生成一个可证伪的新方向。严格返回 {\"text\":\"...\"}。"
+    "严格执行 instruction，基于实验输出与失败边界生成一个可证伪的新方向。严格返回 {\"text\":\"...\"}。"
 )

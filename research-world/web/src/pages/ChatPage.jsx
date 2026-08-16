@@ -1,6 +1,6 @@
-import { Beaker, BookOpen, GitBranch, Lightbulb, MessageSquare, Save, SendHorizontal } from "lucide-react";
+import { Beaker, BookOpen, GitBranch, Lightbulb, MessageSquare, Plus, Save, SendHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { getMessages, materializeDraft, sendMessage, startWorkflow } from "../api";
+import { clearConversation, getMessages, materializeDraft, sendMessage, startWorkflow } from "../api";
 import { useWorld } from "../context/WorldContext";
 import "../chat.css";
 
@@ -21,7 +21,7 @@ function ProjectChat({ data, refresh, setError }) {
   const node = data.nodes.find((item) => item.id === selectedId) || data.nodes[0];
   const conversation = useConversation(data.active_project_id, node, refresh, setError);
   return <section className="manager-chat"><NodeRail nodes={data.nodes} selectedId={node?.id} onSelect={setSelectedId} />
-    <main className="manager-thread"><ThreadHeader node={node} workflows={data.workflows} /><MessageLog messages={conversation.messages} loading={conversation.loading} />
+    <main className="manager-thread"><ThreadHeader node={node} workflows={data.workflows} onNew={conversation.reset} /><MessageLog messages={conversation.messages} loading={conversation.loading} />
       <Composer node={node} conversation={conversation} data={data} refresh={refresh} setError={setError} /></main>
     <ContextPane node={node} edges={data.edges} workflows={data.workflows} /></section>;
 }
@@ -39,18 +39,35 @@ function useConversation(projectId, node, refresh, setError) {
     return () => { stale = true; };
   }, [projectId, node?.id]);
   return { messages, setMessages, loading, draft, setDraft,
-    send: () => sendDraft(projectId, node, draft, setDraft, setMessages, setError),
+    send: () => sendDraft(projectId, node, draft, setDraft, setMessages, refresh, setError),
+    reset: () => resetConversation(projectId, node, setDraft, setMessages, setLoading, setError),
     materialize: () => materialize(projectId, node, draft, setDraft, setMessages, refresh, setError) };
 }
 
 
-async function sendDraft(projectId, node, draft, setDraft, setMessages, setError) {
+async function sendDraft(projectId, node, draft, setDraft, setMessages, refresh, setError) {
   const content = draft.trim();
   if (!content) return;
+  const pendingId = `draft:${Date.now()}`;
   setDraft("");
-  setMessages((items) => [...items, { id: `draft:${Date.now()}`, role: "user", content }]);
-  try { const reply = await sendMessage(projectId, { node_id: node.id, message: content }); setMessages((items) => [...items, reply]); }
-  catch (error) { setDraft(content); setError(error.message); }
+  setMessages((items) => [...items, { id: pendingId, role: "user", content }]);
+  try {
+    const reply = await sendMessage(projectId, { node_id: node.id, message: content });
+    setMessages((items) => [...items, reply]);
+    if (reply.workflow) await refresh(projectId);
+  }
+  catch (error) {
+    setMessages((items) => items.filter((item) => item.id !== pendingId));
+    setDraft(content); setError(error.message);
+  }
+}
+
+
+async function resetConversation(projectId, node, setDraft, setMessages, setLoading, setError) {
+  setLoading(true);
+  try { await clearConversation(projectId, node.id); setDraft(""); setMessages([]); }
+  catch (error) { setError(error.message); }
+  finally { setLoading(false); }
 }
 
 
@@ -73,9 +90,11 @@ function NodeRail({ nodes, selectedId, onSelect }) {
 }
 
 
-function ThreadHeader({ node, workflows }) {
-  const active = workflows.filter((item) => item.node_id === node?.id && ["queued", "running", "waiting_human"].includes(item.status)).length;
-  return <header className="thread-header"><div><span>{KIND[node?.kind] || "节点"}</span><h1>{nodeText(node)}</h1></div><span className={active ? "active" : ""}>{active ? `${active} 个工作流进行中` : "就绪"}</span></header>;
+function ThreadHeader({ node, workflows, onNew }) {
+  const active = workflowsFor(workflows, node).filter((item) => ["queued", "running", "waiting_human"].includes(item.status)).length;
+  return <header className="thread-header"><div className="thread-title"><span>{KIND[node?.kind] || "节点"}</span><h1>{nodeText(node)}</h1></div>
+    <div className="thread-actions"><span className={active ? "active" : ""}>{active ? `${active} 个工作流进行中` : "就绪"}</span>
+      <button className="icon-button" aria-label="新建对话" title="新建对话" onClick={onNew}><Plus size={17} /></button></div></header>;
 }
 
 
@@ -119,7 +138,7 @@ function ContextPane({ node, edges, workflows }) {
   const records = Object.entries(node?.payload || {});
   return <aside className="chat-context"><header><b>上下文</b><span>{KIND[node?.kind]}</span></header><section><h2>节点记录</h2><dl>{records.map(([key, value]) => <div key={key}><dt>{key}</dt><dd>{String(value)}</dd></div>)}</dl></section>
     <section><h2>研究状态</h2><dl><div><dt>生命态</dt><dd>{lifeLabel(node?.life_state)}</dd></div>{node?.direction_status && <div><dt>方向</dt><dd>{node.direction_status}</dd></div>}
-      <div><dt>证据关系</dt><dd>{relations.length}</dd></div><div><dt>工作流</dt><dd>{workflows.filter((item) => item.node_id === node?.id).length}</dd></div></dl></section></aside>;
+      <div><dt>证据关系</dt><dd>{relations.length}</dd></div><div><dt>工作流</dt><dd>{workflowsFor(workflows, node).length}</dd></div></dl></section></aside>;
 }
 
 
@@ -134,7 +153,14 @@ function actionsFor(node) {
 
 function workflowRequest(node, action) {
   const kind = ["brainstorm", "reflect"].includes(action) ? "brainstorm" : "plan-execute-review-reflect";
-  return { node_id: node.id, kind, payload: kind === "brainstorm" ? { count: 8, select: 4 } : {} };
+  const payload = { instruction: "按当前节点上下文推进", mode: action };
+  if (kind === "brainstorm") Object.assign(payload, { count: 8, select: 4 });
+  return { node_id: node.id, kind, payload };
+}
+
+
+function workflowsFor(workflows, node) {
+  return workflows.filter((item) => item.node_id === node?.id || item.payload?.experiment_id === node?.id);
 }
 
 

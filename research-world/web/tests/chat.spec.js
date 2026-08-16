@@ -42,6 +42,36 @@ test("sends a message with the selected node context", async ({ page }) => {
 });
 
 
+test("starts a new conversation for the current node", async ({ page }) => {
+  let cleared = false;
+  await mockChat(page);
+  await page.route(/\/api\/v1\/projects\/project%3Atest\/messages/, (route) => {
+    if (route.request().method() === "DELETE") { cleared = true; return route.fulfill({ status: 204 }); }
+    return route.fulfill({ json: [{ id: 1, role: "assistant", content: "旧草稿" }] });
+  });
+  await page.goto("/chat");
+  await expect(page.getByText("旧草稿")).toBeVisible();
+  await page.getByRole("button", { name: "新建对话" }).click();
+  await expect.poll(() => cleared).toBe(true);
+  await expect(page.getByText("当前节点尚无对话草稿")).toBeVisible();
+});
+
+
+test("refreshes workflow state after an instruction starts work", async ({ page }) => {
+  let bootstraps = 0;
+  await page.route(/\/api\/v1\/bootstrap/, (route) => { bootstraps += 1; return route.fulfill({ json: fixture() }); });
+  await page.route(/\/api\/v1\/projects\/project%3Atest\/messages/, (route) => {
+    if (route.request().method() === "GET") return route.fulfill({ json: [] });
+    return route.fulfill({ status: 201, json: { id: 2, role: "assistant", content: "已创建工作流", workflow: { id: "workflow:new" } } });
+  });
+  await page.goto("/chat");
+  await page.getByLabel("消息").fill("生成三个方向，只保留一个");
+  await page.getByRole("button", { name: "发送" }).click();
+  await expect(page.getByText("已创建工作流")).toBeVisible();
+  await expect.poll(() => bootstraps).toBeGreaterThan(1);
+});
+
+
 test("maps reflection to a brainstorm workflow", async ({ page }) => {
   let request;
   const direction = node("node:d", "direction", { direction_status: "supported" });

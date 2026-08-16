@@ -15,6 +15,7 @@ export const confirmWorkflow = (id) => fetch(`/api/v1/workflows/${encodeURICompo
 export const resolveWorkflow = (id, body) => fetch(`/api/v1/workflows/${encodeURIComponent(id)}/resolve`, json("POST", body)).then(decode);
 export const getMessages = (projectId, nodeId) => fetch(`/api/v1/projects/${encodeURIComponent(projectId)}/messages?node_id=${encodeURIComponent(nodeId)}`).then(decode);
 export const sendMessage = (projectId, body) => fetch(`/api/v1/projects/${encodeURIComponent(projectId)}/messages`, json("POST", body)).then(decode);
+export const clearConversation = (projectId, nodeId) => fetch(`/api/v1/projects/${encodeURIComponent(projectId)}/messages?node_id=${encodeURIComponent(nodeId)}`, { method: "DELETE" }).then(decode);
 export const materializeDraft = (projectId, body) => fetch(`/api/v1/projects/${encodeURIComponent(projectId)}/drafts/materialize`, json("POST", body)).then(decode);
 export const setProjectAuto = (projectId, auto) => fetch(`/api/v1/projects/${encodeURIComponent(projectId)}`, json("PATCH", { auto })).then(decode);
 

@@ -43,3 +43,14 @@ def test_bootstrap_includes_all_life_states(world, project):
     world.ghost_node(ghost["id"], "audit rejected")
     data = bootstrap_data(world, project["id"])
     assert {node["life_state"] for node in data["nodes"]} == {"admitted", "pending", "ghost"}
+
+
+def test_active_workflow_is_idempotent_for_node_and_experiment(world, project):
+    direction = world.create_node(project["id"], "direction", {"text": "Candidate"})
+    experiment = world.create_node(project["id"], "experiment", {"title": "Pending"}, parent_id=direction["id"])
+    workflow = world.create_workflow(project["id"], direction["id"], "plan-execute-review-reflect",
+                                     {"experiment_id": experiment["id"]})
+    duplicate = world.create_workflow(project["id"], direction["id"], "plan-execute-review-reflect")
+    associated = world.create_workflow(project["id"], experiment["id"], "brainstorm")
+    assert duplicate["id"] == workflow["id"] == associated["id"]
+    assert len(world.workflows(project["id"])) == 1

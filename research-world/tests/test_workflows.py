@@ -28,8 +28,12 @@ class FakeAgents:
         self.candidates = candidates or []
         self.decisions = list(decisions or [])
         self.pairs = []
+        self.brainstorm_contexts = []
+        self.plan_contexts = []
+        self.reflect_contexts = []
 
     def brainstorm(self, context, count):
+        self.brainstorm_contexts.append(context)
         return {"candidates": self.candidates[:count]}
 
     def pairwise(self, left, right):
@@ -37,6 +41,7 @@ class FakeAgents:
         return True
 
     def plan(self, direction):
+        self.plan_contexts.append(direction)
         return {"steps": [{"image": "busybox:1.36", "command": ["true"]}]}
 
     def review(self, context, reviewer):
@@ -44,6 +49,7 @@ class FakeAgents:
         return {"decision": decision, "quality": 0.8, "diversity": 0.7, "rebuttal": reviewer}
 
     def reflect(self, context):
+        self.reflect_contexts.append(context)
         return {"text": "Reflected direction"}
 
 
@@ -86,13 +92,15 @@ def test_brainstorm_blocks_duplicates_and_admits_selected(world, project):
     world.embedding = FakeEmbedding({"Existing direction": [1, 0], "Duplicate": [1, 0], "Novel": [0, 1]})
     world.update_node(existing["id"], payload={"text": "Existing direction"})
     agents = FakeAgents([{"text": "Duplicate", "quality": 0.9}, {"text": "Novel", "quality": 0.8}])
-    workflow = world.create_workflow(project["id"], world.nodes(project["id"])[0]["id"], "brainstorm", {"select": 2})
+    workflow = world.create_workflow(project["id"], world.nodes(project["id"])[0]["id"], "brainstorm",
+                                     {"select": 2, "instruction": "只考虑长期稳定性"})
     result = engine(world, agents, world.embedding).run(workflow["id"])
     directions = [node for node in world.nodes(project["id"]) if node["kind"] == "direction"]
     assert result["status"] == "completed"
     assert world.workflow_events(workflow["id"])[1]["actor"] == "brainstormer"
     assert any(node["life_state"] == "ghost" and "cos=1.00" in node["rejection_reason"] for node in directions)
     assert any(node["payload"]["text"] == "Novel" and node["life_state"] == "admitted" for node in directions)
+    assert agents.brainstorm_contexts[0]["instruction"] == "只考虑长期稳定性"
 
 
 def test_gray_similarity_uses_pairwise_judge(world, project):
@@ -107,9 +115,11 @@ def test_gray_similarity_uses_pairwise_judge(world, project):
 
 def test_manual_research_confirms_start_and_each_step(world, project):
     direction = admitted_direction(world, project)
-    workflow = world.create_workflow(project["id"], direction["id"], "plan-execute-review-reflect")
+    workflow = world.create_workflow(project["id"], direction["id"], "plan-execute-review-reflect",
+                                     {"instruction": "先扫描步长敏感性"})
     runner = FakeRunner()
-    service = engine(world, FakeAgents(), runner=runner)
+    agents = FakeAgents()
+    service = engine(world, agents, runner=runner)
     planned = service.confirm(workflow["id"])
     assert planned["status"] == "waiting_human"
     assert planned["payload"]["experiment_id"].startswith("node:")
@@ -118,6 +128,21 @@ def test_manual_research_confirms_start_and_each_step(world, project):
     assert completed["status"] == "completed"
     assert len(runner.calls) == 1
     assert world.node(direction["id"])["direction_status"] == "supported"
+    assert agents.plan_contexts[0]["instruction"] == "先扫描步长敏感性"
+    assert agents.reflect_contexts[0]["instruction"] == "先扫描步长敏感性"
+
+
+def test_replan_adds_evidence_without_rewriting_terminal_direction(world, project):
+    direction = admitted_direction(world, project)
+    world.update_node(direction["id"], direction_status="refuted")
+    workflow = world.create_workflow(project["id"], direction["id"], "plan-execute-review-reflect",
+                                     {"instruction": "更换积分器后重新验证", "mode": "replan"})
+    service = engine(world, FakeAgents(), runner=FakeRunner())
+    service.confirm(workflow["id"])
+    result = service.confirm(workflow["id"])
+    assert result["status"] == "completed"
+    assert world.node(direction["id"])["direction_status"] == "refuted"
+    assert any(edge["polarity"] == "supports" for edge in world.edges(project["id"]))
 
 
 def test_auto_review_starts_next_iteration(world, project):

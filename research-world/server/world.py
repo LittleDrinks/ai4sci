@@ -194,10 +194,18 @@ class World:
         with self.db.connect() as connection:
             connection.execute("DELETE FROM messages WHERE project_id=? AND node_id=?", (project_id, node_id))
 
+    def active_workflow(self, project_id: str, node_id: str) -> dict | None:
+        active = [item for item in self.workflows(project_id)
+                  if item["status"] in {"queued", "running", "waiting_human"}]
+        associated = next((item for item in active if item["payload"].get("experiment_id") == node_id), None)
+        return associated or next((item for item in active if item["node_id"] == node_id), None)
+
     def create_workflow(self, project_id: str, node_id: str, kind: str, payload: dict | None = None) -> dict:
         project, node = self.project(project_id), self.node(node_id)
         if node["project_id"] != project_id:
             raise ValueError("workflow node belongs to another project")
+        if active := self.active_workflow(project_id, node_id):
+            return active
         workflow_id = f"workflow:{secrets.token_hex(12)}"
         status = "queued" if project["auto"] or kind == "brainstorm" else "waiting_human"
         values = (workflow_id, project_id, node_id, node["lineage_id"], kind, "created", status,

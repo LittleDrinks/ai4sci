@@ -1,86 +1,65 @@
-import { ArrowDownToLine, ArrowUpFromLine, ClipboardList, ExternalLink, FileCode2, Focus, Play, Plus } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { JobDialog } from "../components/JobDialog";
-import { ReviewActions } from "../components/ReviewActions";
-import { Status } from "../components/Status";
-import { SubmitNodeDialog } from "../components/SubmitNodeDialog";
+import { GitBranch, MessageSquare, Play, Send } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getMessages, sendMessage } from "../api";
 import { useWorld } from "../context/WorldContext";
-import { displayLabel, formatTime, isAdmittedNode, objectEntries, shortId } from "../utils";
 
-const VISIBLE_RELATIONS = 5;
 
-function InspectorActions({ openNode, openPlan, openJob, openReport, disabled }) {
-  return <div className="inspector-actions"><button className="button secondary" disabled={disabled} onClick={openNode}><Plus size={16} />添加节点</button><button className="button secondary" disabled={disabled} onClick={openPlan}><ClipboardList size={16} />规划</button><button className="button secondary" disabled={disabled} onClick={openJob}><Play size={16} />研究</button><button className="button secondary" disabled={disabled} onClick={openReport}><FileCode2 size={16} />HTML 报告</button></div>;
+const LABELS = { question: "问题", source: "来源", direction: "方向", experiment: "实验",
+  pending: "待审查", admitted: "已入图", ghost: "已驳回", proposed: "待验证", supported: "已支持", refuted: "已反驳" };
+
+
+export function Inspector({ node, nodes, edges, onSelect, onStart }) {
+  if (!node) return <aside className="inspector inspector-empty">选择节点查看上下文。</aside>;
+  return <aside className="inspector"><div className="inspector-scroll"><NodeHeader node={node} onStart={onStart} />
+    <NodeRecord node={node} /><Relations node={node} nodes={nodes} edges={edges} onSelect={onSelect} />
+    <Rebuttal node={node} /></div><NodeChat node={node} /></aside>;
 }
 
-function Provenance({ node }) {
-  const actor = node.created_by || { id: "system" };
-  const source = node.content?.provenance || {};
-  return <dl className="inspector-provenance"><div><dt>提交</dt><dd>{actor.id || "系统"} · {formatTime(node.created_at)}</dd></div><Source label="原始资料" path={source.source_path} hash={source.source_sha256} /><Source label="图谱快照" path={source.graph_path} hash={source.graph_sha256} /><div><dt>节点</dt><dd><code>{shortId(node.id)}</code></dd></div></dl>;
+
+function NodeHeader({ node, onStart }) {
+  const title = node.payload?.title || node.payload?.text || "未命名节点";
+  return <header className="inspector-header"><div className="eyebrow"><span>{LABELS[node.kind]}</span><span>{LABELS[node.life_state]}</span>{node.direction_status && <span>{LABELS[node.direction_status]}</span>}</div>
+    <h1>{title}</h1>{node.rejection_reason && <p className="rejection-reason">{node.rejection_reason}</p>}
+    <button className="button primary workflow-start" onClick={() => onStart(node)}><Play size={16} />发起工作流</button></header>;
 }
 
-function Source({ label, path, hash }) {
-  if (!path && !hash) return null;
-  const name = path?.split(/[\\/]/).pop() || "未命名来源";
-  return <div><dt>{label}</dt><dd><b title={path}>{name}</b>{hash && <code title={hash}>{shortId(hash)}</code>}</dd></div>;
+
+function NodeRecord({ node }) {
+  const entries = Object.entries(node.payload || {}).filter(([, value]) => value !== null && typeof value !== "object");
+  return <section className="inspector-section"><h2>节点记录</h2><dl className="node-record">{entries.map(([key, value]) => <div key={key}><dt>{key}</dt><dd>{String(value)}</dd></div>)}</dl></section>;
 }
 
-function ArtifactLinks({ artifacts }) {
-  if (!artifacts.length) return <p className="muted">暂无产物。</p>;
-  return <ul className="plain-list">{artifacts.map((artifact) => <li key={artifact.id}><span>{artifact.title}</span><Link to={`/reports/${artifact.id}`}>打开</Link></li>)}</ul>;
-}
 
-function RelationList({ nodes, onSelect }) {
-  return <ul>{nodes.map((item) => <li key={item.id}><button onClick={() => onSelect(item.id)}><span>{displayLabel(item.kind)}</span><b>{item.title}</b></button></li>)}</ul>;
-}
-
-function RelatedNodes({ title, icon: Icon, nodes, onSelect }) {
-  if (!nodes.length) return null;
-  const visible = nodes.slice(0, VISIBLE_RELATIONS);
-  const hidden = nodes.slice(VISIBLE_RELATIONS);
-  return <section className="relation-group"><h3><Icon size={15} />{title}<span>{nodes.length}</span></h3><RelationList nodes={visible} onSelect={onSelect} />{hidden.length > 0 && <details className="relation-more"><summary>其余 {hidden.length} 个节点</summary><RelationList nodes={hidden} onSelect={onSelect} /></details>}</section>;
-}
-
-function NodeRelations({ node, nodes, edges, onSelect }) {
+function Relations({ node, nodes, edges, onSelect }) {
   const byId = new Map(nodes.map((item) => [item.id, item]));
-  const before = edges.filter((edge) => edge.target === node.id).map((edge) => byId.get(edge.source)).filter(Boolean);
-  const after = edges.filter((edge) => edge.source === node.id).map((edge) => byId.get(edge.target)).filter(Boolean);
-  return <section className="inspector-section"><div className="section-heading"><h2>节点关系</h2><span>{before.length + after.length}</span></div><RelatedNodes title="前置节点" icon={ArrowDownToLine} nodes={before} onSelect={onSelect} /><RelatedNodes title="后续节点" icon={ArrowUpFromLine} nodes={after} onSelect={onSelect} /></section>;
+  const related = edges.filter((edge) => edge.source === node.id || edge.target === node.id).map((edge) => ({ edge, node: byId.get(edge.source === node.id ? edge.target : edge.source) })).filter((item) => item.node);
+  return <section className="inspector-section"><h2><GitBranch size={15} />证据关系</h2>{related.length ? <ul className="relation-list">{related.map(({ edge, node: item }) => <li key={`${edge.source}:${edge.target}:${edge.polarity}`}><button onClick={() => onSelect(item.id)}><span className={`polarity ${edge.polarity}`}>{edge.polarity === "supports" ? "支持" : "反驳"}</span><b>{item.payload?.title || item.payload?.text}</b></button></li>)}</ul> : <p className="muted">暂无关系</p>}</section>;
 }
 
-function FocusAction({ focused, onFocus }) {
-  return <button className="button secondary inspector-focus" disabled={focused} onClick={onFocus}><Focus size={16} />{focused ? "当前聚焦节点" : "聚焦此节点"}</button>;
+
+function Rebuttal({ node }) {
+  if (!node.rebuttal) return null;
+  return <section className="inspector-section"><h2>双审意见</h2><div className="rebuttal-grid">{Object.entries(node.rebuttal).map(([reviewer, value]) => <div key={reviewer}><b>{reviewer === "reviewer_a" ? "审查 A" : "审查 B"}</b><p>{value.rebuttal || value.feedback || value.decision}</p><span>{value.quality ?? "-"} / {value.diversity ?? "-"}</span></div>)}</div></section>;
 }
 
-function factValue(key, value) {
-  if (typeof value === "boolean") return value ? "是" : "否";
-  if (key.endsWith("_percent") && typeof value === "number") return `${value}%`;
-  return displayLabel(value);
-}
 
-function KeyFacts({ node }) {
-  const summary = node.summary?.trim();
-  const facts = objectEntries(node.content?.record).filter(([key, value]) => typeof value !== "object" && String(value).trim() !== summary && key !== "hypothesis").slice(0, 4);
-  if (!facts.length) return null;
-  return <section className="inspector-section inspector-facts"><div className="section-heading"><h2>关键记录</h2><span>{facts.length}</span></div><dl>{facts.map(([key, value]) => <div key={key}><dt>{displayLabel(key)}</dt><dd>{factValue(key, value)}</dd></div>)}</dl></section>;
-}
-
-function InspectorHeader({ node }) {
-  return <header className="inspector-header"><div className="eyebrow"><span>{displayLabel(node.kind)}</span><Status value={node.status} /></div><h1>{node.title}</h1><p className="lead-copy">{node.summary || "未记录摘要。"}</p></header>;
-}
-
-function InspectorBody({ node, nodes, edges, artifacts, focused, onSelect, onFocus, setDialog }) {
-  return <><InspectorHeader node={node} /><FocusAction focused={focused} onFocus={() => onFocus(node.id)} /><ReviewActions node={node} /><InspectorActions disabled={!isAdmittedNode(node)} openNode={() => setDialog("node")} openPlan={() => setDialog("plan")} openJob={() => setDialog("research")} openReport={() => setDialog("html_report")} /><KeyFacts node={node} /><NodeRelations node={node} nodes={nodes} edges={edges} onSelect={onSelect} /><section className="inspector-section"><div className="section-heading"><h2>产物</h2><span>{artifacts.length}</span></div><ArtifactLinks artifacts={artifacts} /></section><section className="inspector-section"><div className="section-heading"><h2>溯源</h2><Link to={`/nodes/${node.id}`}>完整详情 <ExternalLink size={14} /></Link></div><Provenance node={node} /></section></>;
-}
-
-export function Inspector({ node, nodes = [], edges = [], focused, onSelect, onFocus }) {
-  const [dialog, setDialog] = useState("");
-  const { data } = useWorld();
-  if (!node) return <aside className="inspector inspector-empty"><p>选择节点以查看数据和可用操作。</p></aside>;
-  const artifacts = data.artifacts.filter((item) => item.node_id === node.id);
-  return <aside className="inspector"><div className="inspector-scroll"><InspectorBody node={node} nodes={nodes} edges={edges} artifacts={artifacts} focused={focused} onSelect={onSelect} onFocus={onFocus} setDialog={setDialog} /></div>
-    <SubmitNodeDialog open={dialog === "node"} onClose={() => setDialog("")} initialDependency={node.id} />
-    <JobDialog open={dialog === "plan" || dialog === "research" || dialog === "html_report"} onClose={() => setDialog("")} subjectId={node.id} kind={dialog || "research"} />
-  </aside>;
+function NodeChat({ node }) {
+  const { projectId, setError } = useWorld();
+  const [messages, setMessages] = useState([]);
+  const [value, setValue] = useState("");
+  const [sending, setSending] = useState(false);
+  useEffect(() => { getMessages(projectId, node.id).then(setMessages).catch((error) => setError(error.message)); }, [projectId, node.id]);
+  const submit = async () => {
+    if (!value.trim() || sending) return;
+    setSending(true);
+    try { const reply = await sendMessage(projectId, { node_id: node.id, message: value }); setMessages(await getMessages(projectId, node.id)); setValue(""); return reply; }
+    catch (error) { setError(error.message); }
+    finally { setSending(false); }
+  };
+  const keyDown = (event) => {
+    const composing = event.isComposing || event.nativeEvent?.isComposing || event.keyCode === 229;
+    if (event.key === "Enter" && !event.shiftKey && !composing) { event.preventDefault(); submit(); }
+  };
+  return <section className="node-chat"><header><MessageSquare size={16} /><b>节点对话</b></header><div className="node-chat-log">{messages.map((message) => <p key={message.id} className={message.role}>{message.content}</p>)}</div>
+    <div className="node-composer"><textarea aria-label="节点消息" value={value} onChange={(event) => setValue(event.target.value)} onKeyDown={keyDown} rows="2" placeholder="围绕当前节点讨论..." /><button className="icon-button" onClick={submit} disabled={sending || !value.trim()} aria-label="发送消息"><Send size={17} /></button></div></section>;
 }

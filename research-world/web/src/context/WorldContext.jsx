@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getBootstrap, postCommand } from "../api";
 
-const EMPTY = { projects: [], nodes: [], review_nodes: [], edges: [], events: [], jobs: [], agents: [], runtimes: [], artifacts: [] };
+const EMPTY = { projects: [], nodes: [], edges: [], workflows: [], slots: [] };
 const WorldContext = createContext(null);
 
 function useWorldState() {

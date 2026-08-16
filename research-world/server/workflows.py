@@ -35,20 +35,30 @@ class AgentFacade:
 
     def brainstorm(self, context: dict, count: int) -> list[dict]:
         value = self.harness.json("科研构思助手", BRAINSTORM_PROMPT, {**context, "count": count})
-        return value["candidates"]
+        candidates = required(value, "candidates")
+        if not isinstance(candidates, list) or len(candidates) < count:
+            raise ValueError(f"harness field 'candidates' must contain at least {count} items")
+        return candidates[:count]
 
     def pairwise(self, left: str, right: str) -> bool:
         value = self.harness.json("科研新颖性裁决者", PAIR_PROMPT, {"left": left, "right": right})
-        return bool(value["duplicate"])
+        return bool(required(value, "duplicate"))
 
     def plan(self, direction: dict) -> dict:
-        return self.harness.json("科研实验规划者", PLAN_PROMPT, direction)
+        value = self.harness.json("科研实验规划者", PLAN_PROMPT, direction)
+        required(value, "steps")
+        return value
 
     def review(self, context: dict, reviewer: str) -> dict:
-        return self.harness.json(f"独立审查者 {reviewer}", REVIEW_PROMPT, context)
+        value = self.harness.json(f"独立审查者 {reviewer}", REVIEW_PROMPT, context)
+        for field in ("decision", "quality", "diversity", "rebuttal"):
+            required(value, field)
+        return value
 
     def reflect(self, context: dict) -> dict:
-        return self.harness.json("科研反思助手", REFLECT_PROMPT, context)
+        value = self.harness.json("科研反思助手", REFLECT_PROMPT, context)
+        required(value, "text")
+        return value
 
 
 @dataclass
@@ -276,6 +286,12 @@ def clean(value: dict) -> dict:
     return {key: item for key, item in value.items() if not key.startswith("_")}
 
 
+def required(value: dict, field: str):
+    if field not in value:
+        raise ValueError(f"harness response missing required field '{field}'")
+    return value[field]
+
+
 def default_engine(world: World) -> WorkflowEngine:
     settings = load_settings()
     if not settings.model_api_base or not settings.model_api_key:
@@ -286,8 +302,24 @@ def default_engine(world: World) -> WorkflowEngine:
     return WorkflowEngine(world, agents, embedding, runner)
 
 
-BRAINSTORM_PROMPT = "生成相互差异显著的候选研究方向，每项包含 text 与 0-1 quality。"
-PAIR_PROMPT = "判断两个研究方向是否在研究问题、方法和可证伪结论上实质重复，返回 duplicate。"
-PLAN_PROMPT = "把方向拆为可独立确认的最小实验步骤。steps 每项包含 image、command、可选 files/seed/limits。"
-REVIEW_PROMPT = "机械审计优先，再独立评价质量与多样性。返回 decision=approve|reject、quality、diversity、rebuttal。"
-REFLECT_PROMPT = "基于实验输出与失败边界生成一个可证伪的新方向，返回 text。"
+BRAINSTORM_PROMPT = (
+    "输入 text 是唯一研究问题，count 是候选数。只围绕该问题生成恰好 count 个相互差异显著、"
+    "可证伪的研究方向。严格返回 {\"candidates\":[{\"text\":\"...\",\"quality\":0.0}]}，quality 范围 0-1。"
+)
+PAIR_PROMPT = (
+    "判断 left 与 right 是否在研究问题、方法和可证伪结论上实质重复。"
+    "严格返回 {\"duplicate\":true}，duplicate 只能是布尔值。"
+)
+PLAN_PROMPT = (
+    "把输入方向拆为可独立确认的最小实验步骤。严格返回 "
+    "{\"steps\":[{\"image\":\"busybox:1.36\",\"command\":[\"sh\",\"-lc\",\"...\"],"
+    "\"files\":{},\"seed\":0,\"limits\":{\"cpus\":1,\"memory_mb\":512,\"pids\":128}}]}。"
+)
+REVIEW_PROMPT = (
+    "机械审计优先，再独立评价质量与多样性。严格返回 "
+    "{\"decision\":\"approve\",\"quality\":0.0,\"diversity\":0.0,\"rebuttal\":\"...\"}；"
+    "decision 只能是 approve 或 reject，分数范围 0-1。"
+)
+REFLECT_PROMPT = (
+    "基于实验输出与失败边界生成一个可证伪的新方向。严格返回 {\"text\":\"...\"}。"
+)

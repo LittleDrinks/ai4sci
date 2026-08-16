@@ -56,7 +56,7 @@ class HarnessClient:
         turn = self._request("POST", f"/sessions/{session['id']}/turns", {"prompt": prompt})
         if turn["status"] != "completed":
             raise RuntimeError(f"harness turn failed: {turn['status']}")
-        value = repair_json((turn["result_text"] or "").lstrip("```json\n").rstrip("`"), return_objects=True)
+        value = json_object(turn["result_text"] or "")
         return {**value, "_session_id": session["id"], "_turn_id": turn["id"], "_usage": turn["usage"]}
 
     def trace(self, session_id: str) -> str:
@@ -68,6 +68,16 @@ class HarnessClient:
         response = httpx.request(method, self.url + path, json=body, timeout=660)
         response.raise_for_status()
         return response.json()
+
+
+def json_object(text: str) -> dict:
+    start = text.find("{")
+    if start < 0:
+        raise ValueError("harness response did not contain a JSON object")
+    value = repair_json(text[start:], return_objects=True)
+    if not isinstance(value, dict):
+        raise ValueError("harness response must be a JSON object")
+    return value
 
 
 class RunnerClient:

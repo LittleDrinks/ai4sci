@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from server.workflows import WorkflowEngine, mmr
+import pytest
+
+from server.workflows import AgentFacade, WorkflowEngine, mmr
 
 
 class FakeEmbedding:
@@ -45,6 +47,16 @@ class FakeAgents:
         return {"text": "Reflected direction"}
 
 
+class FakeHarness:
+    def __init__(self, value):
+        self.value = value
+        self.call = None
+
+    def json(self, role, instruction, payload):
+        self.call = (role, instruction, payload)
+        return self.value
+
+
 def engine(world, agents, embedding=None, runner=None):
     return WorkflowEngine(world, agents, embedding or FakeEmbedding({}), runner or FakeRunner())
 
@@ -52,6 +64,14 @@ def engine(world, agents, embedding=None, runner=None):
 def admitted_direction(world, project, text="Existing direction"):
     node = world.create_node(project["id"], "direction", {"text": text})
     return world.admit_node(node["id"])
+
+
+def test_brainstorm_agent_enforces_named_response_contract():
+    harness = FakeHarness({"research_directions": []})
+    with pytest.raises(ValueError, match="required field 'candidates'"):
+        AgentFacade(harness).brainstorm({"text": "Why?"}, 2)
+    assert '"candidates"' in harness.call[1]
+    assert harness.call[2] == {"text": "Why?", "count": 2}
 
 
 def test_mmr_balances_quality_and_similarity():

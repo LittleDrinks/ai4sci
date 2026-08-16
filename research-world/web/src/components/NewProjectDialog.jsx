@@ -14,7 +14,7 @@ export function NewProjectDialog({ open, onClose }) {
   const update = (key) => (event) => setForm({ ...form, [key]: event.target.value });
   const submit = async (event) => {
     event.preventDefault(); setSubmitting(true);
-    try { const result = await command("create_project", form); const id = result?.id; if (id) selectProject(id); setForm(EMPTY); onClose(); navigate("/map"); }
+    try { const result = await command("create_project", form); const id = result?.id; if (id) await selectProject(id); setForm(EMPTY); onClose(); navigate("/map"); }
     catch {}
     finally { setSubmitting(false); }
   };

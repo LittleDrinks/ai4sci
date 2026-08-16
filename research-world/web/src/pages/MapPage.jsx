@@ -1,5 +1,6 @@
 import { Focus, Network, Workflow } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { setProjectAuto, startWorkflow } from "../api";
 import { useWorld } from "../context/WorldContext";
 import { GraphView } from "../graph/GraphView";
@@ -15,21 +16,26 @@ export function MapPage() {
 
 
 function ProjectMap({ data, refresh, setError }) {
+  const navigate = useNavigate();
   const rootId = data.nodes.find((node) => node.kind === "question")?.id || "";
   const [selectedId, setSelectedId] = useState(rootId);
   const [overview, setOverview] = useState(true);
   const newIds = useNewNodes(data.nodes);
   const selected = data.nodes.find((node) => node.id === selectedId) || data.nodes[0];
+  const active = activeWorkflow(data.workflows, selected?.id);
   const relations = useMemo(() => graphEdges(data.nodes, data.edges), [data.nodes, data.edges]);
   const graph = useMemo(() => overview ? { nodes: data.nodes, edges: relations }
     : branch(data.nodes, relations, selected?.id), [data.nodes, relations, overview, selected?.id]);
   const start = async (node) => {
-    try { await startWorkflow(data.active_project_id, workflowFor(node)); await refresh(data.active_project_id); }
+    try {
+      const workflow = await startWorkflow(data.active_project_id, workflowFor(node));
+      await refresh(data.active_project_id); openWorkflow(navigate, workflow);
+    }
     catch (error) { setError(error.message); }
   };
   return <section className="map-page"><MapToolbar data={data} relationCount={relations.length} overview={overview} setOverview={setOverview} refresh={refresh} setError={setError} />
-    <div className="map-workspace"><div className="graph-canvas"><GraphView nodes={graph.nodes} edges={graph.edges} selectedId={selected?.id} onSelect={setSelectedId} onStart={start} newIds={newIds} /></div>
-      <Inspector node={selected} nodes={data.nodes} edges={data.edges} onSelect={setSelectedId} onStart={start} /></div></section>;
+    <div className="map-workspace"><div className="graph-canvas"><GraphView nodes={graph.nodes} edges={graph.edges} selectedId={selected?.id} onSelect={setSelectedId} newIds={newIds} /></div>
+      <Inspector node={selected} nodes={data.nodes} edges={data.edges} workflow={active} onSelect={setSelectedId} onStart={start} onOpen={(workflow) => openWorkflow(navigate, workflow)} /></div></section>;
 }
 
 
@@ -47,9 +53,23 @@ function MapToolbar({ data, relationCount, overview, setOverview, refresh, setEr
 
 
 function workflowFor(node) {
-  const kind = node.kind === "question" || node.kind === "source" || node.kind === "experiment" || node.direction_status !== "proposed"
+  if (node.kind === "experiment") return { node_id: node.id, kind: "brainstorm",
+    payload: { count: 8, select: 4, mode: "reflect", instruction: "基于实验结果反思并生成后续方向" } };
+  const kind = node.kind === "question" || node.kind === "source" || node.direction_status !== "proposed"
     ? "brainstorm" : "plan-execute-review-reflect";
   return { node_id: node.id, kind, payload: kind === "brainstorm" ? { count: 8, select: 4 } : {} };
+}
+
+
+function activeWorkflow(workflows, nodeId) {
+  const active = workflows.filter((item) => ["queued", "running", "waiting_human"].includes(item.status));
+  return active.find((item) => item.payload?.experiment_id === nodeId)
+    || active.find((item) => item.node_id === nodeId);
+}
+
+
+function openWorkflow(navigate, workflow) {
+  navigate({ pathname: "/activity", search: `?workflow=${encodeURIComponent(workflow.id)}` });
 }
 
 

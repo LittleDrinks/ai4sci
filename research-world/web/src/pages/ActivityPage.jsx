@@ -1,5 +1,6 @@
 import { Activity, Check, ChevronDown, ChevronRight, GitBranch, Pause, Play, ThumbsDown, ThumbsUp, Wrench } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { confirmWorkflow, resolveWorkflow } from "../api";
 import { useWorld } from "../context/WorldContext";
 import "../activity.css";
@@ -11,13 +12,21 @@ const STAGE = { created: "准备", brainstorm: "头脑风暴", plan: "规划", e
 
 export function ActivityPage() {
   const { data, loading, refresh, setError } = useWorld();
+  const [params] = useSearchParams();
+  const requested = params.get("workflow") || "";
   const [selectedId, setSelectedId] = useState("");
-  useEffect(() => setSelectedId((value) => data.workflows.some((item) => item.id === value) ? value : data.workflows[0]?.id || ""), [data.workflows]);
+  useEffect(() => setSelectedId((value) => selectedWorkflow(data.workflows, requested, value)), [data.workflows, requested]);
   const workflow = data.workflows.find((item) => item.id === selectedId);
   if (loading) return <div className="page-loading">正在载入活动...</div>;
   return <section className="rw-activity"><ActivityHeader workflows={data.workflows} /><SlotStrip slots={data.slots} />
     <div className="rw-activity-workspace"><WorkflowList workflows={data.workflows} selectedId={selectedId} onSelect={setSelectedId} />
       <TracePanel workflow={workflow} refresh={refresh} setError={setError} /></div></section>;
+}
+
+
+function selectedWorkflow(workflows, requested, current) {
+  if (requested && workflows.some((item) => item.id === requested)) return requested;
+  return workflows.some((item) => item.id === current) ? current : workflows[0]?.id || "";
 }
 
 

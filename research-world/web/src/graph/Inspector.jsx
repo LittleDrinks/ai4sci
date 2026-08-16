@@ -1,4 +1,4 @@
-import { GitBranch, MessageSquare, Play, Send } from "lucide-react";
+import { Activity, GitBranch, MessageSquare, Play, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getMessages, sendMessage } from "../api";
 import { useWorld } from "../context/WorldContext";
@@ -8,19 +8,26 @@ const LABELS = { question: "问题", source: "来源", direction: "方向", expe
   pending: "待审查", admitted: "已入图", ghost: "已驳回", proposed: "待验证", supported: "已支持", refuted: "已反驳" };
 
 
-export function Inspector({ node, nodes, edges, onSelect, onStart }) {
+export function Inspector({ node, nodes, edges, workflow, onSelect, onStart, onOpen }) {
   if (!node) return <aside className="inspector inspector-empty">选择节点查看上下文。</aside>;
-  return <aside className="inspector"><div className="inspector-scroll"><NodeHeader node={node} onStart={onStart} />
+  return <aside className="inspector"><div className="inspector-scroll"><NodeHeader node={node} workflow={workflow} onStart={onStart} onOpen={onOpen} />
     <NodeRecord node={node} /><Relations node={node} nodes={nodes} edges={edges} onSelect={onSelect} />
     <Rebuttal node={node} /></div><NodeChat node={node} /></aside>;
 }
 
 
-function NodeHeader({ node, onStart }) {
+function NodeHeader({ node, workflow, onStart, onOpen }) {
   const title = node.payload?.title || node.payload?.text || "未命名节点";
+  const label = workflow?.status === "waiting_human" ? "继续工作流" : "查看工作流";
   return <header className="inspector-header"><div className="eyebrow"><span>{LABELS[node.kind]}</span><span>{LABELS[node.life_state]}</span>{node.direction_status && <span>{LABELS[node.direction_status]}</span>}</div>
     <h1>{title}</h1>{node.rejection_reason && <p className="rejection-reason">{node.rejection_reason}</p>}
-    <button className="button primary workflow-start" onClick={() => onStart(node)}><Play size={16} />发起工作流</button></header>;
+    {workflow && <button className="button primary workflow-start" onClick={() => onOpen(workflow)}><Activity size={16} />{label}</button>}
+    {!workflow && <button className="button primary workflow-start" onClick={() => onStart(node)}><Play size={16} />{startLabel(node)}</button>}</header>;
+}
+
+
+function startLabel(node) {
+  return node.kind === "experiment" ? "反思实验" : "发起工作流";
 }
 
 
@@ -44,7 +51,7 @@ function Rebuttal({ node }) {
 
 
 function NodeChat({ node }) {
-  const { projectId, setError } = useWorld();
+  const { projectId, refresh, setError } = useWorld();
   const [messages, setMessages] = useState([]);
   const [value, setValue] = useState("");
   const [sending, setSending] = useState(false);
@@ -52,7 +59,11 @@ function NodeChat({ node }) {
   const submit = async () => {
     if (!value.trim() || sending) return;
     setSending(true);
-    try { const reply = await sendMessage(projectId, { node_id: node.id, message: value }); setMessages(await getMessages(projectId, node.id)); setValue(""); return reply; }
+    try {
+      const reply = await sendMessage(projectId, { node_id: node.id, message: value });
+      setMessages(await getMessages(projectId, node.id)); setValue("");
+      if (reply.workflow) await refresh(projectId);
+    }
     catch (error) { setError(error.message); }
     finally { setSending(false); }
   };

@@ -35,8 +35,20 @@ test("lays out the four fixed node kinds as graph lanes", async ({ page }) => {
   expect(await nodeX(page, "node:d")).toBeGreaterThan(await nodeX(page, "node:s"));
   expect(await nodeX(page, "node:e")).toBeGreaterThan(await nodeX(page, "node:d"));
   await expect(page.locator(".react-flow__edge")).toHaveCount(3);
+  await expect(page.locator(".node-run")).toHaveCount(0);
   await expect(page.getByRole("img", { name: "问题图标" })).toBeVisible();
   expect(await page.locator(".hidden-handle").first().evaluate((element) => getComputedStyle(element).opacity)).toBe("0");
+});
+
+
+test("animates visible signal paths along graph relations", async ({ page }) => {
+  await mockMap(page);
+  await page.goto("/map");
+  const paths = page.locator(".signal-flow-path");
+  await expect(paths).not.toHaveCount(0);
+  expect(await paths.count()).toBe(await page.locator(".signal-edge:not(.muted)").count());
+  expect(await paths.first().evaluate((element) => getComputedStyle(element).display)).not.toBe("none");
+  await expect(paths.first().locator("animate")).toHaveAttribute("repeatCount", "indefinite");
 });
 
 
@@ -56,7 +68,7 @@ test("shows pending, working and ghost life states", async ({ page }) => {
 });
 
 
-test("starts a workflow directly from a node", async ({ page }) => {
+test("starts a workflow from the inspector and opens its activity", async ({ page }) => {
   let request;
   await mockMap(page);
   await page.route(/\/api\/v1\/projects\/project%3Atest\/workflows/, async (route) => {
@@ -64,9 +76,40 @@ test("starts a workflow directly from a node", async ({ page }) => {
     await route.fulfill({ status: 201, json: { id: "workflow:new", ...request } });
   });
   await page.goto("/map");
-  await page.locator('.react-flow__node[data-id="node:d"]').getByRole("button", { name: "从方向发起工作流" }).click();
+  await page.locator('.react-flow__node[data-id="node:d"]').click();
+  await page.getByRole("button", { name: "发起工作流", exact: true }).click();
   await expect.poll(() => request?.kind).toBe("plan-execute-review-reflect");
   expect(request.node_id).toBe("node:d");
+  await expect(page).toHaveURL(/\/activity\?workflow=workflow%3Anew$/);
+});
+
+
+test("opens the workflow associated with an experiment", async ({ page }) => {
+  const body = fixture();
+  body.workflows = [{ id: "workflow:experiment", project_id: "project:test", node_id: "node:d", lineage_id: "lineage:node:d",
+    kind: "plan-execute-review-reflect", stage: "execute", status: "waiting_human", payload: { experiment_id: "node:e" },
+    auto: 0, created_at: "2026-08-16T00:00:00Z", updated_at: "2026-08-16T00:00:00Z", steps: [], events: [] }];
+  await mockMap(page, body);
+  await page.goto("/map");
+  await page.locator('.react-flow__node[data-id="node:e"]').click();
+  await page.getByRole("button", { name: "继续工作流" }).click();
+  await expect(page).toHaveURL(/\/activity\?workflow=workflow%3Aexperiment$/);
+});
+
+
+test("starts experiment reflection from the inspector", async ({ page }) => {
+  let request;
+  await mockMap(page);
+  await page.route(/\/api\/v1\/projects\/project%3Atest\/workflows/, async (route) => {
+    request = route.request().postDataJSON();
+    await route.fulfill({ status: 201, json: { id: "workflow:reflection", ...request } });
+  });
+  await page.goto("/map");
+  await page.locator('.react-flow__node[data-id="node:e"]').click();
+  await page.getByRole("button", { name: "反思实验" }).click();
+  await expect.poll(() => request?.payload?.mode).toBe("reflect");
+  expect(request).toMatchObject({ node_id: "node:e", kind: "brainstorm" });
+  await expect(page).toHaveURL(/\/activity\?workflow=workflow%3Areflection$/);
 });
 
 

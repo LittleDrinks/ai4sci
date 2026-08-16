@@ -47,6 +47,16 @@ test("reduces the queue to occupied and idle slot indicators", async ({ page }) 
 });
 
 
+test("selects the workflow requested by the map", async ({ page }) => {
+  const requested = workflow({ id: "workflow:requested", stage: "execute" });
+  const body = fixture(workflow({ id: "workflow:first", stage: "review" }));
+  body.workflows.push(requested);
+  await mockActivity(page, body);
+  await page.goto("/activity?workflow=workflow%3Arequested");
+  await expect(page.locator(".workflow-list button.selected")).toContainText("执行");
+});
+
+
 test("continues a manual workflow from the activity trace", async ({ page }) => {
   const item = workflow({ status: "waiting_human", stage: "execute", auto: 0 });
   let confirmed = false;

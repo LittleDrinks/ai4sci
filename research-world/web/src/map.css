@@ -19,7 +19,7 @@
 .research-node.life-pending { border-style: dashed; border-width: 2px; }
 .research-node.life-ghost { opacity: .32; filter: grayscale(.65); }
 .research-node.life-ghost:hover, .research-node.life-ghost.selected { opacity: .72; }
-.research-node > header { height: 88px; display: grid; grid-template-columns: 42px minmax(0, 1fr) 32px; align-items: start; gap: 10px; padding: 14px 12px; overflow: hidden; }
+.research-node > header { height: 88px; display: grid; grid-template-columns: 42px minmax(0, 1fr); align-items: start; gap: 10px; padding: 14px 12px; overflow: hidden; }
 .research-node > header > div { min-width: 0; }
 .research-node > header > div > span { display: block; margin-bottom: 4px; color: #6b7280; font-size: 11px; }
 .research-node > header h3 { display: -webkit-box; margin: 0; color: #111827; font-size: 14px; line-height: 1.4; font-weight: 600; letter-spacing: 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
@@ -28,8 +28,6 @@
 .kind-source .node-kind-icon { background: #0e7490; }
 .kind-direction .node-kind-icon { background: #b45309; }
 .kind-experiment .node-kind-icon { background: #15803d; }
-.node-run { width: 30px; height: 30px; display: grid; place-items: center; padding: 0; border: 1px solid #d1d5db; border-radius: 6px; color: #4b5563; background: #fff; cursor: pointer; }
-.node-run:hover { color: #0b57d0; border-color: #8ab4f8; background: #e8f0fe; }
 .research-node > footer { height: 39px; display: flex; align-items: center; gap: 7px; padding: 0 12px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 12px; }
 .research-node > footer svg:first-of-type { margin-left: auto; }
 .research-node.is-working { animation: map-working 1.6s ease-in-out infinite; }
@@ -44,7 +42,10 @@
 .signal-edge.polarity-refutes .react-flow__edge-path { stroke: #b91c1c; }
 .signal-edge.incident.polarity-lineage .react-flow__edge-path { stroke: #1a73e8; }
 .signal-edge.muted { opacity: .16; }
-.signal-flow-path { display: none; }
+.signal-flow-path { pointer-events: none; stroke: #64748b; stroke-width: 8; opacity: .82; }
+.signal-edge.polarity-supports .signal-flow-path { stroke: #15803d; }
+.signal-edge.polarity-refutes .signal-flow-path { stroke: #b91c1c; }
+.signal-edge.incident .signal-flow-path { stroke: #1a73e8; stroke-width: 10; opacity: 1; }
 .inspector { display: grid; grid-template-rows: minmax(0, 1fr) auto; }
 .inspector-scroll { height: auto; padding: 20px; }
 .inspector-header .eyebrow { justify-content: flex-start; gap: 6px; }
@@ -81,4 +82,5 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .research-node.is-working, .research-node.just-completed, .spin { animation: none !important; }
+  .signal-flow-path { display: none; }
 }

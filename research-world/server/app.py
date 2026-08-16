@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 
 from .config import ROOT, load_settings
+from .orchestrator import WorkflowManager
 from .world import World
 
 
@@ -13,6 +14,7 @@ def create_app(world: World) -> FastAPI:
     app = FastAPI(title="Research World", version="2")
     project_routes(app, world)
     graph_routes(app, world)
+    conversation_routes(app, world)
     frontend_routes(app)
     return app
 
@@ -63,6 +65,24 @@ def graph_routes(app: FastAPI, world: World) -> None:
         value = await request.json()
         ensure_project_node(world, project_id, value["source"])
         return world.add_edge(value["source"], value["target"], value["polarity"])
+
+
+def conversation_routes(app: FastAPI, world: World) -> None:
+    manager = WorkflowManager(world)
+
+    @app.get("/api/v1/projects/{project_id}/messages")
+    async def messages(project_id: str, node_id: str):
+        return world.messages(project_id, node_id)
+
+    @app.post("/api/v1/projects/{project_id}/messages", status_code=201)
+    async def send_message(project_id: str, request: Request):
+        value = await request.json()
+        return manager.assist(project_id, value["node_id"], value["message"])
+
+    @app.post("/api/v1/projects/{project_id}/drafts/materialize", status_code=201)
+    async def materialize(project_id: str, request: Request):
+        value = await request.json()
+        return manager.materialize(project_id, value["node_id"], value["kind"], value["payload"])
 
 
 NODE_STATE_KEYS = {"parent_id", "lineage_id", "life_state", "direction_status", "working"}

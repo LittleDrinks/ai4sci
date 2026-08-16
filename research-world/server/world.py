@@ -177,6 +177,22 @@ class World:
         rows = self._rows("SELECT vector FROM node_embeddings WHERE node_id=?", (node_id,))
         return json.loads(rows[0]["vector"]) if rows else None
 
+    def add_message(self, project_id: str, node_id: str, role: str, content: str) -> dict:
+        if role not in {"user", "assistant"} or not content.strip():
+            raise ValueError("message requires a valid role and content")
+        with self.db.connect() as connection:
+            cursor = connection.execute("INSERT INTO messages(project_id,node_id,role,content,created_at) VALUES(?,?,?,?,?)",
+                                        (project_id, node_id, role, content.strip(), now()))
+        return self._one("SELECT * FROM messages WHERE id=?", (cursor.lastrowid,))
+
+    def messages(self, project_id: str, node_id: str) -> list[dict]:
+        return self._many("SELECT * FROM messages WHERE project_id=? AND node_id=? ORDER BY id",
+                          (project_id, node_id))
+
+    def clear_messages(self, project_id: str, node_id: str) -> None:
+        with self.db.connect() as connection:
+            connection.execute("DELETE FROM messages WHERE project_id=? AND node_id=?", (project_id, node_id))
+
     def _node_text(self, payload: dict) -> str:
         return " ".join(str(payload.get(key, "")) for key in ("title", "text", "summary") if payload.get(key))
 

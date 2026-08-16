@@ -44,3 +44,39 @@ class ModelClient:
         response = httpx.post(self.url, headers=self.headers, json=body, timeout=600)
         response.raise_for_status()
         return response.json()["choices"][0]["message"]["content"]
+
+
+class HarnessClient:
+    def __init__(self, url: str):
+        self.url = url.rstrip("/")
+
+    def json(self, role: str, instruction: str, payload: dict) -> dict:
+        session = self._request("POST", "/sessions", {"role_prompt": role})
+        prompt = f"{instruction}\nReturn one JSON object and no prose.\n{json.dumps(payload, ensure_ascii=False)}"
+        turn = self._request("POST", f"/sessions/{session['id']}/turns", {"prompt": prompt})
+        if turn["status"] != "completed":
+            raise RuntimeError(f"harness turn failed: {turn['status']}")
+        value = repair_json((turn["result_text"] or "").lstrip("```json\n").rstrip("`"), return_objects=True)
+        return {**value, "_session_id": session["id"], "_turn_id": turn["id"], "_usage": turn["usage"]}
+
+    def trace(self, session_id: str) -> str:
+        response = httpx.get(f"{self.url}/sessions/{session_id}/trace", timeout=60)
+        response.raise_for_status()
+        return response.text
+
+    def _request(self, method: str, path: str, body: dict) -> dict:
+        response = httpx.request(method, self.url + path, json=body, timeout=660)
+        response.raise_for_status()
+        return response.json()
+
+
+class RunnerClient:
+    def __init__(self, url: str):
+        self.url = url.rstrip("/")
+
+    def run(self, step: dict) -> dict:
+        spec = {"image": step["image"], "command": step["command"], "files": step.get("files", {}),
+                "seed": step.get("seed", 0), "limits": step.get("limits", {"cpus": 1, "memory_mb": 512, "pids": 128})}
+        response = httpx.post(f"{self.url}/run", json=spec, timeout=360)
+        response.raise_for_status()
+        return response.json()

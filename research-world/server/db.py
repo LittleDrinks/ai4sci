@@ -38,6 +38,28 @@ CREATE TABLE IF NOT EXISTS messages(
   role TEXT NOT NULL CHECK(role IN ('user','assistant')),
   content TEXT NOT NULL, created_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS lineages(
+  id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  rejection_streak INTEGER NOT NULL DEFAULT 0, auto_paused INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS workflows(
+  id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  node_id TEXT NOT NULL REFERENCES nodes(id), lineage_id TEXT NOT NULL,
+  kind TEXT NOT NULL CHECK(kind IN ('brainstorm','plan-execute-review-reflect')),
+  stage TEXT NOT NULL, status TEXT NOT NULL,
+  payload TEXT NOT NULL, auto INTEGER NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS workflow_steps(
+  id TEXT PRIMARY KEY, workflow_id TEXT NOT NULL REFERENCES workflows(id) ON DELETE CASCADE,
+  ordinal INTEGER NOT NULL, stage TEXT NOT NULL, status TEXT NOT NULL,
+  requires_confirmation INTEGER NOT NULL, payload TEXT NOT NULL, output TEXT,
+  started_at TEXT, completed_at TEXT, UNIQUE(workflow_id,ordinal)
+);
+CREATE TABLE IF NOT EXISTS workflow_events(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  workflow_id TEXT NOT NULL REFERENCES workflows(id) ON DELETE CASCADE,
+  actor TEXT NOT NULL, type TEXT NOT NULL, payload TEXT NOT NULL, time TEXT NOT NULL
+);
 """
 
 

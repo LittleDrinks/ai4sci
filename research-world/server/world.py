@@ -24,7 +24,7 @@ def stable_id(prefix: str, value: object) -> str:
 
 def decode(row: sqlite3.Row) -> dict:
     value = dict(row)
-    for key in ("payload", "rebuttal"):
+    for key in ("payload", "rebuttal", "output"):
         if value.get(key):
             value[key] = json.loads(value[key])
     return value
@@ -73,6 +73,7 @@ class World:
         values = self._node_values(node_id, project_id, kind, payload, lineage_id, state)
         with self.db.connect() as connection:
             connection.execute("INSERT INTO nodes VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)", values)
+            connection.execute("INSERT OR IGNORE INTO lineages VALUES(?,?,0,0)", (lineage_id, project_id))
             connection.execute("INSERT INTO node_fts VALUES(?,?,?)", (node_id, project_id, self._node_text(payload)))
             self._store_embedding(connection, node_id, payload)
         return self.node(node_id)
@@ -192,6 +193,75 @@ class World:
     def clear_messages(self, project_id: str, node_id: str) -> None:
         with self.db.connect() as connection:
             connection.execute("DELETE FROM messages WHERE project_id=? AND node_id=?", (project_id, node_id))
+
+    def create_workflow(self, project_id: str, node_id: str, kind: str, payload: dict | None = None) -> dict:
+        project, node = self.project(project_id), self.node(node_id)
+        if node["project_id"] != project_id:
+            raise ValueError("workflow node belongs to another project")
+        workflow_id = f"workflow:{secrets.token_hex(12)}"
+        status = "queued" if project["auto"] or kind == "brainstorm" else "waiting_human"
+        values = (workflow_id, project_id, node_id, node["lineage_id"], kind, "created", status,
+                  json.dumps(payload or {}), project["auto"], now(), now())
+        with self.db.connect() as connection:
+            connection.execute("INSERT INTO workflows VALUES(?,?,?,?,?,?,?,?,?,?,?)", values)
+            connection.execute("INSERT OR IGNORE INTO lineages VALUES(?,?,0,0)", (node["lineage_id"], project_id))
+        return self.workflow(workflow_id)
+
+    def workflow(self, workflow_id: str) -> dict:
+        return self._one("SELECT * FROM workflows WHERE id=?", (workflow_id,))
+
+    def workflows(self, project_id: str | None = None) -> list[dict]:
+        sql = "SELECT * FROM workflows" + (" WHERE project_id=?" if project_id else "") + " ORDER BY created_at DESC"
+        return self._many(sql, (project_id,) if project_id else ())
+
+    def claim_workflow(self) -> dict | None:
+        sql = "UPDATE workflows SET status='running',updated_at=? WHERE id=(SELECT id FROM workflows WHERE status='queued' ORDER BY created_at LIMIT 1) RETURNING *"
+        with self.db.connect() as connection:
+            row = connection.execute(sql, (now(),)).fetchone()
+        return decode(row) if row else None
+
+    def update_workflow(self, workflow_id: str, stage: str, status: str, payload: dict | None = None) -> dict:
+        current = self.workflow(workflow_id)
+        value = payload if payload is not None else current["payload"]
+        with self.db.connect() as connection:
+            connection.execute("UPDATE workflows SET stage=?,status=?,payload=?,updated_at=? WHERE id=?",
+                               (stage, status, json.dumps(value), now(), workflow_id))
+        return self.workflow(workflow_id)
+
+    def add_step(self, workflow_id: str, ordinal: int, stage: str, payload: dict, confirm: bool) -> dict:
+        step_id = f"step:{secrets.token_hex(12)}"
+        values = (step_id, workflow_id, ordinal, stage, "pending", int(confirm), json.dumps(payload), None, None, None)
+        with self.db.connect() as connection:
+            connection.execute("INSERT INTO workflow_steps VALUES(?,?,?,?,?,?,?,?,?,?)", values)
+        return self._one("SELECT * FROM workflow_steps WHERE id=?", (step_id,))
+
+    def steps(self, workflow_id: str) -> list[dict]:
+        return self._many("SELECT * FROM workflow_steps WHERE workflow_id=? ORDER BY ordinal", (workflow_id,))
+
+    def update_step(self, step_id: str, status: str, output: dict | None = None) -> dict:
+        started = now() if status == "running" else None
+        completed = now() if status in {"completed", "failed"} else None
+        with self.db.connect() as connection:
+            connection.execute("UPDATE workflow_steps SET status=?,output=COALESCE(?,output),started_at=COALESCE(?,started_at),completed_at=COALESCE(?,completed_at) WHERE id=?",
+                               (status, json.dumps(output) if output is not None else None, started, completed, step_id))
+        return self._one("SELECT * FROM workflow_steps WHERE id=?", (step_id,))
+
+    def record_workflow_event(self, workflow_id: str, actor: str, event_type: str, payload: dict) -> dict:
+        values = (workflow_id, actor, event_type, json.dumps(payload), now())
+        with self.db.connect() as connection:
+            cursor = connection.execute("INSERT INTO workflow_events(workflow_id,actor,type,payload,time) VALUES(?,?,?,?,?)", values)
+        return self._one("SELECT * FROM workflow_events WHERE id=?", (cursor.lastrowid,))
+
+    def workflow_events(self, workflow_id: str) -> list[dict]:
+        return self._many("SELECT * FROM workflow_events WHERE workflow_id=? ORDER BY id", (workflow_id,))
+
+    def register_review(self, lineage_id: str, approved: bool) -> dict:
+        lineage = self._one("SELECT * FROM lineages WHERE id=?", (lineage_id,))
+        streak = 0 if approved else lineage["rejection_streak"] + 1
+        paused = int(streak >= 2)
+        with self.db.connect() as connection:
+            connection.execute("UPDATE lineages SET rejection_streak=?,auto_paused=? WHERE id=?", (streak, paused, lineage_id))
+        return self._one("SELECT * FROM lineages WHERE id=?", (lineage_id,))
 
     def _node_text(self, payload: dict) -> str:
         return " ".join(str(payload.get(key, "")) for key in ("title", "text", "summary") if payload.get(key))

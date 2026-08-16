@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import threading
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
@@ -8,6 +9,7 @@ from fastapi.responses import FileResponse
 from .config import ROOT, load_settings
 from .orchestrator import WorkflowManager
 from .world import World
+from .workflows import default_engine
 
 
 def create_app(world: World) -> FastAPI:
@@ -15,6 +17,7 @@ def create_app(world: World) -> FastAPI:
     project_routes(app, world)
     graph_routes(app, world)
     conversation_routes(app, world)
+    workflow_routes(app, world)
     frontend_routes(app)
     return app
 
@@ -85,6 +88,28 @@ def conversation_routes(app: FastAPI, world: World) -> None:
         return manager.materialize(project_id, value["node_id"], value["kind"], value["payload"])
 
 
+def workflow_routes(app: FastAPI, world: World) -> None:
+    @app.get("/api/v1/projects/{project_id}/workflows")
+    async def workflows(project_id: str):
+        return [workflow_view(world, item) for item in world.workflows(project_id)]
+
+    @app.post("/api/v1/projects/{project_id}/workflows", status_code=201)
+    async def start_workflow(project_id: str, request: Request):
+        value = await request.json()
+        return world.create_workflow(project_id, value["node_id"], value["kind"], value.get("payload"))
+
+    @app.post("/api/v1/workflows/{workflow_id}/confirm", status_code=202)
+    async def confirm(workflow_id: str):
+        run_async(default_engine(world).confirm, workflow_id)
+        return world.workflow(workflow_id)
+
+    @app.post("/api/v1/workflows/{workflow_id}/resolve", status_code=202)
+    async def resolve(workflow_id: str, request: Request):
+        value = await request.json()
+        run_async(default_engine(world).resolve, workflow_id, value["decision"], value["reason"])
+        return world.workflow(workflow_id)
+
+
 NODE_STATE_KEYS = {"parent_id", "lineage_id", "life_state", "direction_status", "working"}
 UPDATE_KEYS = {"life_state", "direction_status", "working", "rejection_reason", "rebuttal"}
 
@@ -93,17 +118,20 @@ def bootstrap_data(world: World, project_id: str | None) -> dict:
     projects = project_cards(world)
     selected = project_id or (projects[0]["id"] if projects else None)
     if not selected:
-        return {"projects": [], "active_project_id": None, "nodes": [], "edges": []}
+        return {"projects": [], "active_project_id": None, "nodes": [], "edges": [], "workflows": [], "slots": []}
     get_or_404(world.project, selected)
+    workflows = [workflow_view(world, item) for item in world.workflows(selected)]
     return {"projects": projects, "active_project_id": selected,
-            "nodes": world.nodes(selected), "edges": world.edges(selected)}
+            "nodes": world.nodes(selected), "edges": world.edges(selected), "workflows": workflows,
+            "slots": slot_view(workflows)}
 
 
 def project_cards(world: World) -> list[dict]:
     cards = []
     for project in world.projects():
         nodes = world.nodes(project["id"])
-        cards.append({**project, "title": project["name"], "node_count": len(nodes)})
+        cards.append({**project, "title": project["name"], "node_count": len(nodes),
+                      "workflow_count": len(world.workflows(project["id"]))})
     return cards
 
 
@@ -117,6 +145,21 @@ def get_or_404(getter, value: str):
         return getter(value)
     except KeyError as error:
         raise HTTPException(404, "not found") from error
+
+
+def workflow_view(world: World, workflow: dict) -> dict:
+    return {**workflow, "steps": world.steps(workflow["id"]),
+            "events": world.workflow_events(workflow["id"])}
+
+
+def slot_view(workflows: list[dict], count: int = 2) -> list[dict]:
+    active = [item for item in workflows if item["status"] in {"queued", "running", "waiting_human"}]
+    return [{"index": index + 1, "workflow": active[index] if index < len(active) else None}
+            for index in range(count)]
+
+
+def run_async(function, *args) -> None:
+    threading.Thread(target=function, args=args, daemon=True).start()
 
 
 def frontend_routes(app: FastAPI) -> None:

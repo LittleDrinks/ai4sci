@@ -1,77 +1,67 @@
 import { expect, test } from "@playwright/test";
 
-const IDS = { run: "run:test", generation: "generation:test", attempt: "attempt:test" };
 
-
-function activityFixture() {
-  const events = Array.from({ length: 189 }, (_, index) => ({ event_id: index + 1, run_id: IDS.run, generation_id: IDS.generation, attempt_id: IDS.attempt, actor: "producer", type: index === 2 ? "tool_call" : "research_step", time: `2026-08-12T00:00:${String(index % 60).padStart(2, "0")}Z`, entity: { type: "step", id: `step:${index}` }, payload: { message: `Recorded step ${index + 1}` } }));
-  const run = { id: IDS.run, status: "completed", created_at: events[0].time, events };
-  const job = { id: IDS.attempt, generation_id: IDS.generation, actor: "producer", status: "completed", created_at: events[0].time, completed_at: events.at(-1).time };
-  return { events, run, job };
+function workflow(state = {}) {
+  return { id: "workflow:trace01", project_id: "project:test", node_id: "node:d", lineage_id: "lineage:alpha", kind: "plan-execute-review-reflect",
+    stage: "review", status: "running", payload: {}, auto: 1, created_at: "2026-08-16T10:00:00Z", updated_at: "2026-08-16T10:01:12Z",
+    steps: [{ id: "step:1", ordinal: 1, stage: "execute", status: "completed", requires_confirmation: 0, payload: {}, output: {}, started_at: "2026-08-16T10:00:10Z", completed_at: "2026-08-16T10:00:42Z" }],
+    events: [{ id: 1, actor: "planner", type: "assistant", payload: { text: "已生成最小实验计划" }, time: "2026-08-16T10:00:08Z" },
+      { id: 2, actor: "runner", type: "tool_result", payload: { command: "pytest -q", exit_code: 0 }, time: "2026-08-16T10:00:42Z" },
+      { id: 3, actor: "reviewer-a", type: "assistant", payload: { summary: "机械审计通过，证据完整" }, time: "2026-08-16T10:01:12Z" }], ...state };
 }
 
 
-function traceFixture() {
-  const base = { run_id: "trace:test", model_name: "qwen3.7-flash", workspace_root: "/workspace" };
-  const records = [{ ...base, event_index: 1, turn_index: 0, timestamp: "2026-08-12T00:00:00Z", role: "user", text: "Research question", payload: {} }, { ...base, event_index: 2, turn_index: 1, timestamp: "2026-08-12T00:00:02Z", role: "assistant", text: "Evidence reviewed", payload: { response: { finish_reason: "stop", usage: { prompt_tokens: 1200, completion_tokens: 200, total_tokens: 1400 } } } }];
-  return [{ attempt_id: IDS.attempt, actor: "producer", generation_id: IDS.generation, content: { output: {}, trace: [{ name: "trace.jsonl", jsonl: records.map((record) => JSON.stringify(record)).join("\n") }] } }];
+function fixture(item = workflow()) {
+  return { projects: [{ id: "project:test", title: "测试项目", question: "怎样验证这个方向？", auto: 1 }], active_project_id: "project:test", nodes: [], edges: [], workflows: [item],
+    slots: [{ index: 1, workflow: item }, { index: 2, workflow: null }] };
 }
 
 
-async function mockActivity(page) {
-  const { run, job } = activityFixture();
-  await page.route(/\/api\/v1\/runs$/, (route) => route.fulfill({ json: [run] }));
-  await page.route(/\/api\/v1\/runs\/run%3Atest$/, (route) => route.fulfill({ json: run }));
-  await page.route(/\/wire$/, (route) => route.fulfill({ json: traceFixture() }));
-  await page.route(/\/context$/, (route) => route.fulfill({ json: [{ attempt_id: IDS.attempt, actor: "producer", content: { messages: [{ role: "user", content: "Research question" }] } }] }));
-  await page.route(/\/agents-jobs$/, (route) => route.fulfill({ json: [job] }));
-  await page.route(/\/events\?follow=true$/, (route) => route.fulfill({ status: 200, contentType: "text/event-stream", body: ": ready\n\n" }));
+async function mockActivity(page, body = fixture()) {
+  await page.route(/\/api\/v1\/bootstrap/, (route) => route.fulfill({ json: body }));
 }
 
 
-async function openActivity(page, viewport) {
+test("renders the DSH metrics, role rows and bottom statistics", async ({ page }) => {
   await mockActivity(page);
-  await page.setViewportSize(viewport);
   await page.goto("/activity");
-  await expect(page.getByText("Generation 0")).toBeVisible();
-}
-
-
-async function assertNoPageOverflow(page) {
-  const widths = await page.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
-  expect(widths[0]).toBeLessThanOrEqual(widths[1]);
-}
-
-
-async function assertViews(page) {
-  await page.getByRole("button", { name: "Wire" }).click();
-  await expect(page.locator(".wire-list details").first()).toBeVisible();
-  await page.locator(".wire-list details").first().click();
-  await expect(page.locator(".wire-list pre").first()).toBeVisible();
-  await page.getByRole("button", { name: "Context" }).click();
-  await expect(page.locator(".context-list details").first()).toBeVisible();
-  await page.getByRole("button", { name: "Agents / Jobs" }).click();
-  await expect(page.locator(".jobs-table tbody tr").first()).toBeVisible();
-}
-
-
-test("replays a completed run across all desktop views", async ({ page }) => {
-  const errors = [];
-  page.on("console", (message) => message.type() === "error" && errors.push(message.text()));
-  await openActivity(page, { width: 1440, height: 1000 });
-  await expect(page.getByText(/189 events/)).toBeVisible();
-  await expect(page.getByText("Turn 1").first()).toBeVisible();
-  await expect(page.getByText(/tokens · context/).first()).toBeVisible();
-  await assertViews(page);
-  await assertNoPageOverflow(page);
-  expect(errors).toEqual([]);
-  await page.screenshot({ path: "test-results/activity-desktop.png" });
+  await expect(page.getByText("Duration")).toBeVisible();
+  await expect(page.getByText("Turns")).toBeVisible();
+  await expect(page.getByText("Calls")).toBeVisible();
+  await expect(page.getByText("TOOL")).toBeVisible();
+  await expect(page.getByText("ASSISTANT").first()).toBeVisible();
+  await expect(page.locator(".trace-bottom")).toContainText("完成步骤 1/1");
+  await page.screenshot({ path: "test-results/activity-dsh.png" });
 });
 
 
-test("keeps all activity views usable on mobile", async ({ page }) => {
-  await openActivity(page, { width: 390, height: 844 });
-  await assertViews(page);
-  await assertNoPageOverflow(page);
-  await page.screenshot({ path: "test-results/activity-mobile.png" });
+test("reduces the queue to occupied and idle slot indicators", async ({ page }) => {
+  await mockActivity(page);
+  await page.goto("/activity");
+  await expect(page.getByLabel("执行槽位").getByText("槽位 1")).toBeVisible();
+  await expect(page.getByLabel("执行槽位").getByText("空闲")).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "工作流" })).toBeVisible();
+});
+
+
+test("continues a manual workflow from the activity trace", async ({ page }) => {
+  const item = workflow({ status: "waiting_human", stage: "execute", auto: 0 });
+  let confirmed = false;
+  await mockActivity(page, fixture(item));
+  await page.route(/\/api\/v1\/workflows\/workflow%3Atrace01\/confirm/, (route) => { confirmed = true; return route.fulfill({ status: 202, json: item }); });
+  await page.goto("/activity");
+  await page.getByRole("button", { name: "继续执行" }).click();
+  await expect.poll(() => confirmed).toBe(true);
+});
+
+
+test("keeps the activity trace readable on mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await mockActivity(page);
+  await page.goto("/activity");
+  await expect(page.getByText("TOOL")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.screenshot({ path: "test-results/activity-mobile.png", fullPage: true });
+  await page.locator(".trace-bottom").scrollIntoViewIfNeeded();
+  await expect(page.locator(".trace-bottom")).toBeVisible();
 });

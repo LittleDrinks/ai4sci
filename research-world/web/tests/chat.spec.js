@@ -73,6 +73,19 @@ test("materializes the draft as a direction and clears the thread", async ({ pag
 });
 
 
+test("keeps agent work in activity instead of the human conversation", async ({ page }) => {
+  const body = fixture();
+  body.workflows = [{ id: "workflow:active", node_id: "node:q", status: "running",
+    events: [{ type: "assistant", actor: "reviewer-a", payload: { rebuttal: "只应出现在活动中的工作过程" } }] }];
+  await mockChat(page, body);
+  await page.route(/\/api\/v1\/projects\/project%3Atest\/messages/, (route) => route.fulfill({ json: [] }));
+  await page.goto("/chat");
+  await expect(page.getByText("当前节点尚无对话草稿")).toBeVisible();
+  await expect(page.getByText("只应出现在活动中的工作过程")).toHaveCount(0);
+  await expect(page.locator(".manager-message")).toHaveCount(0);
+});
+
+
 test("keeps the manager chat IME-safe and readable on mobile", async ({ page }) => {
   let sends = 0;
   await page.setViewportSize({ width: 390, height: 844 });

@@ -30,7 +30,7 @@ class FakeAgents:
         self.pairs = []
 
     def brainstorm(self, context, count):
-        return self.candidates[:count]
+        return {"candidates": self.candidates[:count]}
 
     def pairwise(self, left, right):
         self.pairs.append((left, right))
@@ -90,6 +90,7 @@ def test_brainstorm_blocks_duplicates_and_admits_selected(world, project):
     result = engine(world, agents, world.embedding).run(workflow["id"])
     directions = [node for node in world.nodes(project["id"]) if node["kind"] == "direction"]
     assert result["status"] == "completed"
+    assert world.workflow_events(workflow["id"])[1]["actor"] == "brainstormer"
     assert any(node["life_state"] == "ghost" and "cos=1.00" in node["rejection_reason"] for node in directions)
     assert any(node["payload"]["text"] == "Novel" and node["life_state"] == "admitted" for node in directions)
 
@@ -111,6 +112,7 @@ def test_manual_research_confirms_start_and_each_step(world, project):
     service = engine(world, FakeAgents(), runner=runner)
     planned = service.confirm(workflow["id"])
     assert planned["status"] == "waiting_human"
+    assert planned["payload"]["experiment_id"].startswith("node:")
     assert runner.calls == []
     completed = service.confirm(workflow["id"])
     assert completed["status"] == "completed"

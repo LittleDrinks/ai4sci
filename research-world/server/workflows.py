@@ -33,12 +33,12 @@ class AgentFacade:
     def __init__(self, harness: HarnessClient):
         self.harness = harness
 
-    def brainstorm(self, context: dict, count: int) -> list[dict]:
+    def brainstorm(self, context: dict, count: int) -> dict:
         value = self.harness.json("科研构思助手", BRAINSTORM_PROMPT, {**context, "count": count})
         candidates = required(value, "candidates")
         if not isinstance(candidates, list) or len(candidates) < count:
             raise ValueError(f"harness field 'candidates' must contain at least {count} items")
-        return candidates[:count]
+        return {**value, "candidates": candidates[:count]}
 
     def pairwise(self, left: str, right: str) -> bool:
         value = self.harness.json("科研新颖性裁决者", PAIR_PROMPT, {"left": left, "right": right})
@@ -102,7 +102,9 @@ class WorkflowEngine:
         origin = self.world.set_working(workflow["node_id"], True)
         self.world.update_workflow(workflow["id"], "brainstorm", "running")
         count = int(workflow["payload"].get("count", 8))
-        candidates = self.agents.brainstorm(origin["payload"], count)
+        result = self.agents.brainstorm(origin["payload"], count)
+        self._record_agent(workflow["id"], "brainstormer", result)
+        candidates = result["candidates"]
         try:
             pool = self._deduplicate(workflow, origin, candidates)
         except EndpointCapabilityError as error:
@@ -170,11 +172,13 @@ class WorkflowEngine:
         experiment = self.world.create_node(workflow["project_id"], "experiment",
                                             {"title": "待执行实验", "goal": direction["payload"].get("text", "")},
                                             parent_id=direction["id"], lineage_id=direction["lineage_id"], working=True)
+        payload = {**workflow["payload"], "experiment_id": experiment["id"]}
+        self.world.update_workflow(workflow["id"], "plan", "running", payload)
+        self._event(workflow["id"], "control", "experiment_created", {"node_id": experiment["id"]})
         plan = self.agents.plan(direction["payload"])
         self._record_agent(workflow["id"], "planner", plan)
         for ordinal, step in enumerate(plan["steps"], 1):
             self.world.add_step(workflow["id"], ordinal, "execute", step, not bool(workflow["auto"]))
-        payload = {**workflow["payload"], "experiment_id": experiment["id"]}
         status = "running" if workflow["auto"] else "waiting_human"
         self.world.update_workflow(workflow["id"], "execute", status, payload)
         return self._execute_all(self.world.workflow(workflow["id"])) if workflow["auto"] else self.world.workflow(workflow["id"])
@@ -213,7 +217,8 @@ class WorkflowEngine:
         context = {"subject": subject, "node": node["payload"], **(extra or {})}
         reviews = [self.agents.review(context, name) for name in ("A", "B")]
         for name, review in zip(("A", "B"), reviews, strict=True):
-            self._record_agent(workflow["id"], f"reviewer-{name.lower()}", review)
+            event = {**review, "node_id": node["id"], "subject": subject}
+            self._record_agent(workflow["id"], f"reviewer-{name.lower()}", event)
         self.world.update_node(node["id"], rebuttal={"reviewer_a": clean(reviews[0]), "reviewer_b": clean(reviews[1])})
         decisions = [review.get("decision") == "approve" for review in reviews]
         if decisions[0] != decisions[1]:

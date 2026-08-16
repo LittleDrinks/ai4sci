@@ -1,4 +1,4 @@
-import { Activity, Check, Clock3, GitBranch, Pause, Play, ThumbsDown, ThumbsUp, Wrench } from "lucide-react";
+import { Activity, Check, ChevronDown, ChevronRight, GitBranch, Pause, Play, ThumbsDown, ThumbsUp, Wrench } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { confirmWorkflow, resolveWorkflow } from "../api";
 import { useWorld } from "../context/WorldContext";
@@ -6,7 +6,7 @@ import "../activity.css";
 
 
 const STATUS = { queued: "排队中", running: "运行中", waiting_human: "等待人工", completed: "已完成", paused: "已暂停", failed: "失败" };
-const STAGE = { created: "准备", brainstorm: "头脑风暴", execute: "执行", review: "复核", reflect: "反思", complete: "完成", paused: "暂停" };
+const STAGE = { created: "准备", brainstorm: "头脑风暴", plan: "规划", execute: "执行", review: "复核", reflect: "反思", complete: "完成", paused: "暂停" };
 
 
 export function ActivityPage() {
@@ -83,9 +83,14 @@ function TraceRows({ events }) {
 
 
 function TraceRow({ event, index }) {
+  const [expanded, setExpanded] = useState(false);
   const role = traceRole(event);
-  return <li className={`dsh-row ${role.toLowerCase()}`}><span className="trace-index">{String(index + 1).padStart(2, "0")}</span>
-    <strong>{role}</strong><span className="trace-actor">{event.actor}</span><p>{eventSummary(event)}</p><time>{formatTime(event.time)}</time></li>;
+  const Toggle = expanded ? ChevronDown : ChevronRight;
+  return <li className={`dsh-row ${role.toLowerCase()} ${expanded ? "expanded" : ""}`}>
+    <button className="trace-toggle" aria-label={`${expanded ? "收起" : "展开"}第 ${index + 1} 条过程`} aria-expanded={expanded} onClick={() => setExpanded(!expanded)}><Toggle size={15} /></button>
+    <span className="trace-index">{String(index + 1).padStart(2, "0")}</span><strong>{role}</strong>
+    <span className="trace-actor">{event.actor}</span><p>{eventSummary(event)}</p><time>{formatTime(event.time)}</time>
+    {expanded && <pre className="trace-detail">{eventDetail(event)}</pre>}</li>;
 }
 
 
@@ -109,7 +114,14 @@ function metrics(workflow) {
 
 function eventSummary(event) {
   const value = event.payload || {};
+  if (value.candidates) return `生成 ${value.candidates.length} 个候选方向`;
+  if (value.steps) return `生成 ${value.steps.length} 个实验步骤`;
   return value.text || value.reason || value.summary || value.command || compactJson(value) || event.type.replaceAll("_", " ");
+}
+
+
+function eventDetail(event) {
+  return JSON.stringify({ actor: event.actor, type: event.type, time: event.time, payload: event.payload || {} }, null, 2);
 }
 
 

@@ -31,6 +31,9 @@ test("renders the DSH metrics, role rows and bottom statistics", async ({ page }
   await expect(page.getByText("TOOL")).toBeVisible();
   await expect(page.getByText("ASSISTANT").first()).toBeVisible();
   await expect(page.locator(".trace-bottom")).toContainText("完成步骤 1/1");
+  await page.getByRole("button", { name: "展开第 1 条过程" }).click();
+  await expect(page.locator(".trace-detail")).toContainText('"actor": "planner"');
+  await expect(page.getByRole("button", { name: "收起第 1 条过程" })).toHaveAttribute("aria-expanded", "true");
   await page.screenshot({ path: "test-results/activity-dsh.png" });
 });
 

@@ -34,6 +34,10 @@ sources:
     url: https://cdn.openai.com/pdf/scientific-computing-in-the-age-of-agentic-ai-an-exploratory-field-report.pdf
   - title: AI as a Scientific Collaborator
     url: https://cdn.openai.com/pdf/f4b4a5da-b2de-418d-9fcd-6b293e9dc157/oai_ai-as-a-scientific-collaborator_jan-2026.pdf
+  - title: AI Research Agents Narrow Scientific Exploration
+    url: https://arxiv.org/abs/2605.27905
+  - title: Measuring the Gap Between Human and LLM Research Ideas
+    url: https://arxiv.org/abs/2607.01233
 ---
 # AI 科学家资料核验与系统启发
 ## 核验结论
@@ -78,6 +82,11 @@ Science 论文题为 `Autonomous biomedical research with an artificial intellig
 ### OpenAI 科研工程案例
 用户所说的“AI 科研工程师报告”对应 OpenAI 2026-07-28 的 `Scientific computing in the age of agentic AI` 及 55 页 `an exploratory field report`，不是机器之心文章本身。报告收录 8 个早期代码 Agent 案例，包含将 STAR 比对器重写为 Rust 的 rustar-aligner、MHCflurry PyTorch 重写、RustQC/FastQC-Rust、hifiasm、cyvcf2、bayesm-rs 和 HI.SIM。rustar-aligner 在 10000 条酵母 RNA-seq reads 上报告单端 99.815%、双端 99.883% 一致率；RustQC 报告 1.86 亿条 reads 从 15 小时 34 分降至 14 分 54 秒，磁盘从 2.5 TB 降到 0.1 TB。
 这些数字由案例贡献者提供，报告作者做了一致性检查并尽量选取公开产物，但没有独立复现每个基准。可复用的验收模式是外部参考输出、字节或统计一致性、已知答案模拟、固定容差和真实数据边界测试；同时保留代码、环境、日志、产物哈希和维护责任，不能用 Agent 自报成功替代独立结果审核。OpenAI 另有 `AI as a Scientific Collaborator` 使用报告，讨论科学类消息和任务分布，不是上述 Rust 工程证据。
+### 科研创意空间收缩
+`AI Research Agents Narrow Scientific Exploration` 当前版本为 arXiv:2605.27905v2，2026-07-11 修订。论文用五种 Agent 框架、五种模型在 12 个学科的 155 个研究区域生成 219655 个有效创意。AI 创意的平均探索广度为 0.554，人类同区域论文为 0.599；到起始文献的平均探索距离为 0.322，人类后续论文为 0.410。AI 创意只覆盖 28.5% 的次年研究前沿关键词，人类后续论文覆盖 36.5%；只有 10.5% 的 AI 创意提出起始文献中没有的新研究问题，90.4% 的差异来自新方法。五类框架包含单次生成、自我反思、多阶段验证、多 Agent 讨论和竞赛式演化，均被明确要求创新并允许检索文献，整体收缩仍然存在。
+论文测量的是语义嵌入距离、未来关键词和相邻论文引用代理，不是创意真值；引用代理与真实引用的相关性较弱，未来前沿也不等于科学价值。可复用结论是把 Agent 当作有偏的搜索策略，按模型和框架比较候选分布、问题变化与方法变化；不能用候选数量、单项新颖度评分或 persona 数量证明探索广度。
+`Measuring the Gap Between Human and LLM Research Ideas` 为 arXiv:2607.01233v1，2026-07-01 提交。论文从 ICLR、ICML、NeurIPS 和 Nature Communications 构造 11683 个匹配样本，让多种 LLM 基于与人类论文相同的局部前序文献生成动机与方法，再比较机会模式和方法范式的分布。人类创意中 bridge 类机会占 12.1%、synthesis/unification 方法占 5.1%；九个主要模型分别集中到 47.1%-64.2% 和 22.5%-38.7%。模型更常使用 integrate/unify 模板，人类更常作 replace、decouple、formalize 等局部干预；更长思考没有消除分布偏移。
+该实验依赖重建的局部文献上下文、离散 taxonomy 和经人工核验的 LLM 标注，且只测一次生成；论文明确指出真实研究还依赖隐性经验、失败、协作和长期议程，交互式或领域 Agent 可能缩小差距。其 taxonomy 只适合作为 SearchBench 的外部分析标尺，不进入产品 schema。SearchBench 应区分“换研究问题”与“换实现方法”，报告模型内候选集中度、跨模型覆盖增量及相对人类参考路线的距离，并继续由执行审核裁决候选是否有效。
 ## 对项目的落地
 1. 为假设增加系统 ID、状态、父子来源、证据和事件哈希；只允许通过审核的证据移动状态，未测试假设不得产生依赖后代，`dormant` 与 `refuted` 保持可查询。
 2. 保持机制重合、执行有效性、结果内容、人工治理四类审核独立；对代理自评、官方格式验证、任务分数和外部复现分别建证据，不合并成单一通过分数。
@@ -85,6 +94,7 @@ Science 论文题为 `Autonomous biomedical research with an artificial intellig
 4. 为敏感数据和高成本工具采用 broker 接口，只返回可审计聚合、QC、日志和 manifest；表型、因果解释和高风险主张进入人工队列。
 5. 图谱只存事实、证据、依赖和审核事件；FlowSearch 的 DAG、AutoScientists 的 dead-end registry 和 Biomni 的工具轨迹都作为派生审查视图或可追溯事件，不写成自由文本总览。
 6. 审查带宽指标加入缺失外部验证、独立审核、尝试选择策略、人工时间、Token、计算和下游失效范围；不把节点数或最终分数当阅读成本和研究价值。
+7. 搜索评测加入候选分布广度、问题变化与方法变化；按模型分层并与人类参考路线比较，不把大量近邻方法重组计为探索成功。
 ## 未核验或需修正的说法
 用户列出的五篇 arXiv 论文均为 2026 年提交，但“全是 2026 年最新工作”不是稳定事实；FlowSearch 是 2025 年 v1、2026 年 v2，Biomni 的公开预印本是 2025 年而 Science 正式论文为 2026 年。
 “Biomni 整合 105 个科研工具 + 59 个专业数据库”不准确；原文是 150 个专用生物医学工具、105 个软件包、59 个数据库。

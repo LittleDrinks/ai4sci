@@ -1,103 +1,45 @@
+from __future__ import annotations
+
 import pytest
 
-from server.world import InvalidPackage
+from server.app import bootstrap_data
+from server.world import EDGE_POLARITIES, NODE_KINDS
 
 
-def package(world, project, generation_id):
-    source = world.add_artifact(b"Line one.\nLine two supports the claim.\n", "text/plain")
-    snapshot = world.add_source_snapshot(
-        project["id"], "https://example.test/orbits", source, {"line_start": 1, "line_end": 2}
-    )
-    return {
-        "generation_id": generation_id,
-        "strategy": "Check whether the premise has a dissipative mechanism.",
-        "sources": [{"snapshot_id": snapshot["id"], "artifact_id": source["id"], "title": "Orbital mechanics"}],
-        "claims": [claim(snapshot, source)],
-        "artifacts": [{"artifact_id": source["id"], "role": "source_text"}],
-        "code": [],
-        "no_code_reason": "The claim is resolved analytically from cited mechanics.",
-    }
+def test_graph_has_four_node_kinds_and_two_edge_polarities():
+    assert NODE_KINDS == {"question", "source", "direction", "experiment"}
+    assert EDGE_POLARITIES == {"supports", "refutes"}
 
 
-def claim(snapshot, source):
-    citation = {
-        "source_snapshot_id": snapshot["id"],
-        "artifact_id": source["id"],
-        "locator": {"line_start": 2, "line_end": 2},
-    }
-    return {"kind": "evidence", "text": "An ideal two-body orbit does not dissipate energy.", "citations": [citation]}
+def test_pending_node_is_admitted_or_ghosted(world, project):
+    pending = world.create_node(project["id"], "direction", {"text": "Test orbit resonance"})
+    assert pending["life_state"] == "pending"
+    assert world.admit_node(pending["id"])["life_state"] == "admitted"
+    rejected = world.create_node(project["id"], "experiment", {"title": "Unstable solver"})
+    ghost = world.ghost_node(rejected["id"], "numerical audit failed")
+    assert (ghost["life_state"], ghost["rejection_reason"]) == ("ghost", "numerical audit failed")
 
 
-def test_package_is_isolated_then_atomically_admitted(world, project):
-    generation = world.create_generation(project["id"], 0)
-    candidate = world.submit_package(project["id"], package(world, project, generation["id"]))
-    assert world.search(project["id"], "dissipate") == []
-    world.review_package(candidate["id"], "reviewer-a", "approve", "Citations resolve.")
-    assert world.search(project["id"], "dissipate") == []
-    world.review_package(candidate["id"], "reviewer-b", "approve", "Mechanism is sound.")
-    nodes = world.search(project["id"], "dissipate")
-    assert {node["kind"] for node in nodes} >= {"claim", "result"}
-    assert {node["status"] for node in world.package_nodes(candidate["id"])} == {"admitted"}
+def test_direction_state_is_terminal(world, project):
+    direction = world.create_node(project["id"], "direction", {"text": "Resonance protects the orbit"})
+    supported = world.update_node(direction["id"], direction_status="supported")
+    assert supported["direction_status"] == "supported"
+    with pytest.raises(ValueError, match="terminal"):
+        world.update_node(direction["id"], direction_status="refuted")
 
 
-def test_submission_rejects_unresolvable_citation(world, project):
-    generation = world.create_generation(project["id"], 0)
-    value = package(world, project, generation["id"])
-    value["claims"][0]["citations"][0]["locator"] = {"line_start": 99, "line_end": 100}
-    with pytest.raises(InvalidPackage, match="locator"):
-        world.submit_package(project["id"], value)
+def test_edge_requires_polarity_and_one_project(world, project, tmp_path):
+    direction = world.create_node(project["id"], "direction", {"text": "Candidate"})
+    evidence = world.create_node(project["id"], "source", {"title": "Paper"}, life_state="admitted")
+    assert world.add_edge(evidence["id"], direction["id"], "supports")["polarity"] == "supports"
+    other = world.create_project("other", tmp_path / "other", "Other question")
+    with pytest.raises(ValueError, match="one project"):
+        world.add_edge(evidence["id"], world.nodes(other["id"])[0]["id"], "refutes")
 
 
-def test_submission_rejects_unresolvable_package_sources(world, project):
-    generation = world.create_generation(project["id"], 0)
-    value = package(world, project, generation["id"])
-    del value["sources"][0]["artifact_id"]
-    with pytest.raises(InvalidPackage, match="source"):
-        world.submit_package(project["id"], value)
-
-
-def test_submission_rejects_code_without_verified_execution(world, project):
-    generation = world.create_generation(project["id"], 0)
-    value = package(world, project, generation["id"])
-    value["code"] = [{"execution_id": "execution:missing", "artifact_id": value["artifacts"][0]["artifact_id"]}]
-    with pytest.raises(InvalidPackage, match="execution"):
-        world.submit_package(project["id"], value)
-
-
-def test_submission_requires_claim_classification(world, project):
-    generation = world.create_generation(project["id"], 0)
-    value = package(world, project, generation["id"])
-    del value["claims"][0]["kind"]
-    with pytest.raises(InvalidPackage, match="claim kind"):
-        world.submit_package(project["id"], value)
-
-
-def test_hybrid_search_expands_admitted_neighbors(world, project):
-    generation = world.create_generation(project["id"], 0)
-    candidate = world.submit_package(project["id"], package(world, project, generation["id"]))
-    world.review_package(candidate["id"], "a", "approve", "ok")
-    world.review_package(candidate["id"], "b", "approve", "ok")
-    results = world.search(project["id"], "ideal orbit energy", embed=lambda _: [1.0, 0.0])
-    assert len(results) <= 40
-    assert {node["kind"] for node in results} >= {"claim", "source", "result"}
-
-
-def test_hybrid_search_does_not_expand_pending_neighbors(world, project):
-    generation = world.create_generation(project["id"], 0)
-    world.submit_package(project["id"], package(world, project, generation["id"]))
-    results = world.search(project["id"], "planetary orbits")
-    assert all(node["status"] == "admitted" for node in results)
-
-
-def test_support_edges_follow_claim_citations(world, project):
-    generation = world.create_generation(project["id"], 0)
-    value = package(world, project, generation["id"])
-    artifact = world.add_artifact(b"Other evidence.\n", "text/plain")
-    snapshot = world.add_source_snapshot(project["id"], "https://example.test/other", artifact, {"line_start": 1, "line_end": 1})
-    value["sources"].append({"snapshot_id": snapshot["id"], "artifact_id": artifact["id"], "title": "Other"})
-    value["claims"].append({"kind": "evidence", "text": "A separate claim.", "citations": [{"source_snapshot_id": snapshot["id"], "artifact_id": artifact["id"], "locator": {"line_start": 1, "line_end": 1}}]})
-    candidate = world.submit_package(project["id"], value)
-    world.review_package(candidate["id"], "a", "approve", "ok")
-    world.review_package(candidate["id"], "b", "approve", "ok")
-    supports = [edge for edge in world.project_edges(project["id"]) if edge["type"] == "supports"]
-    assert len(supports) == 2
+def test_bootstrap_includes_all_life_states(world, project):
+    world.create_node(project["id"], "direction", {"text": "Pending"})
+    ghost = world.create_node(project["id"], "experiment", {"title": "Failed"})
+    world.ghost_node(ghost["id"], "audit rejected")
+    data = bootstrap_data(world, project["id"])
+    assert {node["life_state"] for node in data["nodes"]} == {"admitted", "pending", "ghost"}

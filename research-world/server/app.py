@@ -1,188 +1,114 @@
 from __future__ import annotations
 
-import asyncio
-import json
 from pathlib import Path
 
-from fastapi import FastAPI, Header, HTTPException, Query, Request, Response
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse
 
 from .config import ROOT, load_settings
-from .world import InvalidPackage, World
+from .world import World
 
 
 def create_app(world: World) -> FastAPI:
-    app = FastAPI(title="Research World", version="1")
-    project_read_routes(app, world)
-    project_write_routes(app, world)
-    run_routes(app, world)
-    run_view_routes(app, world)
+    app = FastAPI(title="Research World", version="2")
+    project_routes(app, world)
     graph_routes(app, world)
     frontend_routes(app)
     return app
 
 
-def project_read_routes(app: FastAPI, world: World) -> None:
+def project_routes(app: FastAPI, world: World) -> None:
     @app.get("/api/v1/health")
-    def health():
+    async def health():
         return {"ok": True}
 
     @app.get("/api/v1/projects")
-    def projects():
-        return world.projects()
+    async def projects():
+        return project_cards(world)
 
-    @app.get("/api/v1/bootstrap")
-    def bootstrap(project_id: str | None = None):
-        projects = world.projects()
-        selected = project_id or (projects[0]["id"] if projects else None)
-        return bootstrap_data(world, projects, selected)
-
-
-def project_write_routes(app: FastAPI, world: World) -> None:
-    @app.post("/api/v1/projects")
+    @app.post("/api/v1/projects", status_code=201)
     async def create_project(request: Request):
         value = await request.json()
         return world.create_project(value["name"], Path(value["root"]), value["question"])
 
-    @app.post("/api/v1/projects/{name}/snapshots")
-    def sync_project(name: str):
-        return world.sync_project(world.project_by_name(name)["id"])
+    @app.get("/api/v1/bootstrap")
+    async def bootstrap(project_id: str | None = None):
+        return bootstrap_data(world, project_id)
 
-
-def run_routes(app: FastAPI, world: World) -> None:
-    @app.get("/api/v1/runs")
-    def runs():
-        return world.runs()
-
-    @app.get("/api/v1/runs/{run_id}")
-    def run(run_id: str):
-        return {**world.run(run_id), "events": world.events(run_id)}
-
-    @app.get("/api/v1/runs/{run_id}/generations/{generation_id}")
-    def generation(run_id: str, generation_id: str):
-        value = next(item for item in world.generations(run_id) if item["id"] == generation_id)
-        value["attempts"] = [item for item in world.attempts(run_id) if item["generation_id"] == generation_id]
-        return value
-
-
-def run_view_routes(app: FastAPI, world: World) -> None:
-    @app.get("/api/v1/runs/{run_id}/wire")
-    def wire(run_id: str):
-        return attempt_artifacts(world, run_id, "wire_artifact_id")
-
-    @app.get("/api/v1/runs/{run_id}/context")
-    def context(run_id: str):
-        return attempt_artifacts(world, run_id, "context_artifact_id")
-
-    @app.get("/api/v1/runs/{run_id}/agents-jobs")
-    def agents_jobs(run_id: str):
-        return world.attempts(run_id)
-
-    @app.get("/api/v1/runs/{run_id}/events")
-    def events(run_id: str, follow: bool = Query(False), last_event_id: str | None = Header(None)):
-        after = int(last_event_id or 0)
-        return StreamingResponse(event_stream(world, run_id, after, follow), media_type="text/event-stream")
+    @app.patch("/api/v1/projects/{project_id}")
+    async def update_project(project_id: str, request: Request):
+        value = await request.json()
+        return world.set_auto(project_id, bool(value["auto"]))
 
 
 def graph_routes(app: FastAPI, world: World) -> None:
-    @app.get("/api/v1/artifacts/{artifact_id}")
-    def artifact(artifact_id: str):
-        return admitted_artifact(world, artifact_id)
-
     @app.get("/api/v1/nodes/{node_id}")
-    def node(node_id: str):
-        return public_node(world.admitted_node(node_id))
+    async def node(node_id: str):
+        return get_or_404(world.node, node_id)
 
-    @app.get("/api/v1/artifacts/{artifact_id}/content")
-    def artifact_content(artifact_id: str):
-        value = admitted_artifact(world, artifact_id)
-        return Response(world.artifacts.read(artifact_id), media_type=value["media_type"])
+    @app.post("/api/v1/projects/{project_id}/nodes", status_code=201)
+    async def create_node(project_id: str, request: Request):
+        value = await request.json()
+        state = {key: value[key] for key in NODE_STATE_KEYS if key in value}
+        return world.create_node(project_id, value["kind"], value["payload"], **state)
+
+    @app.patch("/api/v1/nodes/{node_id}")
+    async def update_node(node_id: str, request: Request):
+        value = await request.json()
+        state = {key: value[key] for key in UPDATE_KEYS if key in value}
+        return world.update_node(node_id, value.get("payload"), **state)
+
+    @app.post("/api/v1/projects/{project_id}/edges", status_code=201)
+    async def create_edge(project_id: str, request: Request):
+        value = await request.json()
+        ensure_project_node(world, project_id, value["source"])
+        return world.add_edge(value["source"], value["target"], value["polarity"])
+
+
+NODE_STATE_KEYS = {"parent_id", "lineage_id", "life_state", "direction_status", "working"}
+UPDATE_KEYS = {"life_state", "direction_status", "working", "rejection_reason", "rebuttal"}
+
+
+def bootstrap_data(world: World, project_id: str | None) -> dict:
+    projects = project_cards(world)
+    selected = project_id or (projects[0]["id"] if projects else None)
+    if not selected:
+        return {"projects": [], "active_project_id": None, "nodes": [], "edges": []}
+    get_or_404(world.project, selected)
+    return {"projects": projects, "active_project_id": selected,
+            "nodes": world.nodes(selected), "edges": world.edges(selected)}
+
+
+def project_cards(world: World) -> list[dict]:
+    cards = []
+    for project in world.projects():
+        nodes = world.nodes(project["id"])
+        cards.append({**project, "title": project["name"], "node_count": len(nodes)})
+    return cards
+
+
+def ensure_project_node(world: World, project_id: str, node_id: str) -> None:
+    if get_or_404(world.node, node_id)["project_id"] != project_id:
+        raise HTTPException(400, "node belongs to another project")
+
+
+def get_or_404(getter, value: str):
+    try:
+        return getter(value)
+    except KeyError as error:
+        raise HTTPException(404, "not found") from error
 
 
 def frontend_routes(app: FastAPI) -> None:
     @app.get("/{path:path}", include_in_schema=False)
-    def frontend(path: str):
-        return frontend_file(path)
-
-
-async def event_stream(world: World, run_id: str, after: int, follow: bool):
-    cursor = after
-    while True:
-        values = world.events(run_id, cursor)
-        for event in values:
-            cursor = event["event_id"]
-            yield f"id: {cursor}\ndata: {json.dumps(event)}\n\n"
-        if not follow:
-            return
-        yield ": keepalive\n\n"
-        await asyncio.sleep(1)
-
-
-def bootstrap_data(world: World, projects: list[dict], selected: str | None) -> dict:
-    if not selected:
-        return {"projects": [], "active_project_id": None, "nodes": [], "edges": [], "events": [], "jobs": [], "agents": [], "runtimes": [], "artifacts": []}
-    runs = [run for run in world.runs() if run["project_id"] == selected]
-    nodes = [public_node(node) for node in world.admitted_nodes(selected)]
-    return {"projects": [{**item, "title": item["name"]} for item in projects], "active_project_id": selected,
-            "nodes": nodes, "review_nodes": nodes,
-            "edges": world.project_edges(selected), "events": [event for run in runs for event in world.events(run["id"])],
-            "jobs": [attempt for run in runs for attempt in world.attempts(run["id"])], "agents": [], "runtimes": [],
-            "artifacts": public_artifacts(world.project_artifacts(selected), nodes), "runs": runs}
-
-
-def public_node(node: dict) -> dict:
-    payload = node.get("payload") or {}
-    actor = node.get("generation_id")
-    return {key: value for key, value in node.items() if key != "payload"} | {
-        "title": node_text(payload, 96), "summary": node_text(payload, 280),
-        "content": {"record": payload},
-        "created_by": {"kind": "agent" if actor else "system", "id": actor or "system"},
-        "audit": "approve" if node.get("status") == "admitted" else "pending",
-    }
-
-
-def node_text(payload: dict, limit: int) -> str:
-    value = next((payload[key] for key in ("title", "text", "strategy", "role")
-                  if isinstance(payload.get(key), str) and payload[key].strip()), "Untitled node")
-    compact = " ".join(value.split())
-    return compact if len(compact) <= limit else f"{compact[:limit - 3]}..."
-
-
-def public_artifacts(artifacts: list[dict], nodes: list[dict]) -> list[dict]:
-    owners = {node["content"]["record"].get("artifact_id"): node for node in nodes}
-    return [public_artifact(artifact, owners.get(artifact["id"])) for artifact in artifacts]
-
-
-def public_artifact(artifact: dict, owner: dict | None) -> dict:
-    return {**artifact, "node_id": owner["id"] if owner else None,
-            "title": owner["title"] if owner else artifact["id"],
-            "kind": owner["kind"] if owner else "artifact", "content_type": artifact["media_type"]}
-
-
-def attempt_artifacts(world: World, run_id: str, field: str) -> list[dict]:
-    values = []
-    for attempt in world.attempts(run_id):
-        if attempt[field]:
-            content = json.loads(world.artifacts.read(attempt[field]))
-            values.append({"attempt_id": attempt["id"], "actor": attempt["actor"], "generation_id": attempt["generation_id"], "content": content})
-    return values
-
-
-def frontend_file(path: str):
-    dist = ROOT / "web" / "dist"
-    asset = dist / path
-    if path and asset.is_file():
-        return FileResponse(asset)
-    if (dist / "index.html").is_file():
-        return FileResponse(dist / "index.html")
-    raise HTTPException(404, "frontend not built")
-
-
-def admitted_artifact(world: World, artifact_id: str) -> dict:
-    try:
-        return world.public_artifact(artifact_id)
-    except PermissionError as error:
-        raise HTTPException(404, "artifact not found") from error
+    async def frontend(path: str):
+        dist = ROOT / "web" / "dist"
+        asset = dist / path
+        if path and asset.is_file():
+            return FileResponse(asset)
+        if (dist / "index.html").is_file():
+            return FileResponse(dist / "index.html")
+        raise HTTPException(404, "frontend not built")
 
 
 settings = load_settings()

@@ -1,31 +1,22 @@
-from server.clients import HarnessAgents
+from __future__ import annotations
+
+import httpx
+import pytest
+import respx
+
+from server.clients import EmbeddingClient, EndpointCapabilityError
 
 
-def test_search_plan_uses_exact_output_contract(tmp_path, monkeypatch):
-    agents = HarnessAgents("https://model.test", "key")
-    captured = {}
-
-    def respond(prompt, workspace, role):
-        captured["prompt"] = prompt
-        return {"queries": ["first", "second"]}
-
-    monkeypatch.setattr(agents, "_json_agent", respond)
-    assert agents.plan_search({"question": "Q"}, tmp_path) == ["first", "second"]
-    assert '{"queries":["first query","second query"]}' in captured["prompt"]
+@respx.mock
+def test_embedding_uses_openai_compatible_endpoint():
+    route = respx.post("https://model.test/v1/embeddings").mock(
+        return_value=httpx.Response(200, json={"data": [{"embedding": [0.2, 0.4]}]}))
+    assert EmbeddingClient("https://model.test/v1", "secret")("orbit") == [0.2, 0.4]
+    assert route.calls[0].request.headers["authorization"] == "Bearer secret"
 
 
-def test_model_json_repairs_unescaped_claim_quotes():
-    agents = HarnessAgents("https://model.test", "key")
-    value = '{"claim":"the source says "stable" here","code":[]}'
-    assert agents._decode_json(value, "producer")["claim"] == 'the source says "stable" here'
-
-
-def test_report_reads_declared_artifact_not_session_summary(tmp_path, monkeypatch):
-    agents = HarnessAgents("https://model.test", "key")
-
-    def respond(prompt, workspace, role):
-        (workspace / "report.md").write_text("# Actual report")
-        return "I wrote the report."
-
-    monkeypatch.setattr(agents, "_agent", respond)
-    assert agents.report({"graph": []}, tmp_path) == "# Actual report"
+@respx.mock
+def test_embedding_reports_unsupported_endpoint():
+    respx.post("https://model.test/v1/embeddings").mock(return_value=httpx.Response(404))
+    with pytest.raises(EndpointCapabilityError, match="does not support embeddings"):
+        EmbeddingClient("https://model.test/v1", "secret")("orbit")

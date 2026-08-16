@@ -6,25 +6,31 @@ from pathlib import Path
 
 SCHEMA = """
 PRAGMA foreign_keys=ON;
-CREATE TABLE IF NOT EXISTS projects(id TEXT PRIMARY KEY,name TEXT UNIQUE NOT NULL,root TEXT NOT NULL,question TEXT NOT NULL,created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS project_snapshots(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,artifact_id TEXT NOT NULL,created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS artifacts(id TEXT PRIMARY KEY,sha256 TEXT UNIQUE NOT NULL,media_type TEXT NOT NULL,size INTEGER NOT NULL,path TEXT NOT NULL,created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS source_snapshots(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,url TEXT NOT NULL,artifact_id TEXT NOT NULL,locator TEXT NOT NULL,created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS generations(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,run_id TEXT,ordinal INTEGER NOT NULL,parent_id TEXT,strategy_change TEXT,package_id TEXT,created_at TEXT NOT NULL,UNIQUE(run_id,ordinal));
-CREATE TABLE IF NOT EXISTS packages(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,generation_id TEXT NOT NULL,payload TEXT NOT NULL,status TEXT NOT NULL,created_at TEXT NOT NULL,admitted_at TEXT);
-CREATE TABLE IF NOT EXISTS nodes(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,generation_id TEXT,package_id TEXT,kind TEXT NOT NULL,payload TEXT NOT NULL,status TEXT NOT NULL,created_at TEXT NOT NULL,admitted_at TEXT);
-CREATE TABLE IF NOT EXISTS edges(source TEXT NOT NULL,target TEXT NOT NULL,type TEXT NOT NULL,package_id TEXT NOT NULL,PRIMARY KEY(source,target,type));
-CREATE TABLE IF NOT EXISTS reviews(id TEXT PRIMARY KEY,package_id TEXT NOT NULL,reviewer TEXT NOT NULL,decision TEXT NOT NULL,feedback TEXT NOT NULL,category TEXT NOT NULL,created_at TEXT NOT NULL,UNIQUE(package_id,reviewer));
-CREATE TABLE IF NOT EXISTS node_embeddings(node_id TEXT PRIMARY KEY,vector TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS runs(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,question_id INTEGER NOT NULL,status TEXT NOT NULL,apply_selected INTEGER NOT NULL,project_snapshot_id TEXT,final_markdown_id TEXT,final_html_id TEXT,created_at TEXT NOT NULL,completed_at TEXT);
-CREATE TABLE IF NOT EXISTS attempts(id TEXT PRIMARY KEY,run_id TEXT NOT NULL,generation_id TEXT NOT NULL,snapshot_id TEXT NOT NULL,actor TEXT NOT NULL,status TEXT NOT NULL,workspace TEXT,wire_artifact_id TEXT,context_artifact_id TEXT,manifest_artifact_id TEXT,created_at TEXT NOT NULL,completed_at TEXT);
-CREATE TABLE IF NOT EXISTS attempt_artifacts(attempt_id TEXT NOT NULL,artifact_id TEXT NOT NULL,role TEXT NOT NULL,PRIMARY KEY(attempt_id,artifact_id));
-CREATE TABLE IF NOT EXISTS task_tokens(token_hash TEXT PRIMARY KEY,attempt_id TEXT NOT NULL,expires_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS events(event_id INTEGER PRIMARY KEY AUTOINCREMENT,run_id TEXT NOT NULL,generation_id TEXT,attempt_id TEXT,actor TEXT NOT NULL,type TEXT NOT NULL,time TEXT NOT NULL,entity TEXT NOT NULL,payload TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS tool_receipts(id TEXT PRIMARY KEY,attempt_id TEXT NOT NULL,server TEXT NOT NULL,tool TEXT NOT NULL,arguments TEXT NOT NULL,result TEXT NOT NULL,error TEXT,created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS executions(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,attempt_id TEXT NOT NULL,environment_id TEXT NOT NULL,image_digest TEXT NOT NULL,command TEXT NOT NULL,input_artifact_id TEXT NOT NULL,input_hash TEXT NOT NULL,seed INTEGER NOT NULL,spec TEXT NOT NULL,exit_code INTEGER NOT NULL,output_artifact_id TEXT NOT NULL,output_hash TEXT NOT NULL,usage TEXT NOT NULL,created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS environments(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,attempt_id TEXT NOT NULL,image_digest TEXT NOT NULL,lock_artifact_id TEXT NOT NULL,setup TEXT NOT NULL,created_at TEXT NOT NULL);
-CREATE VIRTUAL TABLE IF NOT EXISTS node_fts USING fts5(node_id UNINDEXED,project_id UNINDEXED,text);
+CREATE TABLE IF NOT EXISTS projects(
+  id TEXT PRIMARY KEY, name TEXT UNIQUE NOT NULL, root TEXT NOT NULL,
+  question TEXT NOT NULL, auto INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS nodes(
+  id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  parent_id TEXT REFERENCES nodes(id), lineage_id TEXT NOT NULL,
+  kind TEXT NOT NULL CHECK(kind IN ('question','source','direction','experiment')),
+  payload TEXT NOT NULL, life_state TEXT NOT NULL CHECK(life_state IN ('pending','admitted','ghost')),
+  direction_status TEXT CHECK(direction_status IN ('proposed','supported','refuted')),
+  working INTEGER NOT NULL DEFAULT 0, rejection_reason TEXT, rebuttal TEXT,
+  created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS edges(
+  source TEXT NOT NULL REFERENCES nodes(id) ON DELETE CASCADE,
+  target TEXT NOT NULL REFERENCES nodes(id) ON DELETE CASCADE,
+  polarity TEXT NOT NULL CHECK(polarity IN ('supports','refutes')),
+  created_at TEXT NOT NULL, PRIMARY KEY(source,target,polarity)
+);
+CREATE VIRTUAL TABLE IF NOT EXISTS node_fts USING fts5(
+  node_id UNINDEXED, project_id UNINDEXED, text
+);
+CREATE TABLE IF NOT EXISTS node_embeddings(
+  node_id TEXT PRIMARY KEY REFERENCES nodes(id) ON DELETE CASCADE, vector TEXT NOT NULL
+);
 """
 
 

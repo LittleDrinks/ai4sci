@@ -263,6 +263,7 @@ class WorkflowEngine:
     def _reflect(self, workflow, experiment, outputs) -> dict:
         if self.world.workflow(workflow["id"])["status"] == "paused":
             return self.world.workflow(workflow["id"])
+        direction = self.world.node(workflow["node_id"])
         context = {"experiment": experiment["payload"], "outputs": outputs}
         value = self.agents.reflect(agent_context(workflow, context))
         self._record_agent(workflow["id"], "reflector", value)

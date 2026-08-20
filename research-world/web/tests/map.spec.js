@@ -35,6 +35,8 @@ test("lays out the four fixed node kinds as graph lanes", async ({ page }) => {
   expect(await nodeX(page, "node:d")).toBeGreaterThan(await nodeX(page, "node:s"));
   expect(await nodeX(page, "node:e")).toBeGreaterThan(await nodeX(page, "node:d"));
   await expect(page.locator(".react-flow__edge")).toHaveCount(3);
+  await expect(page.locator('.signal-edge[data-source="node:e"][data-target="node:d"]')).toHaveCount(1);
+  await expect(page.locator('.signal-edge[data-source="node:d"][data-target="node:e"]')).toHaveCount(0);
   await expect(page.locator(".node-run")).toHaveCount(0);
   await expect(page.locator('.react-flow__node[data-id="node:q"] footer')).not.toContainText("0");
   await expect(page.getByRole("img", { name: "问题图标" })).toBeVisible();

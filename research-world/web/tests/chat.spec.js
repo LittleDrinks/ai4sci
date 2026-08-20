@@ -38,6 +38,7 @@ test("sends a message with the selected node context", async ({ page }) => {
   await page.getByLabel("消息").fill("下一步做什么？");
   await page.getByRole("button", { name: "发送" }).click();
   await expect(page.getByText("先生成并筛选多个研究方向。")).toBeVisible();
+  expect(await page.locator(".manager-message p").last().evaluate((element) => getComputedStyle(element).whiteSpace)).toBe("pre-wrap");
   expect(request).toEqual({ node_id: "node:q", message: "下一步做什么？" });
 });
 

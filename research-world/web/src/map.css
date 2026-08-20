@@ -71,7 +71,7 @@
 .node-chat { padding: 12px; border-top: 1px solid var(--line); background: var(--paper); }
 .node-chat > header { display: flex; align-items: center; gap: 7px; margin-bottom: 9px; font-size: 13px; }
 .node-chat-log { max-height: 140px; overflow-y: auto; }
-.node-chat-log p { width: fit-content; max-width: 88%; margin: 5px 0; padding: 6px 9px; border-radius: 6px; background: #f3f4f6; font-size: 12px; }
+.node-chat-log p { width: fit-content; max-width: 88%; margin: 5px 0; padding: 6px 9px; border-radius: 6px; background: #f3f4f6; font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .node-chat-log p.user { margin-left: auto; background: #e8f0fe; }
 .node-composer { display: grid; grid-template-columns: minmax(0, 1fr) 36px; align-items: end; gap: 7px; }
 .node-composer textarea { min-height: 54px; resize: none; }

@@ -22,7 +22,7 @@
 .manager-messages { min-height: 0; padding: 24px max(18px, calc((100% - 720px) / 2)); overflow-y: auto; background: var(--paper); }
 .manager-message { width: fit-content; max-width: min(82%, 660px); margin: 0 0 18px; }
 .manager-message > span { display: block; margin-bottom: 5px; color: var(--muted); font-size: 10px; }
-.manager-message p { margin: 0; padding: 10px 12px; border-left: 3px solid #c27803; color: var(--ink); background: var(--surface); font-size: 13px; }
+.manager-message p { margin: 0; padding: 10px 12px; border-left: 3px solid #c27803; color: var(--ink); background: var(--surface); font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .manager-message.user { margin-left: auto; }
 .manager-message.user > span { text-align: right; }
 .manager-message.user p { border-left: 0; border-right: 3px solid var(--accent); background: var(--accent-soft); }

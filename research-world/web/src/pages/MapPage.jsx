@@ -84,7 +84,7 @@ function branch(nodes, edges, focusId) {
 
 function graphEdges(nodes, edges) {
   const byId = new Map(nodes.map((node) => [node.id, node]));
-  const evidence = edges.map((edge) => orientEvidence(edge, byId));
+  const evidence = edges;
   const evidencePairs = new Set(evidence.map((edge) => pairKey(edge.source, edge.target)));
   const lineage = nodes.filter((node) => node.parent_id && byId.has(node.parent_id))
     .filter((node) => !evidencePairs.has(pairKey(node.parent_id, node.id)))
@@ -93,10 +93,6 @@ function graphEdges(nodes, edges) {
 }
 
 
-function orientEvidence(edge, nodes) {
-  return nodes.get(edge.source)?.parent_id === edge.target
-    ? { ...edge, source: edge.target, target: edge.source } : edge;
-}
 
 
 function pairKey(left, right) {

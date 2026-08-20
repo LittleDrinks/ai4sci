@@ -267,7 +267,7 @@ class WorkflowEngine:
         value = self.agents.reflect(agent_context(workflow, context))
         self._record_agent(workflow["id"], "reflector", value)
         node = self.world.create_node(workflow["project_id"], "direction", {"text": value["text"]},
-                                     parent_id=experiment["id"], lineage_id=experiment["lineage_id"])
+                                     parent_id=direction["id"], lineage_id=experiment["lineage_id"])
         outcome = self._double_review(workflow, node, "direction")
         if outcome is None:
             return self.world.workflow(workflow["id"])

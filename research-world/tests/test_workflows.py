@@ -132,6 +132,21 @@ def test_manual_research_confirms_start_and_each_step(world, project):
     assert agents.reflect_contexts[0]["instruction"] == "先扫描步长敏感性"
 
 
+def test_reflection_direction_is_attached_to_parent_direction(world, project):
+    direction = admitted_direction(world, project)
+    workflow = world.create_workflow(project["id"], direction["id"], "plan-execute-review-reflect")
+    service = engine(world, FakeAgents(), runner=FakeRunner())
+
+    service.confirm(workflow["id"])
+    result = service.confirm(workflow["id"])
+
+    reflected = [node for node in world.nodes(project["id"]) if node["payload"].get("text") == "Reflected direction"]
+    assert result["status"] == "completed"
+    assert len(reflected) == 1
+    assert reflected[0]["parent_id"] == direction["id"]
+    assert reflected[0]["lineage_id"] == direction["lineage_id"]
+
+
 def test_replan_adds_evidence_without_rewriting_terminal_direction(world, project):
     direction = admitted_direction(world, project)
     world.update_node(direction["id"], direction_status="refuted")
